@@ -28,6 +28,9 @@ class Player:
         self.ace_percentage = 0
         self.ace_proportion = []
 
+        self.doublefault_percentage = 0
+        self.doublefault_proportion = []
+
         self.fatigue = 0
         self.fatigue_features = {'previous tournament': ['19000000', 0, 0], 'current tournament': ['19000000', 0, 0]}
 
@@ -115,3 +118,12 @@ class Player:
             total_aces_nbr += proportion[0]
             total_service_points_played += proportion[1]
         self.ace_percentage = total_aces_nbr / total_service_points_played * 100
+
+    def update_doublefault_percentage(self, df_nb, service_points_played):
+        self.doublefault_proportion += [[df_nb, service_points_played]]
+        total_df_nbr = 0
+        total_service_points_played = 0
+        for proportion in self.doublefault_proportion:
+            total_df_nbr += proportion[0]
+            total_service_points_played += proportion[1]
+        self.doublefault_percentage = total_df_nbr / total_service_points_played * 100

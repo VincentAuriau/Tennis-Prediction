@@ -43,8 +43,10 @@ for row in range(len(df_matches_2012)):
 
     w_ace = df_matches_2012['w_ace'][row]
     w_svpt = df_matches_2012['w_svpt'][row]
+    w_df = df_matches_2012['w_df'][row]
     l_ace = df_matches_2012['l_ace'][row]
     l_svpt = df_matches_2012['l_svpt'][row]
+    l_df = df_matches_2012['l_df'][row]
 
     print('sets number', sets_number)
     for player in players_list:
@@ -55,6 +57,10 @@ for row in range(len(df_matches_2012)):
             player.update_surface_victory_percentage(surface, 'V')
             if w_svpt == w_svpt and w_ace == w_ace:
                 player.update_ace_percentage(w_ace, w_svpt)
+            if w_svpt == 0:
+                print('div by 0', row)
+            if w_svpt == w_svpt and w_df == w_df:
+                player.update_doublefault_percentage(w_df, w_svpt)
 
         elif player.id == id_loser:
             player.add_defeat(id_winner)
@@ -63,6 +69,8 @@ for row in range(len(df_matches_2012)):
             player.update_surface_victory_percentage(surface, 'D')
             if l_svpt == l_svpt and l_ace == l_ace:
                 player.update_ace_percentage(l_ace, l_svpt)
+            if l_svpt == l_svpt and l_df == l_df:
+                player.update_doublefault_percentage(l_df, l_svpt)
 
 print(players_list)
 for player in players_list:
@@ -70,5 +78,6 @@ for player in players_list:
     print('          Last Matches :  ', player.last_matches, ' *** Victory Percentage : ', player.victory_percentage,
           '%')
     print('           *** Ace Percentage : ', player.ace_percentage, '%')
+    print('           *** Double Fault Percentage : ', player.doublefault_percentage, '%')
     if player.id == 104745 or player.id == 104932:
         print(player.matches)
