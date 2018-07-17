@@ -25,6 +25,9 @@ class Player:
         self.matches_grass = []
         self.grass_victory_percentage = 0
 
+        self.ace_percentage = 0
+        self.ace_proportion = []
+
         self.fatigue = 0
         self.fatigue_features = {'previous tournament': ['19000000', 0, 0], 'current tournament': ['19000000', 0, 0]}
 
@@ -103,3 +106,12 @@ class Player:
         self.fatigue = self.fatigue_features['previous tournament'][1] / days_difference_tournaments \
             + self.fatigue_features['current tournament'][1]
         print('fatigue', self.fatigue)
+
+    def update_ace_percentage(self, aces_nb, service_points_played):
+        self.ace_proportion += [[aces_nb, service_points_played]]
+        total_aces_nbr = 0
+        total_service_points_played = 0
+        for proportion in self.ace_proportion:
+            total_aces_nbr += proportion[0]
+            total_service_points_played += proportion[1]
+        self.ace_percentage = total_aces_nbr / total_service_points_played * 100

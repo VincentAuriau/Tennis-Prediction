@@ -40,6 +40,12 @@ for row in range(len(df_matches_2012)):
     tournament_date = str(df_matches_2012['tourney_date'][row])
     sets_number = df_matches_2012['score'][row].count("-")
     surface = df_matches_2012['surface'][row]
+
+    w_ace = df_matches_2012['w_ace'][row]
+    w_svpt = df_matches_2012['w_svpt'][row]
+    l_ace = df_matches_2012['l_ace'][row]
+    l_svpt = df_matches_2012['l_svpt'][row]
+
     print('sets number', sets_number)
     for player in players_list:
         if player.id == id_winner:
@@ -47,17 +53,22 @@ for row in range(len(df_matches_2012)):
             player.last_tournament_date = tournament_date
             player.update_fatigue(tournament_date, sets_number)
             player.update_surface_victory_percentage(surface, 'V')
+            if w_svpt == w_svpt and w_ace == w_ace:
+                player.update_ace_percentage(w_ace, w_svpt)
 
         elif player.id == id_loser:
             player.add_defeat(id_winner)
             player.last_tournament_date = tournament_date
             player.update_fatigue(tournament_date, sets_number)
             player.update_surface_victory_percentage(surface, 'D')
+            if l_svpt == l_svpt and l_ace == l_ace:
+                player.update_ace_percentage(l_ace, l_svpt)
 
 print(players_list)
 for player in players_list:
     print(player)
     print('          Last Matches :  ', player.last_matches, ' *** Victory Percentage : ', player.victory_percentage,
           '%')
+    print('           *** Ace Percentage : ', player.ace_percentage, '%')
     if player.id == 104745 or player.id == 104932:
         print(player.matches)
