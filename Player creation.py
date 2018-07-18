@@ -47,6 +47,9 @@ for row in range(len(df_matches_2012)):
     w_1stwon = df_matches_2012['w_1stWon'][row]
     w_2ndwon = df_matches_2012['w_2ndWon'][row]
     w_1stIn = df_matches_2012['w_1stIn'][row]
+    w_bp_Saved = df_matches_2012['w_bpSaved'][row]
+    w_bp_Faced = df_matches_2012['w_bpFaced'][row]
+    w_SvGms = df_matches_2012['w_SvGms'][row]
 
     l_ace = df_matches_2012['l_ace'][row]
     l_svpt = df_matches_2012['l_svpt'][row]
@@ -54,6 +57,9 @@ for row in range(len(df_matches_2012)):
     l_1stwon = df_matches_2012['l_1stWon'][row]
     l_2ndwon = df_matches_2012['l_2ndWon'][row]
     l_1stIn = df_matches_2012['l_1stIn'][row]
+    l_bp_Saved = df_matches_2012['l_bpSaved'][row]
+    l_bp_Faced = df_matches_2012['l_bpFaced'][row]
+    l_SvGms = df_matches_2012['l_SvGms'][row]
 
     print('sets number', sets_number)
     for player in players_list:
@@ -73,6 +79,8 @@ for row in range(len(df_matches_2012)):
                 player.update_winning_on_2nd_serve_percentage(w_2ndwon, w_svpt)
             if w_svpt == w_svpt and w_1stIn == w_1stIn:
                 player.update_first_serve_success_percentage(w_1stIn, w_svpt)
+            if w_bp_Faced == w_bp_Faced and w_bp_Saved == w_bp_Saved and w_SvGms == w_SvGms:
+                player.update_breakpoint_faced_and_savec(w_bp_Faced, w_bp_Saved, w_SvGms)
 
         elif player.id == id_loser:
             player.add_defeat(id_winner)
@@ -88,6 +96,8 @@ for row in range(len(df_matches_2012)):
                 player.update_winning_on_2nd_serve_percentage(l_2ndwon, l_svpt)
             if l_svpt == l_svpt and l_1stIn == l_1stIn:
                 player.update_first_serve_success_percentage(l_1stIn, l_svpt)
+            if l_bp_Faced == l_bp_Faced and l_bp_Saved == l_bp_Saved and l_SvGms == l_SvGms:
+                player.update_breakpoint_faced_and_savec(l_bp_Faced, l_bp_Saved, l_SvGms)
 
 print(players_list)
 for player in players_list:
@@ -98,5 +108,7 @@ for player in players_list:
     print('           *** Double Fault Percentage : ', player.doublefault_percentage, '%')
     print('           *** Serve Point Won Percentage : ', player.overall_win_on_serve_percentage, '%')
     print('           *** Serve Point In Percentage : ', player.first_serve_success_percentage, '%')
+    print('           *** BreakPoint Faced : ', player.breakpoint_faced_percentage, '%', '   *** Breakpoint Saved : ',
+          player.breakpoint_saved_percentage, '%')
     if player.id == 104745 or player.id == 104932:
         print(player.matches)

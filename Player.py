@@ -40,6 +40,11 @@ class Player:
         self.winning_on_2nd_serve_proportion = []
         self.overall_win_on_serve_percentage = 0
 
+        self.breakpoint_faced_percentage = 0
+        self.breakpoint_faced_proportion = []
+        self.breakpoint_saved_percentage = 0
+        self.breakpoint_saved_number = 0
+
         self.fatigue = 0
         self.fatigue_features = {'previous tournament': ['19000000', 0, 0], 'current tournament': ['19000000', 0, 0]}
 
@@ -147,7 +152,7 @@ class Player:
             total_service_point_played += proportion[1]
         self.winning_on_1st_serve_percentage = total_first_serve_win / total_service_point_played * 100
         self.overall_win_on_serve_percentage = self.winning_on_1st_serve_percentage \
-                                               + self.winning_on_2nd_serve_percentage
+            + self.winning_on_2nd_serve_percentage
 
     def update_winning_on_2nd_serve_percentage(self, second_serve_win, service_points_played):
         self.winning_on_2nd_serve_proportion += [[second_serve_win, service_points_played]]
@@ -158,7 +163,7 @@ class Player:
             total_service_point_played += proportion[1]
         self.winning_on_2nd_serve_percentage = total_second_serve_win / total_service_point_played * 100
         self.overall_win_on_serve_percentage = self.winning_on_1st_serve_percentage \
-                                               + self.winning_on_2nd_serve_percentage
+            + self.winning_on_2nd_serve_percentage
 
     def update_first_serve_success_percentage(self, first_services_in, service_points_played):
         self.first_serve_success_proportion += [[first_services_in, service_points_played]]
@@ -168,3 +173,16 @@ class Player:
             total_first_serves_in += proportion[0]
             total_service_points_played += proportion[1]
         self.first_serve_success_percentage = total_first_serves_in / total_service_points_played * 100
+
+    def update_breakpoint_faced_and_savec(self, breakpoint_faced, breakpoint_saved, service_games_played):
+        self.breakpoint_faced_proportion += [[breakpoint_faced, service_games_played]]
+        self.breakpoint_saved_number += breakpoint_saved
+        total_breakpoint_faced = 0
+        total_games_played = 0
+        for proportion in self.breakpoint_faced_proportion:
+            total_breakpoint_faced += proportion[0]
+            total_games_played += proportion[1]
+
+        self.breakpoint_faced_percentage = total_breakpoint_faced / total_games_played * 100
+        self.breakpoint_saved_percentage = self.breakpoint_saved_number / total_games_played * 100
+
