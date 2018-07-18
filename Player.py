@@ -31,6 +31,9 @@ class Player:
         self.doublefault_percentage = 0
         self.doublefault_proportion = []
 
+        self.first_serve_success_proportion = []
+        self.first_serve_success_percentage = 0
+
         self.winning_on_1st_serve_percentage = 0
         self.winning_on_1st_serve_proportion = []
         self.winning_on_2nd_serve_percentage = 0
@@ -156,3 +159,12 @@ class Player:
         self.winning_on_2nd_serve_percentage = total_second_serve_win / total_service_point_played * 100
         self.overall_win_on_serve_percentage = self.winning_on_1st_serve_percentage \
                                                + self.winning_on_2nd_serve_percentage
+
+    def update_first_serve_success_percentage(self, first_services_in, service_points_played):
+        self.first_serve_success_proportion += [[first_services_in, service_points_played]]
+        total_first_serves_in = 0
+        total_service_points_played = 0
+        for proportion in self.first_serve_success_proportion:
+            total_first_serves_in += proportion[0]
+            total_service_points_played += proportion[1]
+        self.first_serve_success_percentage = total_first_serves_in / total_service_points_played * 100
