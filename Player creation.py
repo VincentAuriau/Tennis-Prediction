@@ -1,5 +1,6 @@
 import pandas as pd
 import Player
+import Match
 
 df_players = pd.read_csv('Data/atp_players.csv', header=None, names=[1, 2, 3, 4, 5, 6], encoding="ISO-8859-1")
 df_matches_2012 = pd.read_csv('Data/atp_matches_2012.csv')
@@ -112,3 +113,9 @@ for player in players_list:
           player.breakpoint_saved_percentage, '%')
     if player.id == 104745 or player.id == 104932:
         print(player.matches)
+
+match = Match.Match()
+match.tournament = 'truc'
+match.winner = 'Winner'
+match.loser = 'Loser'
+print(match)
