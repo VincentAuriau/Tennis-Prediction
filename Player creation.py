@@ -114,8 +114,5 @@ for player in players_list:
     if player.id == 104745 or player.id == 104932:
         print(player.matches)
 
-match = Match.Match()
-match.tournament = 'truc'
-match.winner = 'Winner'
-match.loser = 'Loser'
+match = Match.Match('winner', 'loser', 'tournament', 'surface')
 print(match)
