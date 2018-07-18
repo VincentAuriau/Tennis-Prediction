@@ -31,6 +31,12 @@ class Player:
         self.doublefault_percentage = 0
         self.doublefault_proportion = []
 
+        self.winning_on_1st_serve_percentage = 0
+        self.winning_on_1st_serve_proportion = []
+        self.winning_on_2nd_serve_percentage = 0
+        self.winning_on_2nd_serve_proportion = []
+        self.overall_win_on_serve_percentage = 0
+
         self.fatigue = 0
         self.fatigue_features = {'previous tournament': ['19000000', 0, 0], 'current tournament': ['19000000', 0, 0]}
 
@@ -127,3 +133,26 @@ class Player:
             total_df_nbr += proportion[0]
             total_service_points_played += proportion[1]
         self.doublefault_percentage = total_df_nbr / total_service_points_played * 100
+
+    def update_winning_on_1st_serve_percentage(self, first_serve_win, service_points_played):
+        self.winning_on_1st_serve_proportion += [[first_serve_win, service_points_played]]
+        total_first_serve_win = 0
+        total_service_point_played = 0
+        for proportion in self.winning_on_1st_serve_proportion:
+            print(proportion)
+            total_first_serve_win += proportion[0]
+            total_service_point_played += proportion[1]
+        self.winning_on_1st_serve_percentage = total_first_serve_win / total_service_point_played * 100
+        self.overall_win_on_serve_percentage = self.winning_on_1st_serve_percentage \
+                                               + self.winning_on_2nd_serve_percentage
+
+    def update_winning_on_2nd_serve_percentage(self, second_serve_win, service_points_played):
+        self.winning_on_2nd_serve_proportion += [[second_serve_win, service_points_played]]
+        total_second_serve_win = 0
+        total_service_point_played = 0
+        for proportion in self.winning_on_2nd_serve_proportion:
+            total_second_serve_win += proportion[0]
+            total_service_point_played += proportion[1]
+        self.winning_on_2nd_serve_percentage = total_second_serve_win / total_service_point_played * 100
+        self.overall_win_on_serve_percentage = self.winning_on_1st_serve_percentage \
+                                               + self.winning_on_2nd_serve_percentage

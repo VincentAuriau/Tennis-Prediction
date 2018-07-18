@@ -44,9 +44,14 @@ for row in range(len(df_matches_2012)):
     w_ace = df_matches_2012['w_ace'][row]
     w_svpt = df_matches_2012['w_svpt'][row]
     w_df = df_matches_2012['w_df'][row]
+    w_1stwon = df_matches_2012['w_1stWon'][row]
+    w_2ndwon = df_matches_2012['w_2ndWon'][row]
     l_ace = df_matches_2012['l_ace'][row]
     l_svpt = df_matches_2012['l_svpt'][row]
     l_df = df_matches_2012['l_df'][row]
+    l_1stwon = df_matches_2012['l_1stWon'][row]
+    l_2ndwon = df_matches_2012['l_2ndWon'][row]
+
 
     print('sets number', sets_number)
     for player in players_list:
@@ -61,6 +66,9 @@ for row in range(len(df_matches_2012)):
                 print('div by 0', row)
             if w_svpt == w_svpt and w_df == w_df:
                 player.update_doublefault_percentage(w_df, w_svpt)
+            if w_svpt == w_svpt and w_1stwon == w_1stwon and w_2ndwon == w_2ndwon:
+                player.update_winning_on_1st_serve_percentage(w_1stwon, w_svpt)
+                player.update_winning_on_2nd_serve_percentage(w_2ndwon, w_svpt)
 
         elif player.id == id_loser:
             player.add_defeat(id_winner)
@@ -71,6 +79,9 @@ for row in range(len(df_matches_2012)):
                 player.update_ace_percentage(l_ace, l_svpt)
             if l_svpt == l_svpt and l_df == l_df:
                 player.update_doublefault_percentage(l_df, l_svpt)
+            if l_svpt == l_svpt and l_1stwon == l_1stwon and l_2ndwon == l_2ndwon:
+                player.update_winning_on_1st_serve_percentage(l_1stwon, l_svpt)
+                player.update_winning_on_2nd_serve_percentage(l_2ndwon, l_svpt)
 
 print(players_list)
 for player in players_list:
@@ -79,5 +90,6 @@ for player in players_list:
           '%')
     print('           *** Ace Percentage : ', player.ace_percentage, '%')
     print('           *** Double Fault Percentage : ', player.doublefault_percentage, '%')
+    print('           *** Serve Point Won Percentage : ', player.overall_win_on_serve_percentage, '%')
     if player.id == 104745 or player.id == 104932:
         print(player.matches)
