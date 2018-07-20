@@ -4,6 +4,7 @@ class Player:
         self.name = name
         self.born_year = born_year
         self.ranking = 0
+        self.ranking_points = 0
         self.ranking_over_time = 0
         self.country = country
         self.id = nb_id
@@ -87,20 +88,20 @@ class Player:
         if surface == 'Clay':
             self.matches_clay.append(outcome)
             self.clay_victory_percentage = self.matches_clay.count('V') / len(self.matches_clay) * 100
-            print(self.clay_victory_percentage)
-            print(self.matches_clay)
+            # # print(self.clay_victory_percentage)
+            # # print(self.matches_clay)
         elif surface == 'Grass':
             self.matches_grass.append(outcome)
             self.grass_victory_percentage = self.matches_grass.count('V') / len(self.matches_grass) * 100
-            print(self.grass_victory_percentage)
+            # # print(self.grass_victory_percentage)
         elif surface == 'Hard':
             self.matches_hard.append(outcome)
             self.hard_victory_percentage = self.matches_hard.count('V') / len(self.matches_hard) * 100
-            print(self.hard_victory_percentage)
+            # print(self.hard_victory_percentage)
         elif surface == 'Carpet':
             self.matches_carpet.append(outcome)
             self.carpet_victory_percentage = self.matches_carpet.count('V') / len(self.matches_carpet) * 100
-            print(self.carpet_victory_percentage)
+            # print(self.carpet_victory_percentage)
 
     def update_fatigue(self, tournament_date, sets_number):
         if tournament_date == self.fatigue_features['current tournament'][0]:
@@ -122,7 +123,7 @@ class Player:
 
         self.fatigue = self.fatigue_features['previous tournament'][1] / days_difference_tournaments \
             + self.fatigue_features['current tournament'][1]
-        print('fatigue', self.fatigue)
+        # print('fatigue', self.fatigue)
 
     def update_ace_percentage(self, aces_nb, service_points_played):
         self.ace_proportion += [[aces_nb, service_points_played]]
@@ -147,7 +148,7 @@ class Player:
         total_first_serve_win = 0
         total_service_point_played = 0
         for proportion in self.winning_on_1st_serve_proportion:
-            print(proportion)
+            # print(proportion)
             total_first_serve_win += proportion[0]
             total_service_point_played += proportion[1]
         self.winning_on_1st_serve_percentage = total_first_serve_win / total_service_point_played * 100
@@ -186,3 +187,14 @@ class Player:
         self.breakpoint_faced_percentage = total_breakpoint_faced / total_games_played * 100
         self.breakpoint_saved_percentage = self.breakpoint_saved_number / total_games_played * 100
 
+    def get_data(self):
+        data_to_be_used = [self.ranking, self.ranking_points, self.born_year, self.versus, self.hand,
+                           self.last_tournament_date, self.height,
+                           self.matches, self.matches_clay, self.matches_carpet, self.matches_grass, self.matches_hard,
+                           self.victory_percentage, self.clay_victory_percentage, self.carpet_victory_percentage,
+                           self.grass_victory_percentage, self.hard_victory_percentage, self.ace_percentage,
+                           self.doublefault_percentage, self.first_serve_success_percentage,
+                           self.winning_on_1st_serve_percentage, self.winning_on_2nd_serve_percentage,
+                           self.overall_win_on_serve_percentage, self.breakpoint_faced_percentage,
+                           self.breakpoint_saved_percentage, self.fatigue]
+        return data_to_be_used
