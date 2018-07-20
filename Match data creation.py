@@ -11,7 +11,7 @@ with open('Players_2012_profiles', 'rb') as file:
     my_unpickler = pickle.Unpickler(file)
     players_dict = my_unpickler.load()
 
-for row in range(10):
+for row in range(len(df_matches_2012)):
     tournament_name = df_matches_2012['tourney_name'][row]
     id_winner = df_matches_2012['winner_id'][row]
     id_loser = df_matches_2012['loser_id'][row]
@@ -36,7 +36,7 @@ for row in range(10):
     match.tournament_level = tournament_level
     match.round = round
 
-    print(match.get_data())
+    print(match.get_data()[1][:2], match.get_data()[1][-2])
 
     score = df_matches_2012['score'][row]
     if score == score and type(score) == str:

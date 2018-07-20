@@ -14,4 +14,4 @@ class Match:
 
     def get_data(self):
         return [[self.tournament, self.tournament_level, self.surface, self.tournament_date, self.tournament_level,
-                 self.round], [self.winner.get_data()], [self.loser.get_data()]]
+                 self.round], self.winner.get_data(), self.loser.get_data()]

@@ -188,7 +188,7 @@ class Player:
         self.breakpoint_saved_percentage = self.breakpoint_saved_number / total_games_played * 100
 
     def get_data(self):
-        data_to_be_used = [self.ranking, self.ranking_points, self.born_year, self.versus, self.hand,
+        data_to_be_used = [self.name, self.ranking, self.ranking_points, self.born_year, self.versus, self.hand,
                            self.last_tournament_date, self.height,
                            self.matches, self.matches_clay, self.matches_carpet, self.matches_grass, self.matches_hard,
                            self.victory_percentage, self.clay_victory_percentage, self.carpet_victory_percentage,
