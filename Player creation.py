@@ -1,6 +1,6 @@
 import pandas as pd
 import Player
-import Match
+import pickle
 
 df_players = pd.read_csv('Data/atp_players.csv', header=None, names=[1, 2, 3, 4, 5, 6], encoding="ISO-8859-1")
 df_matches_2012 = pd.read_csv('Data/atp_matches_2012.csv')
@@ -152,8 +152,7 @@ for year in range(1980, 2012):
         except:
             print('Loser no longer playing in 2012')
 
-print(players_list)
-for player in players_list:
+for player in players_list_dict.values():
     print(player)
     print('          Last Matches :  ', player.last_matches, ' *** Victory Percentage : ', player.victory_percentage,
           '%')
@@ -166,5 +165,6 @@ for player in players_list:
     if player.id == 104745 or player.id == 104932:
         print(player.matches)
 
-match = Match.Match('winner', 'loser', 'tournament', 'surface')
-print(match)
+with open('Players_2012_profiles', 'wb') as file:
+    my_pickler = pickle.Pickler(file)
+    my_pickler.dump(players_list_dict)
