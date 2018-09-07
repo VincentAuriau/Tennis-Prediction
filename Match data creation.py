@@ -7,6 +7,8 @@ df_matches_2012 = pd.read_csv('Data/atp_matches_2012.csv')
 df_matches_2012 = df_matches_2012.sort_values(by='tourney_date').reset_index()
 print(df_matches_2012)
 
+whole_data = []
+
 with open('Players_2012_profiles', 'rb') as file:
     my_unpickler = pickle.Unpickler(file)
     players_dict = my_unpickler.load()
@@ -95,3 +97,11 @@ for row in range(len(df_matches_2012)):
         loser.update_first_serve_success_percentage(l_1stIn, l_svpt)
     if l_bp_Faced == l_bp_Faced and l_bp_Saved == l_bp_Saved and l_SvGms == l_SvGms:
         loser.update_breakpoint_faced_and_savec(l_bp_Faced, l_bp_Saved, l_SvGms)
+
+    whole_data += [match.get_data()]
+
+print(whole_data[0])
+
+with open('Data_2012', 'wb') as file:
+    my_pickler = pickle.Pickler(file)
+    my_pickler.dump(whole_data)
