@@ -115,6 +115,7 @@ for match_not_treated in data_not_treated[:10]:
     print(match_data_treated)
     data_treated += [match_data_treated]
 
+print(data_treated)
 
 def precentage_treatment(percentage_list):
     return_list = []
@@ -123,22 +124,21 @@ def precentage_treatment(percentage_list):
     return return_list
 
 
-def float_treatment(float_list, max, min):
-    return_list = []
-    for float in float_list:
-        return_list.append((2 / (max - min)) * float + ((max + min) / (max - min)))
-    return return_list
+def float_treatment(float, max, min):
+    return((2 / (max - min)) * float - ((max + min) / (max - min)))
+
 
 def extrema_determination(list_position):
-    global data_not_treated
-    max = data_not_treated[0][list_position]
-    min = data_not_treated[0][list_position]
-    for i in range(len(data_not_treated)):
-        data = data_not_treated[i][list_position]
-        if data < min:
-            min = data
-        elif data > max:
-            max = data
+    global data_treated
+    max = data_treated[0][3][list_position]
+    min = data_treated[0][3][list_position]
+    for j in range(2):
+        for i in range(len(data_treated)):
+            data = data_treated[i][3+j][list_position]
+            if data < min:
+                min = data
+            elif data > max:
+                max = data
     return (min, max)
 
 float_position = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
@@ -146,5 +146,24 @@ extrema_dict = {}
 
 final_data = []
 
-for match in data_treated:
-    pass
+for data_type in range(18):
+    if data_type == 0:
+        max = 69
+        min = 1
+        for match in range(len(data_treated)):
+            data_treated[match][0] = float_treatment(data_treated[match][0], max, min)
+    elif data_type == 1:
+        max = 6
+        min = 1
+        for match in range(len(data_treated)):
+            data_treated[match][1] = float_treatment(data_treated[match][1], max, min)
+    elif data_type == 2:
+        max = 4
+        min = 1
+        for match in range(len(data_treated)):
+            data_treated[match][2] = float_treatment(data_treated[match][2], max, min)
+    elif data_type < 9:
+        print(data_type-3)
+        couple = extrema_determination(data_type-3)
+        print(couple)
+print(data_treated)
