@@ -1,5 +1,6 @@
 import pickle
 import pandas as pd
+import random
 
 with open('Data_2012', 'rb') as file:
     my_unpickler = pickle.Unpickler(file)
@@ -179,13 +180,21 @@ for data_type in range(18):
             data_treated[match][4][data_type - 3] = percentage_treatment([data_treated[match][4][data_type - 3]])[0]
 
 data_final = []
+outcome = []
 for i in range(len(data_treated)):
     match = data_treated[i]
-    data_final += [match[0:3] + match[3][:6] + match[3][6] + match[3][7:10] + match[4][:6] + match[4][6] + match[4][7:10]]
+    winner = random.randint(0,1)
+    if winner == 0:
+        outcome += [[1, 0]]
+        data_final += [match[0:3] + match[3][:6] + match[3][6] + match[3][7:10] + match[4][:6] + match[4][6] + match[4][7:10]]
+    else:
+        outcome += [[0, 1]]
+        data_final += [
+            match[0:3] + match[4][:6] + match[4][6] + match[4][7:10] + match[3][:6] + match[3][6] + match[3][7:10]]
 
 print(data_treated)
 print(data_final)
 
 with open('data_to_be_used_fina', 'wb') as file:
     my_pickler = pickle.Pickler(file)
-    my_pickler.dump(data_final)
+    my_pickler.dump([data_final, outcome])
