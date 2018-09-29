@@ -195,6 +195,6 @@ for i in range(len(data_treated)):
 print(data_treated)
 print(data_final)
 
-with open('data_to_be_used_fina', 'wb') as file:
+with open('data_to_be_used_final', 'wb') as file:
     my_pickler = pickle.Pickler(file)
     my_pickler.dump([data_final, outcome])
