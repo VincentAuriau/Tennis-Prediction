@@ -19,7 +19,7 @@ tournaments_already_visited = {}
 level_dict = {'A': 1, 'C': 2, 'D': 3, 'F': 4, 'G': 5, 'M': 6}
 surface_dict = {'Hard': 4, 'Grass': 3, 'Clay': 1, 'Carpet': 2}
 
-for match_not_treated in data_not_treated[:10]:
+for match_not_treated in data_not_treated:
     match_data_treated = []
 
     # Match
@@ -84,7 +84,6 @@ for match_not_treated in data_not_treated[:10]:
         else:
             age = 0
 
-
         # Last Matches
         matches = match_not_treated[player][9]
         last_matches = matches[-min(5, len(matches)):]
@@ -102,13 +101,15 @@ for match_not_treated in data_not_treated[:10]:
         last_matches_surface = last_matches_win_percentage_surface
 
         # Matches agains each other
-        results_actual_against_other = match_not_treated[player][5][match_not_treated[player%2+1][1]]
+        results_actual_against_other = match_not_treated[player][5][match_not_treated[player % 2 + 1][1]]
         print(results_actual_against_other)
-        win_percentage_actual_over_other = results_actual_against_other.count('V') / len(results_actual_against_other) * 100
+        win_percentage_actual_over_other = results_actual_against_other.count('V') / \
+                                           len(results_actual_against_other) * 100
 
         print(win_percentage_actual_over_other)
 
-        player_data_treated = [ranking, points, hand, height, fatigue, age, percentages, last_matches_win_percentage, last_matches_surface, win_percentage_actual_over_other]
+        player_data_treated = [ranking, points, hand, height, fatigue, age, percentages, last_matches_win_percentage,
+                               last_matches_surface, win_percentage_actual_over_other]
 
         match_data_treated += [player_data_treated]
 
@@ -117,32 +118,31 @@ for match_not_treated in data_not_treated[:10]:
 
 print(data_treated)
 
-def precentage_treatment(percentage_list):
+
+def percentage_treatment(percentage_list):
     return_list = []
     for percentage in percentage_list:
         return_list.append(percentage * 0.01)
     return return_list
 
 
-def float_treatment(float, max, min):
-    return((2 / (max - min)) * float - ((max + min) / (max - min)))
+def float_treatment(floated, maxi, mini):
+    return (2 / (maxi - mini)) * floated - ((maxi + mini) / (maxi - mini))
 
 
 def extrema_determination(list_position):
     global data_treated
-    max = data_treated[0][3][list_position]
-    min = data_treated[0][3][list_position]
+    maxi = data_treated[0][3][list_position]
+    mini = data_treated[0][3][list_position]
     for j in range(2):
-        for i in range(len(data_treated)):
-            data = data_treated[i][3+j][list_position]
-            if data < min:
-                min = data
-            elif data > max:
-                max = data
-    return (min, max)
+        for ik in range(len(data_treated)):
+            data = data_treated[ik][3+j][list_position]
+            if data < mini:
+                mini = data
+            elif data > maxi:
+                maxi = data
+    return mini, maxi
 
-float_position = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-extrema_dict = {}
 
 final_data = []
 
@@ -163,7 +163,29 @@ for data_type in range(18):
         for match in range(len(data_treated)):
             data_treated[match][2] = float_treatment(data_treated[match][2], max, min)
     elif data_type < 9:
-        print(data_type-3)
         couple = extrema_determination(data_type-3)
         print(couple)
+        for match in range(len(data_treated)):
+            data_treated[match][3][data_type-3] = float_treatment(data_treated[match][3][data_type-3], couple[0], couple[1])
+            data_treated[match][4][data_type - 3] = float_treatment(data_treated[match][4][data_type - 3], couple[0],
+                                                                    couple[1])
+    elif data_type == 9:
+        for match in range(len(data_treated)):
+            data_treated[match][3][6] = percentage_treatment(data_treated[match][3][6])
+            data_treated[match][4][6] = percentage_treatment(data_treated[match][4][6])
+    elif data_type < 13:
+        for match in range(len(data_treated)):
+            data_treated[match][3][data_type-3] = percentage_treatment([data_treated[match][3][data_type-3]])[0]
+            data_treated[match][4][data_type - 3] = percentage_treatment([data_treated[match][4][data_type - 3]])[0]
+
+data_final = []
+for i in range(len(data_treated)):
+    match = data_treated[i]
+    data_final += [match[0:3] + match[3][:6] + match[3][6] + match[3][7:10] + match[4][:6] + match[4][6] + match[4][7:10]]
+
 print(data_treated)
+print(data_final)
+
+with open('data_to_be_used_fina', 'wb') as file:
+    my_pickler = pickle.Pickler(file)
+    my_pickler.dump(data_final)
