@@ -20,24 +20,60 @@ train_x_prime = pd.DataFrame(simple_data, columns=['w', 'l'])
 
 #print(train_x_prime[:10])
 
-train_x = pd.DataFrame(data[0][:10])
-train_y = pd.DataFrame(data[1], columns=['w', 'l'])['w']
+columns = []
+for i in range(41):
+    columns += ['x_%i' % (i+1)]
+print(columns)
+
+train_x = pd.DataFrame(data[0], columns=columns)
+train_y = pd.DataFrame(data[1], columns=['y_1', 'y_2'])
 
 train_x_prime.to_csv('train_x_prime.csv', index=False, header=False)
 train_y.to_csv('train_y.csv', index=False)
 
-X = train_x_prime.values
-Y = train_y.values
-print(Y)
+total = pd.concat([train_x_prime, train_y], axis=1)
+total_2 = pd.concat([train_x, train_y], axis=1)
+print(total)
+print('DELETE MISSING VALUES')
+print(total.iloc[58])
+print(total.iloc[59])
+total = total.dropna()
+print(total.iloc[58])
+print(total.iloc[59])
+
+train_x_prime = total.ix[:, ['w', 'l']]
+
+total_2 = total_2.dropna()
+
+train_x = total_2.ix[:, columns]
+train_y = total_2.ix[:, ['y_1', 'y_2']]
+
+print('RESTORATION')
+print(train_x_prime)
+print(train_y)
+
+X = train_x.values[:2200]
+Y = train_y.values[:2200]
+
+X_test = train_x.values[2201:]
+Y_test = train_y.values[2201:]
+print(Y[:10])
+
 
 model = Sequential()
-model.add(Dense(12, input_dim=2, activation='relu'))
-model.add(Dense(8, activation='relu'))
-model.add(Dense(1, activation='sigmoid'))
-# Compile model
-model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-# Fit the model
-model.fit(X, Y, epochs=150, batch_size=10)
-# evaluate the model
-scores = model.evaluate(X, Y)
-print("\n%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
+model.add(Dense(100, input_dim=41, activation='relu'))
+model.add(Dense(20, activation='relu'))
+model.add(Dense(2, activation='softmax'))
+model.compile(loss='mse', optimizer='adam', metrics=['accuracy'])
+model.fit(X, Y, epochs=100, verbose=1)
+
+scores = model.evaluate(X_test, Y_test)
+print(model.metrics_names)
+
+# X_test = numpy.array([[0.2, -0.5]])
+# print(X[:10])
+print(model.predict(X_test[10:20]))
+print(Y_test[10:20])
+print(pd.concat([train_x['x_4'][2211:2221], train_x['x_23'][2211:2221]], axis=1))
+
+print('SCORE : ', scores)
