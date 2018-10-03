@@ -55,6 +55,7 @@ print('RESTORATION')
 print(train_x)
 print(train_y)
 
+train_x = train_x.reset_index(drop=True)
 X_prime = train_x_prime.values[:2200]
 X = train_x.values[:2200]
 Y = train_y.values[:2200]
@@ -87,7 +88,7 @@ model.fit(X, Y, epochs=10, verbose=1)
 #
 
 def return_original_float(val, maxmin):
-    return 0.5*(val*(maxmin[1] - maxmin[0]) + (maxmin[1] + maxmin[0]))
+    return round(0.5*(val*(maxmin[1] - maxmin[0]) + (maxmin[1] + maxmin[0])))
 
 with open('reversed_indicators_dicts', 'rb') as file:
     my_unpickler = pickle.Unpickler(file)
@@ -95,26 +96,31 @@ with open('reversed_indicators_dicts', 'rb') as file:
 
 print('DISPLAYING THE DATA & THE PREDICTION :')
 print('Surface :')
-print(train_x['x_1'][2225])
-print(train_x['x_3'][2225])
+# print(train_x['x_1'][2225])
+# print(train_x['x_3'][2225])
 print(reverse_surface_dict[train_x['x_3'][2225]])
+print('Tournament :')
 print(reverse_tournament_dict[train_x['x_1'][2225]])
 
 print('Ranks & Points')
-print(train_x['x_4'][2225], train_x['x_5'][2225])
-print(train_x['x_23'][2225], train_x['x_24'][2225])
-print(train_x.iloc[2225]['x_4'])
-print(train_x['x_4'][2225])
+# print(train_x['x_4'][2225], train_x['x_5'][2225])
+# print(train_x['x_23'][2225], train_x['x_24'][2225])
 # print(extrema_dict[3], extrema_dict[4])
-
+print('Player 1:')
 print(return_original_float(train_x['x_4'][2225], extrema_dict[3]), return_original_float(train_x['x_5'][2225], extrema_dict[4]))
+print('Player 2:')
 print(return_original_float(train_x['x_23'][2225], extrema_dict[3]), return_original_float(train_x['x_24'][2225], extrema_dict[4]))
 
+hands_dict = {1 : 'R', 0:'L'}
+print('Hands')
+print(hands_dict[return_original_float(train_x['x_6'][2225], extrema_dict[5])], hands_dict[return_original_float(train_x['x_25'][2225], extrema_dict[5])])
+
+print('Heights')
+print(return_original_float(train_x['x_7'][2225], extrema_dict[6]), return_original_float(train_x['x_26'][2225], extrema_dict[6]))
+
+print('Prediction:')
 print(model.predict(train_x.values[2225:2226]))
+print('Expected Result:')
 print(train_y.values[2225:2226])
 # print(model.predict(train_x.values[2225]))
 
-
-print(train_x['x_4'][2])
-print(train_x.iloc[2]['x_4'])
-print(train_x)
