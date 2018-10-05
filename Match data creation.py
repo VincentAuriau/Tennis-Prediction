@@ -3,31 +3,33 @@ import Match
 import pickle
 import pandas as pd
 
-df_matches_2012 = pd.read_csv('Data/atp_matches_2012.csv')
-df_matches_2012 = df_matches_2012.sort_values(by='tourney_date').reset_index()
-print(df_matches_2012)
+year_to_study = 2013
+
+df_matches_year_to_study = pd.read_csv('Data/atp_matches_%i.csv' % year_to_study)
+df_matches_year_to_study = df_matches_year_to_study.sort_values(by='tourney_date').reset_index()
+print(df_matches_year_to_study)
 
 whole_data = []
 
-with open('Players_2012_profiles', 'rb') as file:
+with open('Players_%i_profiles' % year_to_study, 'rb') as file:
     my_unpickler = pickle.Unpickler(file)
     players_dict = my_unpickler.load()
 
-for row in range(len(df_matches_2012)):
-    tournament_name = df_matches_2012['tourney_name'][row]
-    id_winner = df_matches_2012['winner_id'][row]
-    id_loser = df_matches_2012['loser_id'][row]
-    tournament_date = str(df_matches_2012['tourney_date'][row])
-    surface = df_matches_2012['surface'][row]
-    tournament_level = df_matches_2012['tourney_level'][row]
-    round = df_matches_2012['round'][row]
+for row in range(len(df_matches_year_to_study)):
+    tournament_name = df_matches_year_to_study['tourney_name'][row]
+    id_winner = df_matches_year_to_study['winner_id'][row]
+    id_loser = df_matches_year_to_study['loser_id'][row]
+    tournament_date = str(df_matches_year_to_study['tourney_date'][row])
+    surface = df_matches_year_to_study['surface'][row]
+    tournament_level = df_matches_year_to_study['tourney_level'][row]
+    round = df_matches_year_to_study['round'][row]
 
     winner = players_dict[id_winner]
     loser = players_dict[id_loser]
-    winner_rank = df_matches_2012['winner_rank'][row]
-    winner_rank_points = df_matches_2012['winner_rank_points'][row]
-    loser_rank = df_matches_2012['loser_rank'][row]
-    loser_rank_points = df_matches_2012['loser_rank_points'][row]
+    winner_rank = df_matches_year_to_study['winner_rank'][row]
+    winner_rank_points = df_matches_year_to_study['winner_rank_points'][row]
+    loser_rank = df_matches_year_to_study['loser_rank'][row]
+    loser_rank_points = df_matches_year_to_study['loser_rank_points'][row]
     winner.ranking = winner_rank
     winner.ranking_points = winner_rank_points
     loser.ranking = loser_rank
@@ -40,29 +42,29 @@ for row in range(len(df_matches_2012)):
 
     print(match.get_data()[1][:2], match.get_data()[1][-2])
 
-    score = df_matches_2012['score'][row]
+    score = df_matches_year_to_study['score'][row]
     if score == score and type(score) == str:
         sets_number = score.count('-')
 
-    w_ace = df_matches_2012['w_ace'][row]
-    w_svpt = df_matches_2012['w_svpt'][row]
-    w_df = df_matches_2012['w_df'][row]
-    w_1stwon = df_matches_2012['w_1stWon'][row]
-    w_2ndwon = df_matches_2012['w_2ndWon'][row]
-    w_1stIn = df_matches_2012['w_1stIn'][row]
-    w_bp_Saved = df_matches_2012['w_bpSaved'][row]
-    w_bp_Faced = df_matches_2012['w_bpFaced'][row]
-    w_SvGms = df_matches_2012['w_SvGms'][row]
+    w_ace = df_matches_year_to_study['w_ace'][row]
+    w_svpt = df_matches_year_to_study['w_svpt'][row]
+    w_df = df_matches_year_to_study['w_df'][row]
+    w_1stwon = df_matches_year_to_study['w_1stWon'][row]
+    w_2ndwon = df_matches_year_to_study['w_2ndWon'][row]
+    w_1stIn = df_matches_year_to_study['w_1stIn'][row]
+    w_bp_Saved = df_matches_year_to_study['w_bpSaved'][row]
+    w_bp_Faced = df_matches_year_to_study['w_bpFaced'][row]
+    w_SvGms = df_matches_year_to_study['w_SvGms'][row]
 
-    l_ace = df_matches_2012['l_ace'][row]
-    l_svpt = df_matches_2012['l_svpt'][row]
-    l_df = df_matches_2012['l_df'][row]
-    l_1stwon = df_matches_2012['l_1stWon'][row]
-    l_2ndwon = df_matches_2012['l_2ndWon'][row]
-    l_1stIn = df_matches_2012['l_1stIn'][row]
-    l_bp_Saved = df_matches_2012['l_bpSaved'][row]
-    l_bp_Faced = df_matches_2012['l_bpFaced'][row]
-    l_SvGms = df_matches_2012['l_SvGms'][row]
+    l_ace = df_matches_year_to_study['l_ace'][row]
+    l_svpt = df_matches_year_to_study['l_svpt'][row]
+    l_df = df_matches_year_to_study['l_df'][row]
+    l_1stwon = df_matches_year_to_study['l_1stWon'][row]
+    l_2ndwon = df_matches_year_to_study['l_2ndWon'][row]
+    l_1stIn = df_matches_year_to_study['l_1stIn'][row]
+    l_bp_Saved = df_matches_year_to_study['l_bpSaved'][row]
+    l_bp_Faced = df_matches_year_to_study['l_bpFaced'][row]
+    l_SvGms = df_matches_year_to_study['l_SvGms'][row]
 
     winner.add_victory(id_loser)
     winner.last_tournament_date = tournament_date
@@ -102,6 +104,6 @@ for row in range(len(df_matches_2012)):
 
 print(whole_data[0])
 
-with open('Data_2012', 'wb') as file:
+with open('Data_%i' % year_to_study, 'wb') as file:
     my_pickler = pickle.Pickler(file)
     my_pickler.dump(whole_data)

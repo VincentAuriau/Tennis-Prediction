@@ -2,42 +2,44 @@ import pandas as pd
 import Player
 import pickle
 
-df_players = pd.read_csv('Data/atp_players.csv', header=None, names=[1, 2, 3, 4, 5, 6], encoding="ISO-8859-1")
-df_matches_2012 = pd.read_csv('Data/atp_matches_2012.csv')
-df_matches_2012 = df_matches_2012.sort_values(by='tourney_date').reset_index()
-print(df_matches_2012)
+year_to_study = 2013
 
-list_players_2012 = {}
-for row in range(len(df_matches_2012)):
-    id_winner = df_matches_2012['winner_id'][row]
-    id_loser = df_matches_2012['loser_id'][row]
-    height_winner = df_matches_2012['winner_ht'][row]
-    hand_winner = df_matches_2012['winner_hand'][row]
-    height_loser = df_matches_2012['loser_ht'][row]
-    hand_loser = df_matches_2012['loser_hand'][row]
-    list_players_2012[id_winner] = [height_winner, hand_winner]
-    list_players_2012[id_loser] = [height_loser, hand_loser]
+df_players = pd.read_csv('Data/atp_players.csv', header=None, names=[1, 2, 3, 4, 5, 6], encoding="ISO-8859-1")
+df_matches_year_to_study = pd.read_csv('Data/atp_matches_%i.csv' % year_to_study)
+df_matches_year_to_study = df_matches_year_to_study.sort_values(by='tourney_date').reset_index()
+print(df_matches_year_to_study)
+
+list_players_year_to_study = {}
+for row in range(len(df_matches_year_to_study)):
+    id_winner = df_matches_year_to_study['winner_id'][row]
+    id_loser = df_matches_year_to_study['loser_id'][row]
+    height_winner = df_matches_year_to_study['winner_ht'][row]
+    hand_winner = df_matches_year_to_study['winner_hand'][row]
+    height_loser = df_matches_year_to_study['loser_ht'][row]
+    hand_loser = df_matches_year_to_study['loser_hand'][row]
+    list_players_year_to_study[id_winner] = [height_winner, hand_winner]
+    list_players_year_to_study[id_loser] = [height_loser, hand_loser]
 
 players_list = []
 players_list_dict = {}
 
 for row in range(len(df_players)):
     id_nb = df_players[1][row]
-    if id_nb in list_players_2012.keys():
+    if id_nb in list_players_year_to_study.keys():
         name = str(df_players[2][row]) + ' ' + str(df_players[3][row])
         born_year = str(df_players[5][row])[:4]
         country = str(df_players[6][row])
         player = Player.Player(name, born_year, country, id_nb)
-        hand = list_players_2012[id_nb][1]
-        height = list_players_2012[id_nb][0]
+        hand = list_players_year_to_study[id_nb][1]
+        height = list_players_year_to_study[id_nb][0]
         if hand != 'nan'and hand == hand:
-            player.hand = list_players_2012[id_nb][1]
+            player.hand = list_players_year_to_study[id_nb][1]
         if height != 'nan' and height == height:
-            player.height = list_players_2012[id_nb][0]
+            player.height = list_players_year_to_study[id_nb][0]
         players_list.append(player)
         players_list_dict[player.id] = player
 
-for year in range(1980, 2012):
+for year in range(1980, year_to_study):
     df_matches_year = pd.read_csv('Data/atp_matches_%i.csv' % year)
     for row in range(len(df_matches_year)):
         id_winner = df_matches_year['winner_id'][row]
@@ -70,7 +72,7 @@ for year in range(1980, 2012):
         l_bp_Faced = df_matches_year['l_bpFaced'][row]
         l_SvGms = df_matches_year['l_SvGms'][row]
 
-        print('sets number', sets_number)
+        # print('sets number', sets_number)
         # for player in players_list:
         #     if player.id == id_winner:
         #         player.add_victory(id_loser)
@@ -129,7 +131,7 @@ for year in range(1980, 2012):
             if w_bp_Faced == w_bp_Faced and w_bp_Saved == w_bp_Saved and w_SvGms == w_SvGms:
                 winner.update_breakpoint_faced_and_savec(w_bp_Faced, w_bp_Saved, w_SvGms)
         except:
-            print("Winner no longer playing in 2012")
+            print("Winner no longer playing in %i" % year_to_study)
 
         try:
             loser = players_list_dict[id_loser]
@@ -150,7 +152,7 @@ for year in range(1980, 2012):
             if l_bp_Faced == l_bp_Faced and l_bp_Saved == l_bp_Saved and l_SvGms == l_SvGms:
                 loser.update_breakpoint_faced_and_savec(l_bp_Faced, l_bp_Saved, l_SvGms)
         except:
-            print('Loser no longer playing in 2012')
+            print('Loser no longer playing in %i' % year_to_study)
 
 for player in players_list_dict.values():
     print(player)
@@ -165,6 +167,6 @@ for player in players_list_dict.values():
     if player.id == 104745 or player.id == 104932:
         print(player.matches)
 
-with open('Players_2012_profiles', 'wb') as file:
+with open('Players_%i_profiles' % year_to_study, 'wb') as file:
     my_pickler = pickle.Pickler(file)
     my_pickler.dump(players_list_dict)
