@@ -11,7 +11,7 @@ Current results :
 SCORES :  [delta^2 = 0.059046558635946614, Accuracy_% : 0.9149010073149026]
 
 ____________________________________
-Data & Predction :
+Data & Prediction :
 
 Surface : Hard
 Tournament : Atlanta
