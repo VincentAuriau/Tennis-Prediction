@@ -76,7 +76,7 @@ for match_not_treated in data_not_treated:
 
         # Fatigue
         fatigue = match_not_treated[player][27]
-        # print(fatigues)
+        # print(fatigue)
 
         # Age
         year = year_to_treat

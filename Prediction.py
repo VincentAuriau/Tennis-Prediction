@@ -6,6 +6,7 @@ import pickle
 import pandas as pd
 import numpy
 import matplotlib.pyplot as plt
+import h5py
 
 with open('data_to_be_used_final', 'rb') as file:
     my_unpickler = pickle.Unpickler(file)
@@ -172,3 +173,5 @@ for i in range(10):
     print('Expected Result:')
     print(test_y_2013.values[10+i:11+i])
     # print(model.predict(train_x.values[2225]))
+
+model.save('prediction_model.h5')
