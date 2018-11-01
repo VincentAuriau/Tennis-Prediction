@@ -31,8 +31,8 @@ age_p1 = ''
 
 percentages_p1 = ''
 
-last_matches_win_percentages_p1 = ''
-last_matches_surface_p1 = ''
+last_matches_win_percentages_p1 = '' # Last 5 matches
+last_matches_surface_p1 = '' # Last 5 matches
 win_percentage_actual_over_other_p1 = ''
 
 name_p1 = ''
@@ -49,8 +49,8 @@ age_p2 = ''
 
 percentages_p2 = ''
 
-last_matches_win_percentages_p2 = ''
-last_matches_surface_p2 = ''
+last_matches_win_percentages_p2 = '' # Last 5 matches
+last_matches_surface_p2 = '' # Last 5 matches
 win_percentage_actual_over_other_p2 = ''
 
 name_p2 = ''
@@ -137,6 +137,20 @@ p1_data.append(float_treatment(fatigue_p1, couple[1], couple[0]))
 couple = extrema_dict[8]
 p1_data.append(float_treatment(age_p1, couple[1], couple[0]))
 
+# Percentages
+
+# Last_matches_win_percentage
+
+p1_data.append(percentage_treatment(last_matches_win_percentages_p1))
+
+# Last matches surface win percentage
+
+p1_data.append(percentage_treatment(last_matches_surface_p1))
+
+# Win percentage over P2
+
+p1_data.append(percentage_treatment(win_percentage_actual_over_other_p2))
+
 # Player 2
 
 p2_data = []
@@ -172,3 +186,17 @@ p2_data.append(float_treatment(fatigue_p2, couple[1], couple[0]))
 
 couple = extrema_dict[8]
 p2_data.append(float_treatment(age_p2, couple[1], couple[0]))
+
+# Percentages
+
+# Last_matches_win_percentage
+
+p2_data.append(percentage_treatment(last_matches_win_percentages_p2))
+
+# Last matches surface win percentage
+
+p2_data.append(percentage_treatment(last_matches_surface_p2))
+
+# Win percentage over P1
+
+p2_data.append(percentage_treatment(win_percentage_actual_over_other_p1))
