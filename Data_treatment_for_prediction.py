@@ -153,7 +153,8 @@ for data_type in range(19):
     elif data_type < 9:
         couple = extrema_dict[data_type]
         for match in range(len(data_treated)):
-            data_treated[match][3][data_type-3] = float_treatment(data_treated[match][3][data_type-3], couple[1], couple[0])
+            data_treated[match][3][data_type - 3] = float_treatment(data_treated[match][3][data_type-3], couple[1],
+                                                                    couple[0])
             data_treated[match][4][data_type - 3] = float_treatment(data_treated[match][4][data_type - 3], couple[1],
                                                                     couple[0])
 
@@ -164,7 +165,7 @@ for data_type in range(19):
 
     elif data_type < 13:
         for match in range(len(data_treated)):
-            data_treated[match][3][data_type-3] = percentage_treatment([data_treated[match][3][data_type-3]])[0]
+            data_treated[match][3][data_type - 3] = percentage_treatment([data_treated[match][3][data_type - 3]])[0]
             data_treated[match][4][data_type - 3] = percentage_treatment([data_treated[match][4][data_type - 3]])[0]
 
 print(data_treated[0])

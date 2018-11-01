@@ -23,7 +23,7 @@ level = ''
 # Player 1
 
 rank_p1 = ''
-ranking_points_p1 = ''
+points_p1 = ''
 hand_p1 = ''
 height_p1 = ''
 fatigue_p1 = ''
@@ -41,7 +41,7 @@ name_p1 = ''
 # Player 2
 
 rank_p2 = ''
-ranking_points_p2 = ''
+points_p2 = ''
 hand_p2 = ''
 height_p2 = ''
 fatigue_p2 = ''
@@ -76,26 +76,99 @@ data_treated = []
 match_data = []
 
 # Tournament
+
+maxi = 69
+mini = 1
+
 if tournament in tournaments_dict.keys():
-    match_data.append(tournaments_dict[tournament])
+    match_data.append(float_treatment(tournaments_dict[tournament], maxi, mini))
 elif 'Davis' in tournament:
-    match_data.append(69)
+    match_data.append(float_treatment(69, maxi, mini))
 else:
     print('--  New Tournament  --')
     print(tournament)
-    match_data.append(70)
+    match_data.append(float_treatment(70, maxi, mini))
 
 # Level
 
-match_data.append(level_dict[level])
+maxi = 6
+mini = 1
+match_data.append(float_treatment(level_dict[level], maxi, mini))
 
 # Surface
 
-match_data.append(surface_dict[surface])
+maxi = 4
+mini = 1
+match_data.append(float_treatment(surface_dict[surface], maxi, mini))
 
 # Player 1
 
+p1_data = []
+
+# Rank
+
+couple = extrema_dict[3]
+p1_data.append(float_treatment(rank_p1, couple[1], couple[0]))
+
+# Points
+
+couple = extrema_dict[4]
+p1_data.append(float_treatment(points_p1, couple[1], couple[0]))
+
+# Hand
+
 if hand_p1 == 'L':
-    hand = 0
+    p1_data.append(0)
 else:
-    hand = 1
+    p1_data.append(1)
+
+# Height
+
+couple = extrema_dict[6]
+p1_data.append(float_treatment(height_p1, couple[1], couple[0]))
+
+# Fatigue
+
+couple = extrema_dict[7]
+p1_data.append(float_treatment(fatigue_p1, couple[1], couple[0]))
+
+# Age
+
+couple = extrema_dict[8]
+p1_data.append(float_treatment(age_p1, couple[1], couple[0]))
+
+# Player 2
+
+p2_data = []
+
+# Rank
+
+couple = extrema_dict[3]
+p2_data.append(float_treatment(rank_p2, couple[1], couple[0]))
+
+# Points
+
+couple = extrema_dict[4]
+p2_data.append(float_treatment(points_p2, couple[1], couple[0]))
+
+# Hand
+
+if hand_p2 == 'L':
+    p2_data.append(0)
+else:
+    p2_data.append(1)
+
+# Height
+
+couple = extrema_dict[6]
+p2_data.append(float_treatment(height_p2, couple[1], couple[0]))
+
+# Fatigue
+
+couple = extrema_dict[7]
+p2_data.append(float_treatment(fatigue_p2, couple[1], couple[0]))
+
+# Age
+
+couple = extrema_dict[8]
+p2_data.append(float_treatment(age_p2, couple[1], couple[0]))
