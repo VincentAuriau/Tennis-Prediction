@@ -31,8 +31,8 @@ age_p1 = ''
 
 percentages_p1 = ''
 
-last_matches_win_percentages_p1 = '' # Last 5 matches
-last_matches_surface_p1 = '' # Last 5 matches
+last_matches_win_percentages_p1 = ''  # Last 5 matches
+last_matches_surface_p1 = ''  # Last 5 matches
 win_percentage_actual_over_other_p1 = ''
 
 name_p1 = ''
@@ -49,23 +49,23 @@ age_p2 = ''
 
 percentages_p2 = ''
 
-last_matches_win_percentages_p2 = '' # Last 5 matches
-last_matches_surface_p2 = '' # Last 5 matches
+last_matches_win_percentages_p2 = ''  # Last 5 matches
+last_matches_surface_p2 = ''  # Last 5 matches
 win_percentage_actual_over_other_p2 = ''
 
 name_p2 = ''
 
 # TREATMENT FUNCTIONS
 
-def percentage_treatment(percentage_list):
-    return_list = []
-    for percentage in percentage_list:
-        return_list.append(percentage * 0.01)
-    return return_list
+
+def percentage_treatment(percentage):
+    if percentage > 1:
+        return 0.01 * percentage
 
 
-def float_treatment(floated, maxi, mini):
-    return (2 / (maxi - mini)) * floated - ((maxi + mini) / (maxi - mini))
+def float_treatment(floated, maximum, minimum):
+    return (2 / (maximum - minimum)) * floated - ((maximum + minimum) / (maximum - minimum))
+
 
 data_treated = []
 
@@ -139,6 +139,9 @@ p1_data.append(float_treatment(age_p1, couple[1], couple[0]))
 
 # Percentages
 
+for percentage in percentages_p1:
+    p1_data.append(percentage_treatment(percentage))
+
 # Last_matches_win_percentage
 
 p1_data.append(percentage_treatment(last_matches_win_percentages_p1))
@@ -189,6 +192,9 @@ p2_data.append(float_treatment(age_p2, couple[1], couple[0]))
 
 # Percentages
 
+for percentage in percentages_p2:
+    p2_data.append(percentage_treatment(percentage))
+
 # Last_matches_win_percentage
 
 p2_data.append(percentage_treatment(last_matches_win_percentages_p2))
@@ -200,3 +206,5 @@ p2_data.append(percentage_treatment(last_matches_surface_p2))
 # Win percentage over P1
 
 p2_data.append(percentage_treatment(win_percentage_actual_over_other_p1))
+
+
