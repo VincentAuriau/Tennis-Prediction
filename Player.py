@@ -132,7 +132,10 @@ class Player:
         for proportion in self.ace_proportion:
             total_aces_nbr += proportion[0]
             total_service_points_played += proportion[1]
-        self.ace_percentage = total_aces_nbr / total_service_points_played * 100
+        if total_service_points_played != 0:
+            self.ace_percentage = total_aces_nbr / total_service_points_played * 100
+        else:
+            print('No point played :', self.ace_proportion)
 
     def update_doublefault_percentage(self, df_nb, service_points_played):
         self.doublefault_proportion += [[df_nb, service_points_played]]
@@ -141,7 +144,10 @@ class Player:
         for proportion in self.doublefault_proportion:
             total_df_nbr += proportion[0]
             total_service_points_played += proportion[1]
-        self.doublefault_percentage = total_df_nbr / total_service_points_played * 100
+        if total_service_points_played != 0:
+            self.doublefault_percentage = total_df_nbr / total_service_points_played * 100
+        else:
+            print('No point played :', self.doublefault_proportion)
 
     def update_winning_on_1st_serve_percentage(self, first_serve_win, service_points_played):
         self.winning_on_1st_serve_proportion += [[first_serve_win, service_points_played]]
