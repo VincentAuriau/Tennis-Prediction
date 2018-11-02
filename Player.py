@@ -198,3 +198,14 @@ class Player:
                            self.overall_win_on_serve_percentage, self.breakpoint_faced_percentage,
                            self.breakpoint_saved_percentage, self.fatigue]
         return data_to_be_used
+
+    def get_data_profile(self):
+        data_to_be_used = [self.name, self.id,  self.ranking, self.ranking_points, self.born_year, self.versus, self.hand,
+                           self.height,
+                           self.victory_percentage, self.clay_victory_percentage, self.carpet_victory_percentage,
+                           self.grass_victory_percentage, self.hard_victory_percentage, self.ace_percentage,
+                           self.doublefault_percentage, self.first_serve_success_percentage,
+                           self.winning_on_1st_serve_percentage, self.winning_on_2nd_serve_percentage,
+                           self.overall_win_on_serve_percentage, self.breakpoint_faced_percentage,
+                           self.breakpoint_saved_percentage]
+        return data_to_be_used
