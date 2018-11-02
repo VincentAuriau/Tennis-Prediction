@@ -1,6 +1,7 @@
 from keras.models import load_model
 import pickle
 import keras
+import pandas as pd
 
 
 # MODEL PARAMETERS
@@ -58,9 +59,9 @@ name_p2 = ''
 # TREATMENT FUNCTIONS
 
 
-def percentage_treatment(percentage):
-    if percentage > 1:
-        return 0.01 * percentage
+def percentage_treatment(prctg):
+    if prctg > 1:
+        return 0.01 * prctg
 
 
 def float_treatment(floated, maximum, minimum):
@@ -207,4 +208,10 @@ p2_data.append(percentage_treatment(last_matches_surface_p2))
 
 p2_data.append(percentage_treatment(win_percentage_actual_over_other_p1))
 
+input_data = match_data + p1_data + p2_data
 
+input_data = pd.DataFrame([input_data])
+print(input_data)
+prediction = model.predict(input_data.values)
+
+print('Prediction: ', prediction)

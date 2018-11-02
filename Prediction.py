@@ -170,6 +170,7 @@ for i in range(10):
 
     print('Prediction:')
     print(model.predict(test_x_2013.values[10+i:11+i]))
+
     print('Expected Result:')
     print(test_y_2013.values[10+i:11+i])
     # print(model.predict(train_x.values[2225]))
