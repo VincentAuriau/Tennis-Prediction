@@ -2,7 +2,8 @@ import pandas as pd
 import Player
 import pickle
 
-year_to_study = 2013
+
+year_to_study = 2018
 
 df_players = pd.read_csv('Data/atp_players.csv', header=None, names=[1, 2, 3, 4, 5, 6], encoding="ISO-8859-1")
 df_matches_year_to_study = pd.read_csv('Data/atp_matches_%i.csv' % year_to_study)
@@ -131,7 +132,8 @@ for year in range(1980, year_to_study):
             if w_bp_Faced == w_bp_Faced and w_bp_Saved == w_bp_Saved and w_SvGms == w_SvGms:
                 winner.update_breakpoint_faced_and_savec(w_bp_Faced, w_bp_Saved, w_SvGms)
         except:
-            print("Winner no longer playing in %i" % year_to_study)
+            # print("Winner no longer playing in %i" % year_to_study)
+            pass
 
         try:
             loser = players_list_dict[id_loser]
@@ -152,7 +154,8 @@ for year in range(1980, year_to_study):
             if l_bp_Faced == l_bp_Faced and l_bp_Saved == l_bp_Saved and l_SvGms == l_SvGms:
                 loser.update_breakpoint_faced_and_savec(l_bp_Faced, l_bp_Saved, l_SvGms)
         except:
-            print('Loser no longer playing in %i' % year_to_study)
+            # print('Loser no longer playing in %i' % year_to_study)
+            pass
 
 for player in players_list_dict.values():
     print(player)
@@ -167,6 +170,33 @@ for player in players_list_dict.values():
     if player.id == 104745 or player.id == 104932:
         print(player.matches)
 
+'''
 with open('Players_%i_profiles' % year_to_study, 'wb') as file:
     my_pickler = pickle.Pickler(file)
     my_pickler.dump(players_list_dict)
+'''
+
+df_data_players = pd.DataFrame(columns=['name', 'id',  'ranking', 'ranking_points', 'born_year', 'versus', 'hand',
+                                        'height',
+                                        'victory_percentage', 'clay_victory_percentage', 'carpet_victory_percentage',
+                                        'grass_victory_percentage', 'hard_victory_percentage', 'ace_percentage',
+                                        'doublefault_percentage', 'first_serve_success_percentage',
+                                        'winning_on_1st_serve_percentage', 'winning_on_2nd_serve_percentage',
+                                        'overall_win_on_serve_percentage', 'breakpoint_faced_percentage',
+                                        'breakpoint_saved_percentage'])
+print(df_data_players)
+for player in players_list_dict.keys():
+    df_to_add = pd.DataFrame([players_list_dict[player].get_data_profile()],
+                                            columns=['name', 'id',  'ranking', 'ranking_points', 'born_year', 'versus',
+                                                     'hand', 'height', 'victory_percentage', 'clay_victory_percentage',
+                                                     'carpet_victory_percentage', 'grass_victory_percentage',
+                                                     'hard_victory_percentage', 'ace_percentage',
+                                                     'doublefault_percentage', 'first_serve_success_percentage',
+                                                     'winning_on_1st_serve_percentage',
+                                                     'winning_on_2nd_serve_percentage',
+                                                     'overall_win_on_serve_percentage',
+                                                     'breakpoint_faced_percentage',  'breakpoint_saved_percentage'])
+
+    df_data_players = df_data_players.append(df_to_add)
+
+df_data_players.to_csv('Players_Statistics_.csv', index=False)
