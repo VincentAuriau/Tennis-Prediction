@@ -135,7 +135,7 @@ class Player:
         if total_service_points_played != 0:
             self.ace_percentage = total_aces_nbr / total_service_points_played * 100
         else:
-            print('No point played :', self.ace_proportion)
+            print('No point played :', total_aces_nbr)
 
     def update_doublefault_percentage(self, df_nb, service_points_played):
         self.doublefault_proportion += [[df_nb, service_points_played]]
@@ -147,7 +147,7 @@ class Player:
         if total_service_points_played != 0:
             self.doublefault_percentage = total_df_nbr / total_service_points_played * 100
         else:
-            print('No point played :', self.doublefault_proportion)
+            print('No point played :', total_df_nbr)
 
     def update_winning_on_1st_serve_percentage(self, first_serve_win, service_points_played):
         self.winning_on_1st_serve_proportion += [[first_serve_win, service_points_played]]
@@ -157,9 +157,12 @@ class Player:
             # print(proportion)
             total_first_serve_win += proportion[0]
             total_service_point_played += proportion[1]
-        self.winning_on_1st_serve_percentage = total_first_serve_win / total_service_point_played * 100
-        self.overall_win_on_serve_percentage = self.winning_on_1st_serve_percentage \
-            + self.winning_on_2nd_serve_percentage
+        if total_service_point_played != 0:
+            self.winning_on_1st_serve_percentage = total_first_serve_win / total_service_point_played * 100
+            self.overall_win_on_serve_percentage = self.winning_on_1st_serve_percentage \
+                + self.winning_on_2nd_serve_percentage
+        else:
+            print('No point played :', total_first_serve_win)
 
     def update_winning_on_2nd_serve_percentage(self, second_serve_win, service_points_played):
         self.winning_on_2nd_serve_proportion += [[second_serve_win, service_points_played]]
@@ -168,9 +171,13 @@ class Player:
         for proportion in self.winning_on_2nd_serve_proportion:
             total_second_serve_win += proportion[0]
             total_service_point_played += proportion[1]
-        self.winning_on_2nd_serve_percentage = total_second_serve_win / total_service_point_played * 100
-        self.overall_win_on_serve_percentage = self.winning_on_1st_serve_percentage \
-            + self.winning_on_2nd_serve_percentage
+
+        if total_service_point_played != 0:
+            self.winning_on_2nd_serve_percentage = total_second_serve_win / total_service_point_played * 100
+            self.overall_win_on_serve_percentage = self.winning_on_1st_serve_percentage \
+                + self.winning_on_2nd_serve_percentage
+        else:
+            print('No point played :', total_second_serve_win)
 
     def update_first_serve_success_percentage(self, first_services_in, service_points_played):
         self.first_serve_success_proportion += [[first_services_in, service_points_played]]
@@ -179,7 +186,10 @@ class Player:
         for proportion in self.first_serve_success_proportion:
             total_first_serves_in += proportion[0]
             total_service_points_played += proportion[1]
-        self.first_serve_success_percentage = total_first_serves_in / total_service_points_played * 100
+        if total_service_points_played != 0:
+            self.first_serve_success_percentage = total_first_serves_in / total_service_points_played * 100
+        else:
+            print('No point played :', total_first_serves_in)
 
     def update_breakpoint_faced_and_savec(self, breakpoint_faced, breakpoint_saved, service_games_played):
         self.breakpoint_faced_proportion += [[breakpoint_faced, service_games_played]]
@@ -190,8 +200,11 @@ class Player:
             total_breakpoint_faced += proportion[0]
             total_games_played += proportion[1]
 
-        self.breakpoint_faced_percentage = total_breakpoint_faced / total_games_played * 100
-        self.breakpoint_saved_percentage = self.breakpoint_saved_number / total_games_played * 100
+        if total_games_played != 0:
+            self.breakpoint_faced_percentage = total_breakpoint_faced / total_games_played * 100
+            self.breakpoint_saved_percentage = self.breakpoint_saved_number / total_games_played * 100
+        else:
+            print('No point played :', self.breakpoint_saved_number)
 
     def get_data(self):
         data_to_be_used = [self.name, self.id,  self.ranking, self.ranking_points, self.born_year, self.versus, self.hand,

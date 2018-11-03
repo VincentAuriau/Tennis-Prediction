@@ -82,8 +82,14 @@ for year in range(1968, year_to_study):
                 height = df_matches_year['winner_ht'][row]
                 if height == height:
                     winner.height = height
+
+            if winner.id == 133430:
+                print(winner.heigth)
+                print(df_matches_year['winner_ht'][row])
+
         except:
             print('Winner not registered?')
+            print('haha', id_winner)
 
         try:
             loser = players_list_dict[id_loser]
@@ -125,7 +131,7 @@ for row in range(len(df_rankings)):
         print('Player not seen before...')
 
 
-
+'''
 for player in players_list_dict.values():
     print(player)
     print('          Last Matches :  ', player.last_matches, ' *** Victory Percentage : ', player.victory_percentage,
@@ -136,7 +142,7 @@ for player in players_list_dict.values():
     print('           *** Serve Point In Percentage : ', player.first_serve_success_percentage, '%')
     print('           *** BreakPoint Faced : ', player.breakpoint_faced_percentage, '%', '   *** Breakpoint Saved : ',
           player.breakpoint_saved_percentage, '%')
-
+'''
 
 df_data_players = pd.DataFrame(columns=['name', 'id',  'ranking', 'ranking_points', 'born_year', 'versus', 'hand',
                                         'height',
