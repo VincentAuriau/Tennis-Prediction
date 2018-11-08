@@ -58,3 +58,14 @@ Prediction:
 
 Expected Result:
 [[1 0]]
+
+____________________________________
+
+Prediction for ATP Finals in London on 11/11/2018:
+
+
+Kevin Anderson : 70.16685009002686 % Chances of victory
+Dominic Thiem : 29.833149909973145 % Chances of victory
+
+BetClic's odds:
+Kevin Anderson : 1.90 - 1.82 Dominic Thiem
