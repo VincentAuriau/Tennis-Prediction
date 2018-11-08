@@ -4,6 +4,23 @@ import keras
 import pandas as pd
 
 
+def retrieve_percentages(player_id, srface):
+    df_players = pd.read_csv('Players_Statistics/Players_Statistics_.csv')
+    df = df_players.loc[df_players['id'] == player_id]
+    df = df.reset_index(drop=True)
+    victory_percentage = df['victory_percentage'][0]
+    victory_percentage_surface = df['%s_victory_percentage' % srface.lower()][0]
+    ace_percentage = df['ace_percentage'][0]
+    doublefaults_percentage = df['doublefault_percentage'][0]
+    first_serve_success = df['first_serve_success_percentage'][0]
+    winning_on_first_serve = df['winning_on_1st_serve_percentage'][0]
+    winning_on_second_serve = df['winning_on_2nd_serve_percentage'][0]
+    overall_win_on_serve = df['overall_win_on_serve_percentage'][0]
+    break_points_faced = df['breakpoint_faced_percentage'][0]
+    break_points_saved = df['breakpoint_saved_percentage'][0]
+    return[victory_percentage, victory_percentage_surface, ace_percentage, doublefaults_percentage, first_serve_success,
+           winning_on_first_serve, winning_on_second_serve, overall_win_on_serve, break_points_faced, break_points_saved]
+
 # MODEL PARAMETERS
 
 model_year = 2012
@@ -17,44 +34,49 @@ with open('indicators_dicts_%i' % model_year, 'rb') as file:
 # INPUT DATA
 
 # Match
-tournament = ''
-surface = ''
-level = ''
+tournament = 'London'
+surface = 'Hard'
+level = 'A'
 
 # Player 1
 
-rank_p1 = ''
-points_p1 = ''
-hand_p1 = ''
-height_p1 = ''
-fatigue_p1 = ''
-age_p1 = ''
+name_p1 = 'Kevin Anderson'
+id_p1 = 104731
 
-percentages_p1 = ''
+rank_p1 = 6
+points_p1 = 4310
+hand_p1 = 'R'
+height_p1 = 203
+fatigue_p1 = 0.5
+age_p1 = 32
 
-last_matches_win_percentages_p1 = ''  # Last 5 matches
-last_matches_surface_p1 = ''  # Last 5 matches
-win_percentage_actual_over_other_p1 = ''
+percentages_p1 = retrieve_percentages(id_p1, surface)
+print('PERCENTAGES P1:', percentages_p1)
 
-name_p1 = ''
+last_matches_win_percentages_p1 = 0.80  # Last 5 matches
+last_matches_surface_p1 = 0.80  # Last 5 matches
+win_percentage_actual_over_other_p1 = 0.75
 
 
 # Player 2
 
-rank_p2 = ''
-points_p2 = ''
-hand_p2 = ''
-height_p2 = ''
-fatigue_p2 = ''
-age_p2 = ''
+name_p2 = 'Dominic Thiem'
+id_p2 = 106233
 
-percentages_p2 = ''
+rank_p2 = 7
+points_p2 = 4095
+hand_p2 = 'R'
+height_p2 = 185
+fatigue_p2 = 1
+age_p2 = 25
 
-last_matches_win_percentages_p2 = ''  # Last 5 matches
-last_matches_surface_p2 = ''  # Last 5 matches
-win_percentage_actual_over_other_p2 = ''
+percentages_p2 = retrieve_percentages(id_p2, surface)
+print('PERCENTAGES P2:', percentages_p2)
 
-name_p2 = ''
+last_matches_win_percentages_p2 = 0.60  # Last 5 matches
+last_matches_surface_p2 = 0.60  # Last 5 matches
+win_percentage_actual_over_other_p2 = 0.25
+
 
 # TREATMENT FUNCTIONS
 
@@ -62,6 +84,8 @@ name_p2 = ''
 def percentage_treatment(prctg):
     if prctg > 1:
         return 0.01 * prctg
+    else:
+        return prctg
 
 
 def float_treatment(floated, maximum, minimum):
@@ -206,12 +230,17 @@ p2_data.append(percentage_treatment(last_matches_surface_p2))
 
 # Win percentage over P1
 
-p2_data.append(percentage_treatment(win_percentage_actual_over_other_p1))
+p2_data.append(percentage_treatment(win_percentage_actual_over_other_p2))
 
 input_data = match_data + p1_data + p2_data
-
+print('P2 data:', p2_data)
+print(input_data)
 input_data = pd.DataFrame([input_data])
 print(input_data)
 prediction = model.predict(input_data.values)
 
 print('Prediction: ', prediction)
+
+print('What will ne the results?')
+print(name_p1, ':', prediction[0][0]*100, '% Chances of victory')
+print(name_p2, ':', prediction[0][1]*100, '% Chances of victory')

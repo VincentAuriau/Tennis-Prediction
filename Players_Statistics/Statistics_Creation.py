@@ -89,7 +89,7 @@ for year in range(1968, year_to_study):
 
         except:
             print('Winner not registered?')
-            print('haha', id_winner)
+            print(id_winner)
 
         try:
             loser = players_list_dict[id_loser]
