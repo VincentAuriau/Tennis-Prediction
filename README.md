@@ -13,10 +13,10 @@ SCORES :  [delta^2 = 0.059046558635946614, Accuracy_% : 0.9149010073149026]
 ____________________________________
 Data & Prediction :
 
-Surface : Hard
+Surface : Hard  
 Tournament : Atlanta
 
-Ranks & Points
+Ranks & Points  
 Player 1: 33.0 1185.0
 Julien Benneteau
 
@@ -37,10 +37,10 @@ Expected Result:
 
 ____________________________________
 
-Surface : Hard
+Surface : Hard  
 Tournament : Miami Masters
 
-Ranks & Points
+Ranks & Points  
 Player 1: 103.0 515.0
 Gael Monfils
 
@@ -64,8 +64,8 @@ ____________________________________
 Prediction for ATP Finals in London on 11/11/2018:
 
 
-Kevin Anderson : 70.16685009002686 % Chances of victory
-Dominic Thiem : 29.833149909973145 % Chances of victory
+Kevin Anderson : 70.16685009002686 % Chances of victory  
+Dominic Thiem : 29.833149909973145 % Chances of victory  
 
-BetClic's odds:
-Kevin Anderson : 1.90 - 1.82 Dominic Thiem
+BetClic's odds:  
+Kevin Anderson : 1.90 - 1.82 : Dominic Thiem  
