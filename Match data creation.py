@@ -3,7 +3,7 @@ import Match
 import pickle
 import pandas as pd
 
-year_to_study = 2013
+year_to_study = 2015
 
 df_matches_year_to_study = pd.read_csv('Data/atp_matches_%i.csv' % year_to_study)
 df_matches_year_to_study = df_matches_year_to_study.sort_values(by='tourney_date').reset_index()

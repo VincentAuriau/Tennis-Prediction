@@ -34,49 +34,48 @@ with open('indicators_dicts_%i' % model_year, 'rb') as file:
 # INPUT DATA
 
 # Match
-tournament = 'London'
-surface = 'Hard'
-level = 'A'
+tournament = 'Wimbledon'
+surface = 'Grass'
+level = 'G'
 
 # Player 1
 
-name_p1 = 'Kevin Anderson'
-id_p1 = 104731
+name_p1 = 'Roberto Bautista Agut'
+id_p1 = 105138
 
-rank_p1 = 6
-points_p1 = 4310
+rank_p1 = 19
+points_p1 = 1645
 hand_p1 = 'R'
-height_p1 = 203
-fatigue_p1 = 0.5
-age_p1 = 32
+height_p1 = 181
+fatigue_p1 = 3.8
+age_p1 = 31
 
 percentages_p1 = retrieve_percentages(id_p1, surface)
 print('PERCENTAGES P1:', percentages_p1)
 
-last_matches_win_percentages_p1 = 0.80  # Last 5 matches
-last_matches_surface_p1 = 0.80  # Last 5 matches
-win_percentage_actual_over_other_p1 = 0.75
+last_matches_win_percentages_p1 = 0.60  # Last 5 matches
+last_matches_surface_p1 = 0.60  # Last 5 matches
+win_percentage_actual_over_other_p1 = 0.67
 
 
 # Player 2
 
-name_p2 = 'Dominic Thiem'
-id_p2 = 106233
+name_p2 = 'Taylor Harry Fritz'
+id_p2 = 126203
 
-rank_p2 = 7
-points_p2 = 4095
+rank_p2 = 40
+points_p2 = 1090
 hand_p2 = 'R'
-height_p2 = 185
-fatigue_p2 = 1
-age_p2 = 25
+height_p2 = 193
+fatigue_p2 = 4
+age_p2 = 22
 
 percentages_p2 = retrieve_percentages(id_p2, surface)
 print('PERCENTAGES P2:', percentages_p2)
 
-last_matches_win_percentages_p2 = 0.60  # Last 5 matches
-last_matches_surface_p2 = 0.60  # Last 5 matches
-win_percentage_actual_over_other_p2 = 0.25
-
+last_matches_win_percentages_p2 = 0.80  # Last 5 matches
+last_matches_surface_p2 = 0.80  # Last 5 matches
+win_percentage_actual_over_other_p2 = 0.33
 
 # TREATMENT FUNCTIONS
 

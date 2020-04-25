@@ -2,7 +2,7 @@ import pickle
 import random
 
 model_year = 2012
-year_to_treat = 2013
+year_to_treat = 2015
 
 with open('Data_%i' % year_to_treat, 'rb') as file:
     my_unpickler = pickle.Unpickler(file)
@@ -175,7 +175,7 @@ data_final = []
 outcome = []
 for i in range(len(data_treated)):
     match = data_treated[i]
-    winner = random.randint(0,1)
+    winner = random.randint(0, 1)
     if winner == 0:
         outcome += [[1, 0]]
         data_final += [match[0:3] + match[3][:6] + match[3][6] + match[3][7:10] + match[4][:6] + match[4][6] + match[4][7:10] + [match[3][10]] + [match[4][10]]]

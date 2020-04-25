@@ -3,7 +3,7 @@ import Player
 import pickle
 
 
-year_to_study = 2018
+year_to_study = 2019
 
 df_players = pd.read_csv('../Data/atp_players.csv', header=None, names=[1, 2, 3, 4, 5, 6], encoding="ISO-8859-1")
 df_matches_year_to_study = pd.read_csv('../Data/atp_matches_%i.csv' % year_to_study)
@@ -128,7 +128,7 @@ for row in range(len(df_rankings)):
         player.ranking = rank
         player.ranking_points = points
     except:
-        print('Player not seen before...')
+        print('Player not seen before...', id)
 
 
 '''
@@ -168,4 +168,4 @@ for player in players_list_dict.keys():
     if df_to_add['victory_percentage'][0] != 0 and df_to_add['born_year'][0] != 'nan':
         df_data_players = df_data_players.append(df_to_add)
 
-df_data_players.to_csv('Players_Statistics_.csv', index=False)
+df_data_players.to_csv('Players_Statistics_2019.csv', index=False)
