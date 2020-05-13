@@ -96,3 +96,8 @@ for year in range(1980, 2019):
 
 print('NUMBER OF MATCHES ANALYZED:', num_matches_analyed)
 print('NUMBER OF PLAYERS:', len(players_dict.keys()))
+
+with open('2019_players_updated', 'wb') as file:
+    my_pickler = pickle.Pickler(file)
+    my_pickler.dump(players_dict)
+
