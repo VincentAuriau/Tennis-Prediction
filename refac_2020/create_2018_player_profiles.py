@@ -15,11 +15,13 @@ with open('2019_players', 'rb') as file:
 
 
 print(players_dict)
+num_matches_analyed = 0
 
-
-for year in range(1980, 2001):
+for year in range(1980, 2019):
+    print('YEAR:', year)
     df_matches_year = pd.read_csv('../Data/atp_matches_%i.csv' % year)
     for id, row in df_matches_year.iterrows():
+        num_matches_analyed += 1
         id_winner = row['winner_id']
         id_loser = row['loser_id']
         tournament_date = str(row['tourney_date'])
@@ -74,7 +76,6 @@ for year in range(1980, 2001):
                 winner.update_first_serve_success_percentage(w_1stIn, w_svpt)
             if w_bp_Faced == w_bp_Faced and w_bp_Saved == w_bp_Saved and w_SvGms == w_SvGms:
                 winner.update_breakpoint_faced_and_savec(w_bp_Faced, w_bp_Saved, w_SvGms)
-            print(winner.versus)
 
         if loser is not None:
             loser.add_defeat(id_winner)
@@ -93,5 +94,5 @@ for year in range(1980, 2001):
             if l_bp_Faced == l_bp_Faced and l_bp_Saved == l_bp_Saved and l_SvGms == l_SvGms:
                 loser.update_breakpoint_faced_and_savec(l_bp_Faced, l_bp_Saved, l_SvGms)
 
-            print(loser.versus)
-        print('__')
+print('NUMBER OF MATCHES ANALYZED:', num_matches_analyed)
+print('NUMBER OF PLAYERS:', len(players_dict.keys()))
