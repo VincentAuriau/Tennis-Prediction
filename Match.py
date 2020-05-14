@@ -30,6 +30,6 @@ class Match:
 
         decision = np.random.rand()
         if decision > 0.5:
-            return [].extend(self.data[0]).extend(self.data[1]).extend(self.data[2]).extend(0)
+            return np.concatenate([self.data[0], self.data[1], self.data[2], [0]]).tolist()
         else:
-            return [].extend(self.data[0]).extend(self.data[2]).extend(self.data[1]).extend(1)
+            return np.concatenate([self.data[0], self.data[2], self.data[1], [1]]).tolist()
