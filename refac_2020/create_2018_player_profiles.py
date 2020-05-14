@@ -17,7 +17,7 @@ with open('2019_players', 'rb') as file:
 print(players_dict)
 num_matches_analyed = 0
 
-for year in range(1980, 2019):
+for year in range(1980, 2018):
     print('YEAR:', year)
     df_matches_year = pd.read_csv('../Data/atp_matches_%i.csv' % year)
     for id, row in df_matches_year.iterrows():
