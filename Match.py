@@ -26,10 +26,13 @@ class Match:
 
         self.data = self.get_data()
 
-    def random_data_formatting(self):
+    def randomize_positions(self):
 
         decision = np.random.rand()
         if decision > 0.5:
             return np.concatenate([self.data[0], self.data[1], self.data[2], [0]]).tolist()
         else:
             return np.concatenate([self.data[0], self.data[2], self.data[1], [1]]).tolist()
+
+    def player_data_formatting(self):
+        pass

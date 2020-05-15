@@ -57,7 +57,7 @@ for id, row in df_matches_year.iterrows():
     if loser is not None and winner is not None:
         match = Match(winner, loser, tournament_name, tournament_date)
         match.instantiate(surface, tournament_level, tournament_round)
-        match_data.append(match.random_data_formatting())
+        match_data.append(match.randomize_positions())
 
     if winner is not None:
         winner.add_victory(id_loser)
@@ -95,7 +95,4 @@ for id, row in df_matches_year.iterrows():
         if l_bp_Faced == l_bp_Faced and l_bp_Saved == l_bp_Saved and l_SvGms == l_SvGms:
             loser.update_breakpoint_faced_and_savec(l_bp_Faced, l_bp_Saved, l_SvGms)
 
-print(match_data[0][5], match_data[0][-1])
-print(match_data[1][5], match_data[1][-1])
-print(match_data[2][5], match_data[2][-1])
-
+print(match.randomize_positions())
