@@ -52,11 +52,14 @@ class Match:
         # Specific Versus
         specific_versus = self.data[position][5].get([self.winner, self.loser][position].id)
         specific_win_percentage = specific_versus.count('V') / len(specific_versus)
+        specific_last_matches = specific_versus[-5:].count('V') / 5
         data_dict['specific_versus'] = specific_win_percentage
+        data_dict['last_specific_versus'] = specific_last_matches
         ### ADD: LAST FIVE MATCHES + LAST SPECIFIC FIVE MATCHES
 
         # Straight Forward data #2
         data_dict['hand'] = self.data[position][6]
+        #### TO RECHECK ARGUMENT POSITIONING !!! 
         data_dict['height'] = self.data[position][7]
         data_dict['global_win_percentage'] = self.data[position][8]
         data_dict['surface_win_percentage'] = self.data[position][{'clay': 9, 'carpet': 10, 'grass': 11,
