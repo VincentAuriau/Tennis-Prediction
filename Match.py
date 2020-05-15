@@ -1,3 +1,5 @@
+import ast
+
 import numpy as np
 
 class Match:
@@ -34,5 +36,30 @@ class Match:
         else:
             return np.concatenate([self.data[0], self.data[2], self.data[1], [1]]).tolist()
 
-    def player_data_formatting(self):
-        pass
+    def player_data_formatting(self, position):
+        data_dict = {}
+        # Straight Forward data
+        data_dict['name'] = self.data[position][0]
+        data_dict['id'] = self.data[position][1]
+        data_dict['ranking'] = self.data[position][2]
+        data_dict['ranking_points'] = self.data[position][3]
+
+        # Age
+        born_year = ast.literal_eval(self.data[position][4][:4])
+        match_year = ast.literal_eval(self.tournament_date[:4])
+        data_dict['age'] = match_year - born_year
+
+        # Specific Versus
+        specific_versus = self.data[position][5].get([self.winner, self.loser][position].id)
+        specific_win_percentage = specific_versus.count('V') / len(specific_versus)
+        data_dict['specific_versus'] = specific_win_percentage
+        ### ADD: LAST FIVE MATCHES + LAST SPECIFIC FIVE MATCHES
+
+        # Straight Forward data #2
+        data_dict['hand'] = self.data[position][6]
+        data_dict['height'] = self.data[position][7]
+        data_dict['global_win_percentage'] = self.data[position][8]
+        data_dict['surface_win_percentage'] = self.data[position][{'clay': 9, 'carpet': 10, 'grass': 11,
+                                                                   'carpet': 12}.get(self.surface)]
+
+
