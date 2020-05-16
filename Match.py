@@ -55,14 +55,34 @@ class Match:
         specific_last_matches = specific_versus[-5:].count('V') / 5
         data_dict['specific_versus'] = specific_win_percentage
         data_dict['last_specific_versus'] = specific_last_matches
-        ### ADD: LAST FIVE MATCHES + LAST SPECIFIC FIVE MATCHES
 
         # Straight Forward data #2
         data_dict['hand'] = self.data[position][6]
-        #### TO RECHECK ARGUMENT POSITIONING !!! 
-        data_dict['height'] = self.data[position][7]
-        data_dict['global_win_percentage'] = self.data[position][8]
-        data_dict['surface_win_percentage'] = self.data[position][{'clay': 9, 'carpet': 10, 'grass': 11,
-                                                                   'carpet': 12}.get(self.surface)]
+        data_dict['height'] = self.data[position][8]
+
+        # Win percentages global/surface
+        last_matches = self.data[position][9][-5:].count('V') / 5
+        data_dict['last_matches'] = last_matches
+        last_matches_surface = self.data[position][{'clay': 10, 'carpet': 11, 'grass': 12,
+                                                    'hard': 13}.get(self.surface)][-5:].count('V') / 5
+        data_dict['last_matches_surface'] = last_matches_surface
+        data_dict['global_win_percentage'] = self.data[position][14]
+        data_dict['surface_win_percentage'] = self.data[position][{'clay': 15, 'carpet': 16, 'grass': 17,
+                                                                   'hard': 18}.get(self.surface)]
+
+        # Straight Forward data #3
+        data_dict['ace_percentage'] = self.data[position][19]
+        data_dict['doublefault_percentage'] = self.data[position][20]
+        data_dict['first_serve_success_percentage'] = self.data[position][21]
+        data_dict['winning_on_1st_serve_percentage'] = self.data[position][22]
+        data_dict['winning_on_2nd_serve_percentage'] = self.data[position][23]
+        data_dict['overall_win_on_serve_percentage'] = self.data[position][24]
+        data_dict['break_point_faced_percentage'] = self.data[position][25]
+        data_dict['break_point_saved_percentage'] = self.data[position][26]
+        data_dict['fatigue'] = self.data[position][27]
+
+        return data_dict
+
+
 
 
