@@ -52,9 +52,13 @@ class Match:
             }
         }
 
-
         self.set_number = 0
 
+    def get_rankings(self, player_id):
+        if player_id == self.winner.id:
+            return self.match_time_players_data["winner"]["rank"], self.match_time_players_data["winner"]["ranking_points"]
+        else:
+            return self.match_time_players_data["loser"]["rank"], self.match_time_players_data["loser"]["ranking_points"]
 
     def get_aces_nb(self, player_id):
         if player_id == self.winner.id:

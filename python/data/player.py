@@ -4,9 +4,9 @@ import pandas as pd
 
 class Player:
 
-    def __init__(self, name, born_year, country, nb_id):
+    def __init__(self, name, birthdate, country, nb_id):
         self.name = name
-        self.born_year = born_year
+        self.birthdate = birthdate
         self.ranking = 0
         self.ranking_points = 0
         self.ranking_over_time = 0
@@ -71,7 +71,7 @@ class Player:
 
     def __str__(self):
         return 'ID : ' + str(self.id) + ' *** Name : ' + self.name + ' '*(35 - len(self.name)) + ' *** Born Year : ' \
-               + str(self.born_year) + ' *** Country : ' + str(self.country) + ' *** Hand : ' + str(self.hand) \
+               + str(self.birthdate) + ' *** Country : ' + str(self.country) + ' *** Hand : ' + str(self.hand) \
                + ' *** Height : ' + str(self.height)
 
     def _add_victory(self, id_loser):
@@ -89,7 +89,7 @@ class Player:
             self.versus[id_loser].append('V')
         else:
             self.versus[id_loser] = ['V']
-        self.update_victory_percentage('V')
+        self._update_victory_percentage('V')
 
     def _add_defeat(self, id_winner):
         """
@@ -149,9 +149,9 @@ class Player:
         :param sets_number:
         :return:
         """
-        if tournament_date == self.fatigue_features['current tournament'][0]:
-            self.fatigue_features['current tournament'][1] += sets_number
-            self.fatigue_features['current tournament'][2] += 1
+        if tournament_date == self.fatigue_features_['current tournament']["date"]:
+            # self.fatigue_features['current tournament'][1] += sets_number
+            # self.fatigue_features['current tournament'][2] += 1
 
             self.fatigue_features_['current tournament']["num_sets"] += sets_number
             self.fatigue_features_['current tournament']["num_matchs"] += 1
@@ -163,27 +163,27 @@ class Player:
                 "num_matchs": 1,
             }
 
-            self.fatigue_features['previous tournament'][0] = self.fatigue_features['current tournament'][0]
-            self.fatigue_features['current tournament'][0] = tournament_date
-            self.fatigue_features['previous tournament'][1] = self.fatigue_features['current tournament'][1]
-            self.fatigue_features['current tournament'][1] = sets_number
-            self.fatigue_features['current tournament'][2] = 1
+            # self.fatigue_features['previous tournament'][0] = self.fatigue_features['current tournament'][0]
+            # self.fatigue_features['current tournament'][0] = tournament_date
+            # self.fatigue_features['previous tournament'][1] = self.fatigue_features['current tournament'][1]
+            # self.fatigue_features['current tournament'][1] = sets_number
+            # self.fatigue_features['current tournament'][2] = 1
 
-        previous_tournament_date = self.fatigue_features_['previous tournament']['date']
-        current_tournament_date = self.fatigue_features_['current tournament']['date']
+        previous_tournament_date = str(self.fatigue_features_['previous tournament']['date'])
+        current_tournament_date = str(self.fatigue_features_['current tournament']['date'])
 
-        previous_tournament_date = self.fatigue_features['previous tournament'][0]
-        current_tournament_date = self.fatigue_features['current tournament'][0]
+        # previous_tournament_date = self.fatigue_features['previous tournament'][0]
+        # current_tournament_date = self.fatigue_features['current tournament'][0]
 
         days_difference_tournaments = (int(current_tournament_date[:4]) - int(previous_tournament_date[:4]))*365 \
             + (int(current_tournament_date[4:6]) - int(previous_tournament_date[4:6]))*30 \
             + int(current_tournament_date[6:8]) - int(previous_tournament_date[6:8])
 
-        self.fatigue = self.fatigue_features['previous tournament'][1] / days_difference_tournaments \
-            + self.fatigue_features['current tournament'][1]
+        # self.fatigue = self.fatigue_features['previous tournament'][1] / days_difference_tournaments \
+        #     + self.fatigue_features['current tournament'][1]
 
-        self.fatigue = self.fatigue_features['previous tournament']["num_sets"] / days_difference_tournaments \
-            + self.fatigue_features['current tournament']["num_sets"]
+        self.fatigue = self.fatigue_features_['previous tournament']["num_sets"] / days_difference_tournaments \
+            + self.fatigue_features_['current tournament']["num_sets"]
 
     def _update_ace_percentage(self, aces_nb):
         """
@@ -243,7 +243,7 @@ class Player:
         """
         self.service_data["win_on_2nd_serve"].append(second_serve_win)
 
-        total_second_serves_win = sum(self.service_data["2nd_serve_success"])
+        total_second_serves_win = sum(self.service_data["win_on_2nd_serve"])
         total_service_points_played = sum(self.service_data["service_games_played"])
 
         if total_service_points_played != 0:
@@ -267,7 +267,7 @@ class Player:
         else:
             print('No point played :', total_first_serves_in)
 
-    def _update_breakpoint_faced_and_saved(self, breakpoint_faced, breakpoint_saved):
+    def _update_breakpoints_faced_and_saved(self, breakpoint_faced, breakpoint_saved):
         """
 
         :param breakpoint_faced:
@@ -288,7 +288,6 @@ class Player:
         else:
             print('No point played :', self.breakpoint_saved_number)
 
-
     def _update_service_data(self, service_games_played, aces_nb, doublefaults_nb, first_serve_success,
                              winning_on_1st_serve, winning_on_2nd_serve, breakpoints_faced, breakpoints_saved):
 
@@ -301,8 +300,12 @@ class Player:
         self.overall_win_on_serve_percentage = self.winning_on_1st_serve_percentage + \
                                                self.winning_on_2nd_serve_percentage
         self._update_first_serve_success_percentage(first_services_in=first_serve_success)
-        self._update_breakpoints_faced_and_saved(breakpoints_saved=breakpoints_saved,
-                                                 breakpoints_faced=breakpoints_faced)
+        self._update_breakpoints_faced_and_saved(breakpoint_saved=breakpoints_saved,
+                                                 breakpoint_faced=breakpoints_faced)
+
+    def _update_rankings(self, new_ranking, new_ranking_points):
+        self.ranking = new_ranking
+        self.ranking_points = new_ranking_points
 
     def update_from_match(self, match):
         """
@@ -313,14 +316,14 @@ class Player:
 
         # Update Rankings ?
 
-        if match.winner == self.id:
+        if match.winner.id == self.id:
             self._add_victory(match.loser)
             self._update_surface_victory_percentage(match.surface, "V")
         else:
-            assert match.loser == self.id
+            assert match.loser.id == self.id
             self._add_defeat(match.winner)
             self._update_surface_victory_percentage(match.surface, "D")
-        self._update_fatigue(match.tournament_date, match.sets_number)
+        self._update_fatigue(match.tournament_date, match.set_number)
 
         self._update_service_data(service_games_played=match.get_service_points_played(self.id),
                                   aces_nb=match.get_aces_nb(self.id),
@@ -331,10 +334,10 @@ class Player:
                                   breakpoints_faced=match.get_breakpoint_faced(self.id),
                                   breakpoints_saved=match.get_breakpoint_saved(self.id))
 
-        self._update_rankings(match.get_rankings(self.id))
+        self._update_rankings(*match.get_rankings(self.id))
 
     def get_data(self):
-        data_to_be_used = [self.name, self.id,  self.ranking, self.ranking_points, self.born_year, self.versus,
+        data_to_be_used = [self.name, self.id,  self.ranking, self.ranking_points, self.birthdate, self.versus,
                            self.hand,
                            self.last_tournament_date, self.height,
                            self.matches, self.matches_clay, self.matches_carpet, self.matches_grass, self.matches_hard,
@@ -347,7 +350,7 @@ class Player:
         return data_to_be_used
 
     def get_data_profile(self):
-        data_to_be_used = [self.name, self.id,  self.ranking, self.ranking_points, self.born_year, self.versus,
+        data_to_be_used = [self.name, self.id,  self.ranking, self.ranking_points, self.birthdate, self.versus,
                            self.hand,
                            self.height,
                            self.victory_percentage, self.clay_victory_percentage, self.carpet_victory_percentage,
@@ -365,7 +368,7 @@ class Player:
                         "ID": [self.id],
                         "Ranking": [self.ranking],
                         "Ranking Points": [self.ranking_points],
-                        "Birth Year": [self.born_year],
+                        "Birth Year": [self.birthdate],
                         "Versus": [self.versus],
                         "Hand": [self.hand],
                         "Last Tournament Date": [self.last_tournament_date],
@@ -386,7 +389,8 @@ class Player:
                         "Winning on 1st Serve Percentage": [self.winning_on_1st_serve_percentage],
                         "Winning on 2nd Serve Percentage": [self.winning_on_2nd_serve_percentage],
                         "Overall Win on Serve Percentage": [self.overall_win_on_serve_percentage],
-                        "BreakPoint Face Percenage": [self.breakpoint_faced_percentage],
-                        "Fatigue": [self.breakpoint_saved_percentage, self.fatigue]
+                        "BreakPoint Face Percentage": [self.breakpoint_faced_percentage],
+                        "BreakPoint Saved Percentage": [self.breakpoint_saved_percentage],
+                        "Fatigue": [self.fatigue]
         }
         return pd.DataFrame(data_dict)
