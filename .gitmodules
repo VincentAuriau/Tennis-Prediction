@@ -1,0 +1,3 @@
+[submodule "submodules/tennis_atp"]
+	path = submodules/tennis_atp
+	url = https://github.com/JeffSackmann/tennis_atp.git
