@@ -14,6 +14,9 @@ with open('2019_players_updated', 'rb') as file:
 print(players_dict.keys())
 
 match_data = []
+data_df = pd.DataFrame()
+
+i = 0
 
 df_matches_year = pd.read_csv('../Data/atp_matches_2018.csv')
 for id, row in df_matches_year.iterrows():
@@ -27,6 +30,18 @@ for id, row in df_matches_year.iterrows():
         sets_number = score.count('-')
     else:
         sets_number = -1
+
+    # Ranks and Ranking Points
+    w_rank = row['winner_rank']
+    w_rank_points = row['winner_rank_points']
+    l_rank = row['loser_rank']
+    l_rank_points = row['loser_rank_points']
+    w_height = row['winner_ht']
+    l_height = row['loser_ht']
+
+    print('RANKS:', w_rank, l_rank)
+    print('point', w_rank_points, l_rank_points)
+
     surface = row['surface']
     tournament_level = row['tourney_level']
     tournament_round = row['round']
@@ -55,9 +70,47 @@ for id, row in df_matches_year.iterrows():
     loser = players_dict.get(id_loser)
     print(winner, loser)
     if loser is not None and winner is not None:
-        match = Match(winner, loser, tournament_name, tournament_date)
-        match.instantiate(surface, tournament_level, tournament_round)
-        match_data.append(match.randomize_positions())
+        winner.ranking = w_rank
+        loser.ranking = l_rank
+        winner.ranking_points = w_rank_points
+        loser.ranking_points = l_rank_points
+        winner.height = w_height
+        loser.height = l_height
+
+        match = Match(winner, loser, tournament_name, surface)
+        match.instantiate(tournament_date, tournament_level, tournament_round)
+        match_data.append(match.positions_randomized_data())
+        data = match.positions_randomized_data()
+        full_data_dict = {}
+        for key, value in data[0].items():
+            full_data_dict[key] = [value]
+        print(full_data_dict)
+        for n in range(2):
+            for key, value in data[n+1].items():
+                full_data_dict[key+'_%i' % n] = [value]
+        for key, value in data[3].items():
+            full_data_dict[key] = [value]
+        print(full_data_dict['winner'])
+        data_df = data_df.append(pd.DataFrame(full_data_dict))
+        print(pd.DataFrame(full_data_dict).columns)
+        # print(data_df)
+        #
+        # print(len(match.positions_randomized_data()))
+        # print('w/L')
+        # print(winner)
+        # print(loser)
+        # print('__')
+        for key, value in match.player_data_formatting(1).items():
+            if key == 'specific_versus':
+                print(key, ':', value)
+        for key, value in match.player_data_formatting(2).items():
+            if key == 'specific_versus':
+                print(key, ':', value)
+
+        # print('======================================')
+        # print(winner.versus.get(loser.id, []))
+        # print(loser.versus.get(winner.id, []))
+        # print('======================================')
 
     if winner is not None:
         winner.add_victory(id_loser)
@@ -95,4 +148,5 @@ for id, row in df_matches_year.iterrows():
         if l_bp_Faced == l_bp_Faced and l_bp_Saved == l_bp_Saved and l_SvGms == l_SvGms:
             loser.update_breakpoint_faced_and_savec(l_bp_Faced, l_bp_Saved, l_SvGms)
 
-print(match.randomize_positions())
+print(data_df)
+data_df.to_csv('test_data_df.csv')
