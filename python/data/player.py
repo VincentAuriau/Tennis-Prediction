@@ -4,7 +4,7 @@ import pandas as pd
 
 class Player:
 
-    def __init__(self, name, birthdate, country, nb_id):
+    def __init__(self, name, birthdate, country, nb_id, hand="", height=0):
         self.name = name
         self.birthdate = birthdate
         self.ranking = 0
@@ -14,27 +14,27 @@ class Player:
         self.id = nb_id
         self.last_tournament_date = ''
         self.versus = {}
-        self.hand = ''
-        self.height = 0
+        self.hand = hand
+        self.height = height
 
         self.last_matches = ['', '', '', '', '']
         self.matches = []
-        self.victory_percentage = 0
+        self.victories_percentage = 0
 
         self.matches_hard = []
-        self.hard_victory_percentage = 0
+        self.hard_victories_percentage = 0
         self.matches_carpet = []
-        self.carpet_victory_percentage = 0
+        self.carpet_victories_percentage = 0
         self.matches_clay = []
-        self.clay_victory_percentage = 0
+        self.clay_victories_percentage = 0
         self.matches_grass = []
-        self.grass_victory_percentage = 0
+        self.grass_victories_percentage = 0
 
-        self.ace_percentage = 0
-        self.ace_proportion = []
+        self.aces_percentage = 0
+        self.aces_proportion = []
 
-        self.doublefault_percentage = 0
-        self.doublefault_proportion = []
+        self.doublefaults_percentage = 0
+        self.doublefaults_proportion = []
 
         self.first_serve_success_proportion = []
         self.first_serve_success_percentage = 0
@@ -60,8 +60,7 @@ class Player:
         self.breakpoint_saved_percentage = 0
 
         self.fatigue = 0
-        self.fatigue_features = {'previous tournament': ['19000000', 0, 0], 'current tournament': ['19000000', 0, 0]}
-        self.fatigue_features_ = {'previous tournament': {"date": "19000000",
+        self.fatigue_features = {'previous tournament': {"date": "19000000",
                                                           "num_sets": 0,
                                                           "num_matchs": 0
                                                           },
@@ -76,7 +75,7 @@ class Player:
 
     def _add_victory(self, id_loser):
         """
-        Update last_matches argument with a Victory and updates versus argument using id_loser
+        Update last_matches argument with a victories and updates versus argument using id_loser
         :param id_loser: ID of los of match against current player
         :return:
         """
@@ -89,7 +88,7 @@ class Player:
             self.versus[id_loser].append('V')
         else:
             self.versus[id_loser] = ['V']
-        self._update_victory_percentage('V')
+        self._update_victories_percentage('V')
 
     def _add_defeat(self, id_winner):
         """
@@ -106,41 +105,41 @@ class Player:
             self.versus[id_winner].append('D')
         else:
             self.versus[id_winner] = ['D']
-        self._update_victory_percentage('D')
+        self._update_victories_percentage('D')
 
-    def _update_victory_percentage(self, match_outcome):
+    def _update_victories_percentage(self, match_outcome):
         """
-        Updates Victoy Percentage with a V/D of last match
+        Updates Victories Percentage with a V/D of last match
         :param match_outcome:
         :return:
         """
         self.matches.append(match_outcome)
         victories_number = self.matches.count('V')
         matches_number = len(self.matches)
-        self.victory_percentage = (victories_number / matches_number) * 100
+        self.victories_percentage = (victories_number / matches_number) * 100
 
-    def _update_surface_victory_percentage(self, surface, outcome):
+    def _update_surfaces_victories_percentage(self, surface, outcome):
         """
-        Updates % of victory on a given surface (V/D)
+        Updates % of victories on a given surface (V/D)
         :param surface:
         :param outcome:
         :return:
         """
         if surface == 'Clay':
             self.matches_clay.append(outcome)
-            self.clay_victory_percentage = self.matches_clay.count('V') / len(self.matches_clay) * 100
+            self.clay_victories_percentage = self.matches_clay.count('V') / len(self.matches_clay) * 100
 
         elif surface == 'Grass':
             self.matches_grass.append(outcome)
-            self.grass_victory_percentage = self.matches_grass.count('V') / len(self.matches_grass) * 100
+            self.grass_victories_percentage = self.matches_grass.count('V') / len(self.matches_grass) * 100
 
         elif surface == 'Hard':
             self.matches_hard.append(outcome)
-            self.hard_victory_percentage = self.matches_hard.count('V') / len(self.matches_hard) * 100
+            self.hard_victories_percentage = self.matches_hard.count('V') / len(self.matches_hard) * 100
 
         elif surface == 'Carpet':
             self.matches_carpet.append(outcome)
-            self.carpet_victory_percentage = self.matches_carpet.count('V') / len(self.matches_carpet) * 100
+            self.carpet_victories_percentage = self.matches_carpet.count('V') / len(self.matches_carpet) * 100
 
     def _update_fatigue(self, tournament_date, sets_number):
         """
@@ -149,74 +148,68 @@ class Player:
         :param sets_number:
         :return:
         """
-        if tournament_date == self.fatigue_features_['current tournament']["date"]:
-            # self.fatigue_features['current tournament'][1] += sets_number
-            # self.fatigue_features['current tournament'][2] += 1
+        if sets_number == sets_number and sets_number != "nan":
+            if tournament_date == self.fatigue_features['current tournament']["date"]:
+                self.fatigue_features['current tournament']["num_sets"] += sets_number
+                self.fatigue_features['current tournament']["num_matchs"] += 1
+            else:
+                self.fatigue_features["previous tournament"] = self.fatigue_features["current tournament"]
+                self.fatigue_features["current tournament"] = {
+                    "date": tournament_date,
+                    "num_sets": sets_number,
+                    "num_matchs": 1
+                }
 
-            self.fatigue_features_['current tournament']["num_sets"] += sets_number
-            self.fatigue_features_['current tournament']["num_matchs"] += 1
+            previous_tournament_date = str(self.fatigue_features['previous tournament']['date'])
+            current_tournament_date = str(self.fatigue_features['current tournament']['date'])
+
+            days_difference_tournaments = (int(current_tournament_date[:4]) - int(previous_tournament_date[:4]))*365 \
+                + (int(current_tournament_date[4:6]) - int(previous_tournament_date[4:6]))*30 \
+                + int(current_tournament_date[6:8]) - int(previous_tournament_date[6:8])
+
+            self.fatigue = self.fatigue_features['previous tournament']["num_sets"] / days_difference_tournaments \
+                + self.fatigue_features['current tournament']["num_sets"]
         else:
-            self.fatigue_features_["previous tournament"] = self.fatigue_features_["current tournament"]
-            self.fatigue_features_["current tournament"] = {
-                "date": tournament_date,
-                "num_sets": sets_number,
-                "num_matchs": 1,
-            }
+            print("NaN in sets number", sets_number)
 
-            # self.fatigue_features['previous tournament'][0] = self.fatigue_features['current tournament'][0]
-            # self.fatigue_features['current tournament'][0] = tournament_date
-            # self.fatigue_features['previous tournament'][1] = self.fatigue_features['current tournament'][1]
-            # self.fatigue_features['current tournament'][1] = sets_number
-            # self.fatigue_features['current tournament'][2] = 1
-
-        previous_tournament_date = str(self.fatigue_features_['previous tournament']['date'])
-        current_tournament_date = str(self.fatigue_features_['current tournament']['date'])
-
-        # previous_tournament_date = self.fatigue_features['previous tournament'][0]
-        # current_tournament_date = self.fatigue_features['current tournament'][0]
-
-        days_difference_tournaments = (int(current_tournament_date[:4]) - int(previous_tournament_date[:4]))*365 \
-            + (int(current_tournament_date[4:6]) - int(previous_tournament_date[4:6]))*30 \
-            + int(current_tournament_date[6:8]) - int(previous_tournament_date[6:8])
-
-        # self.fatigue = self.fatigue_features['previous tournament'][1] / days_difference_tournaments \
-        #     + self.fatigue_features['current tournament'][1]
-
-        self.fatigue = self.fatigue_features_['previous tournament']["num_sets"] / days_difference_tournaments \
-            + self.fatigue_features_['current tournament']["num_sets"]
-
-    def _update_ace_percentage(self, aces_nb):
+    def _update_aces_percentage(self, aces_nb):
         """
         Upates Aces Percentage
         :param aces_nb:
         :param service_points_played:
         :return:
         """
-        self.service_data["aces_nb"].append(aces_nb)
-        total_aces_nbr = sum(self.service_data["aces_nb"])
-        total_service_points_played = sum(self.service_data["service_games_played"])
 
-        if total_service_points_played != 0:
-            self.ace_percentage = total_aces_nbr / total_service_points_played * 100
-        else:
-            print('No point played :', total_aces_nbr)
+        if aces_nb == aces_nb and aces_nb != "nan":
+            self.service_data["aces_nb"].append(aces_nb)
+            total_aces_nbr = sum(self.service_data["aces_nb"])
+            total_service_points_played = sum(self.service_data["service_games_played"])
 
-    def _update_doublefault_percentage(self, df_nb):
+            if total_service_points_played != 0:
+                self.aces_percentage = total_aces_nbr / total_service_points_played * 100
+            else:
+                print('No point played :', aces_nb)
+
+    def _update_doublefaults_percentage(self, df_nb):
         """
         Update doublefaults percentage
         :param df_nb:
         :param service_points_played:
         :return:
         """
-        self.service_data["doublefaults_nb"].append(df_nb)
-        total_df_nbr = sum(self.service_data["doublefaults_nb"])
-        total_service_points_played = sum(self.service_data["service_games_played"])
+        if df_nb == df_nb and df_nb != "nan":
+            self.service_data["doublefaults_nb"].append(df_nb)
+            total_df_nbr = sum(self.service_data["doublefaults_nb"])
+            total_service_points_played = sum(self.service_data["service_games_played"])
 
-        if total_service_points_played != 0:
-            self.doublefault_percentage = total_df_nbr / total_service_points_played * 100
+            if total_service_points_played != 0:
+                self.doublefaults_percentage = total_df_nbr / total_service_points_played * 100
+            else:
+                print('No point played :', total_df_nbr)
+                self.doublefaults_percentage = 0
+
         else:
-            print('No point played :', total_df_nbr)
-            self.doublefault_percentage = 0
+            print("NaN in Double Faults", df_nb)
 
     def _update_winning_on_1st_serve_percentage(self, first_serve_win):
         """
@@ -286,22 +279,34 @@ class Player:
             self.breakpoint_faced_percentage = total_breakpoint_faced / total_games_played * 100
             self.breakpoint_saved_percentage = total_breakpoint_saved / total_games_played * 100
         else:
-            print('No point played :', self.breakpoint_saved_number)
+            print('No point played :', self.service_data["breakpoints_saved"])
 
     def _update_service_data(self, service_games_played, aces_nb, doublefaults_nb, first_serve_success,
                              winning_on_1st_serve, winning_on_2nd_serve, breakpoints_faced, breakpoints_saved):
 
-        self.service_data["service_games_played"].append(service_games_played)
+        # Assert data exists
+        if service_games_played == service_games_played and aces_nb == aces_nb and doublefaults_nb == doublefaults_nb \
+                and first_serve_success == first_serve_success and winning_on_1st_serve == winning_on_1st_serve \
+                and winning_on_2nd_serve == winning_on_2nd_serve and breakpoints_faced == breakpoints_faced \
+                and breakpoints_saved == breakpoints_saved:
+            self.service_data["service_games_played"].append(service_games_played)
 
-        self._update_ace_percentage(aces_nb=aces_nb)
-        self._update_doublefault_percentage(df_nb=doublefaults_nb)
-        self._update_winning_on_1st_serve_percentage(first_serve_win=winning_on_1st_serve)
-        self._update_winning_on_2nd_serve_percentage(second_serve_win=winning_on_2nd_serve)
-        self.overall_win_on_serve_percentage = self.winning_on_1st_serve_percentage + \
-                                               self.winning_on_2nd_serve_percentage
-        self._update_first_serve_success_percentage(first_services_in=first_serve_success)
-        self._update_breakpoints_faced_and_saved(breakpoint_saved=breakpoints_saved,
-                                                 breakpoint_faced=breakpoints_faced)
+            self._update_aces_percentage(aces_nb=aces_nb)
+            self._update_doublefaults_percentage(df_nb=doublefaults_nb)
+            self._update_winning_on_1st_serve_percentage(first_serve_win=winning_on_1st_serve)
+            self._update_winning_on_2nd_serve_percentage(second_serve_win=winning_on_2nd_serve)
+            self.overall_win_on_serve_percentage = self.winning_on_1st_serve_percentage + \
+                                                   self.winning_on_2nd_serve_percentage
+            self._update_first_serve_success_percentage(first_services_in=first_serve_success)
+            self._update_breakpoints_faced_and_saved(breakpoint_saved=breakpoints_saved,
+                                                     breakpoint_faced=breakpoints_faced)
+
+        else:
+            # Future argument ;)
+            verbose = 1
+            if verbose > 2:
+                print("Service data not complete...")
+
 
     def _update_rankings(self, new_ranking, new_ranking_points):
         self.ranking = new_ranking
@@ -318,11 +323,11 @@ class Player:
 
         if match.winner.id == self.id:
             self._add_victory(match.loser)
-            self._update_surface_victory_percentage(match.surface, "V")
+            self._update_surfaces_victories_percentage(match.surface, "V")
         else:
             assert match.loser.id == self.id
             self._add_defeat(match.winner)
-            self._update_surface_victory_percentage(match.surface, "D")
+            self._update_surfaces_victories_percentage(match.surface, "D")
         self._update_fatigue(match.tournament_date, match.set_number)
 
         self._update_service_data(service_games_played=match.get_service_points_played(self.id),
@@ -341,9 +346,9 @@ class Player:
                            self.hand,
                            self.last_tournament_date, self.height,
                            self.matches, self.matches_clay, self.matches_carpet, self.matches_grass, self.matches_hard,
-                           self.victory_percentage, self.clay_victory_percentage, self.carpet_victory_percentage,
-                           self.grass_victory_percentage, self.hard_victory_percentage, self.ace_percentage,
-                           self.doublefault_percentage, self.first_serve_success_percentage,
+                           self.victories_percentage, self.clay_victories_percentage, self.carpet_victories_percentage,
+                           self.grass_victories_percentage, self.hard_victories_percentage, self.aces_percentage,
+                           self.doublefaults_percentage, self.first_serve_success_percentage,
                            self.winning_on_1st_serve_percentage, self.winning_on_2nd_serve_percentage,
                            self.overall_win_on_serve_percentage, self.breakpoint_faced_percentage,
                            self.breakpoint_saved_percentage, self.fatigue]
@@ -353,9 +358,9 @@ class Player:
         data_to_be_used = [self.name, self.id,  self.ranking, self.ranking_points, self.birthdate, self.versus,
                            self.hand,
                            self.height,
-                           self.victory_percentage, self.clay_victory_percentage, self.carpet_victory_percentage,
-                           self.grass_victory_percentage, self.hard_victory_percentage, self.ace_percentage,
-                           self.doublefault_percentage, self.first_serve_success_percentage,
+                           self.victories_percentage, self.clay_victories_percentage, self.carpet_victories_percentage,
+                           self.grass_victories_percentage, self.hard_victories_percentage, self.aces_percentage,
+                           self.doublefaults_percentage, self.first_serve_success_percentage,
                            self.winning_on_1st_serve_percentage, self.winning_on_2nd_serve_percentage,
                            self.overall_win_on_serve_percentage, self.breakpoint_faced_percentage,
                            self.breakpoint_saved_percentage]
@@ -378,13 +383,13 @@ class Player:
                         "Matches Carpet": [self.matches_carpet],
                         "Matches Grass": [self.matches_grass],
                         "Matches Hard": [self.matches_hard],
-                        "Victory Percentage": [self.victory_percentage],
-                        "Clay Victory Percentage": [self.clay_victory_percentage],
-                        "Carpet Victory Percentage": [self.carpet_victory_percentage],
-                        "Grass Victory Percentage": [self.grass_victory_percentage],
-                        "Hard Victory Percentage": [self.hard_victory_percentage],
-                        "Aces Percentage": [self.ace_percentage],
-                        "DoubleFaults Percentage": [self.doublefault_percentage],
+                        "victories Percentage": [self.victories_percentage],
+                        "Clay victories Percentage": [self.clay_victories_percentage],
+                        "Carpet victories Percentage": [self.carpet_victories_percentage],
+                        "Grass victories Percentage": [self.grass_victories_percentage],
+                        "Hard victories Percentage": [self.hard_victories_percentage],
+                        "Aces Percentage": [self.aces_percentage],
+                        "Doublefaults Percentage": [self.doublefaults_percentage],
                         "First Serve Success Percentage": [self.first_serve_success_percentage],
                         "Winning on 1st Serve Percentage": [self.winning_on_1st_serve_percentage],
                         "Winning on 2nd Serve Percentage": [self.winning_on_2nd_serve_percentage],

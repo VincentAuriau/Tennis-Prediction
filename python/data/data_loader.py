@@ -14,7 +14,9 @@ def create_player_profiles(df):
         pl = player.Player(name=(str(row["name_first"])+"."+str(row["name_last"])),
                            birthdate=row["dob"],
                            country=row["ioc"],
-                           nb_id=row["player_id"])
+                           nb_id=row["player_id"],
+                           hand=row["hand"],
+                           height=row["height"])
 
         assert row["player_id"] not in players_db.keys()
         players_db[row["player_id"]] = pl
@@ -90,9 +92,18 @@ def load_matches_data():
         df_year = load_match_data_from_path(players_db, filepath)
         data_per_year.append(df_year)
 
-    return pd.concat(df_year, axis=0)
+    return pd.concat(data_per_year, axis=0)
+
+def data_loader():
+    # Encodes data
+    # returns X, y, df
+    return None
+
 
 # players_db = create_player_profiles(df_players)
 # print(players_db)
 df = load_matches_data()
 df.to_csv('all_data.csv')
+
+df = pd.read_csv('sub_data.csv')
+print(df.head())
