@@ -141,7 +141,7 @@ class Match:
         self.tournament_date = data_row["tourney_date"]
         self.tournament_level = data_row["tourney_level"]
         self.round = data_row["round"]
-        self.sets_number = len(data_row["score"].split("-"))
+        self.sets_number = len(str(data_row["score"]).split("-"))
 
         self.match_time_players_data = {
             "winner": {
