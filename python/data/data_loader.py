@@ -104,6 +104,7 @@ def data_loader():
 # print(players_db)
 df = load_matches_data()
 df.to_csv('all_data.csv')
-
+df = pd.read_csv('all_data.csv')
+df.iloc[-1000:].to_csv('sub_data.csv')
 df = pd.read_csv('sub_data.csv')
 print(df.head())
