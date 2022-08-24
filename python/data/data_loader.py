@@ -100,11 +100,43 @@ def data_loader():
     return None
 
 
+def encode_data(df, mode="integer"):
+    if mode == "integer":
+        # Considered Variables:
+        tournament_level = {
+            "G": 0,
+            "A": 1,
+            "M": 2,
+            "D": 4
+        }
+
+        round = {
+            "F": 0,
+            "SF": 1,
+            "QF": 2,
+            "R16": 3,
+            "R32": 4,
+            "R64": 5,
+            "R128": 6,
+            "R256": 7
+        }
+
+        hand = {
+            "R": -1,
+            "L": 1,
+            "A": 0,
+            "U": 2
+        }
+
+    elif mode == "one_hot":
+        pass
+
+
 # players_db = create_player_profiles(df_players)
 # print(players_db)
 df = load_matches_data()
-df.to_csv('all_data.csv')
-df = pd.read_csv('all_data.csv')
-df.iloc[-1000:].to_csv('sub_data.csv')
+df.to_csv('all_data.csv', index=False)
+# df = pd.read_csv('all_data.csv')
+df.iloc[-1000:].to_csv('sub_data.csv', index=False)
 df = pd.read_csv('sub_data.csv')
 print(df.head())
