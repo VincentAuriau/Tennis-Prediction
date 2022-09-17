@@ -101,6 +101,23 @@ def data_loader():
 
 
 def encode_data(df, mode="integer"):
+    # Remove:
+    #   - index
+    #   - Unnamed: 0
+    #   - Unnamed: 0.1
+    #   - tournament
+    #   - Name
+    #   - ID
+    #   - Birth Year => Age
+    #   - Versus: % V against 2, last 5 matches
+    #   - Matches
+
+    # Refac:
+    #   - Versus
+    #   - Birth Year
+    #   - Last Tournament => Days since last tournament + result ?
+
+    df_copy = df
     if mode == "integer":
         # Considered Variables:
         tournament_level = {
@@ -118,7 +135,8 @@ def encode_data(df, mode="integer"):
             "R32": 4,
             "R64": 5,
             "R128": 6,
-            "R256": 7
+            "R256": 7,
+            "RR": 8
         }
 
         hand = {
@@ -128,15 +146,29 @@ def encode_data(df, mode="integer"):
             "U": 2
         }
 
+        for col in df_copy.columns:
+            print(col)
+            if "hand" in col:
+                df_copy[col] = df_copy.apply(lambda row: hand(row[col]), axis=1)
+            elif "round" in col:
+                df_copy[col] = df_copy.apply(lambda row: round[row[col]], axis=1)
+            elif "tournament_level" in col:
+                df_copy[col] = df_copy.apply(lambda row: tournament_level[row[col]], axis=1)
+            else:
+                print(col)
     elif mode == "one_hot":
         pass
 
+    return df_copy
 
 # players_db = create_player_profiles(df_players)
 # print(players_db)
-df = load_matches_data()
-df.to_csv('all_data.csv', index=False)
+# df = load_matches_data()
+# df.to_csv('all_data.csv', index=False)
 # df = pd.read_csv('all_data.csv')
-df.iloc[-1000:].to_csv('sub_data.csv', index=False)
+# df.iloc[-1000:].to_csv('sub_data.csv', index=False)
 df = pd.read_csv('sub_data.csv')
+print(df.head())
+df = encode_data(df)
+df.to_csv('transformed_sub_data.csv')
 print(df.head())
