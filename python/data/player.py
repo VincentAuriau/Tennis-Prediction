@@ -310,11 +310,11 @@ class Player:
         # Update Rankings ?
 
         if match.winner.id == self.id:
-            self._add_victory(match.loser)
+            self._add_victory(match.loser.id)
             self._update_surfaces_victories_percentage(match.surface, "V")
         else:
             assert match.loser.id == self.id
-            self._add_defeat(match.winner)
+            self._add_defeat(match.winner.id)
             self._update_surfaces_victories_percentage(match.surface, "D")
         self._update_fatigue(match.tournament_date, match.sets_number)
 

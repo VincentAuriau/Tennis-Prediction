@@ -16,3 +16,8 @@ Improvements:
         # Either get it from match data (easier)
         # Or better handling birthdate vs match date
 
+    - encoding last x matches [v, v, v, d, d] => [1, 1, 1, 0, 0]
+    - encoding last x matches versus
+    - have better historic of matches order & versus matches = [[id, result], [id, result], ...]
+    -
+
