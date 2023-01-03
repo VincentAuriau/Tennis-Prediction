@@ -2,3 +2,5 @@
 DataBase/
 
 \.idea/
+
+*.pyc
