@@ -130,8 +130,11 @@ def load_matches_data(keep_values_from_year=1990):
     data_per_year = []
     for year in np.sort(data_years.values):
         print("+---------+---------+")
-        print("  Loading Data ...  ")
-        print("Currently year:", year)
+        print("  Year %i  " % year)
+        if year >= keep_values_from_year:
+            print("Updating players statistics & saving matches data")
+        else:
+            print("Only updating players statistics")
         print("+---------+---------+")
         filepath = data_files.loc[data_files.year == str(year)]["filepath"].values[0]
         df_year = load_match_data_from_path(players_db, filepath)
@@ -140,12 +143,24 @@ def load_matches_data(keep_values_from_year=1990):
 
     return pd.concat(data_per_year, axis=0)
 
-def data_loader():
-    # Encodes data
-    # returns X, y, df
+def clean_missing_data(df):
+    """
+    Cleans rows of df with missing data or to few statistics to be useful
+    :param df:
+    :return:
+    """
 
-    df = load_matches_data()
-    df = encode_data(df)
+    return df
+
+def data_loader(starting_year=1990, matches_type="main_atp", encoding="integer"):
+    """
+    Main data loading function
+    :return:
+    """
+
+    df = load_matches_data(keep_values_from_year=starting_year)
+    df = encode_data(df, mode=encoding)
+    df = clean_missing_data(df)
 
     x_columns = ["tournament_level", "round", "Ranking_1", "Ranking Points_1", "Hand_1", "Height_1", "Victories Percentage_1",
                  "Clay victories Percentage_1", "Carpet victories Percentage_1", "Grass victories Percentage_1",
