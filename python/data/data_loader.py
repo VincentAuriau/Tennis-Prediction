@@ -1,4 +1,5 @@
 import os
+import pickle
 import re
 from ast import literal_eval
 
@@ -115,33 +116,60 @@ def load_match_data_from_path(players_db, path_to_matchs_file):
     return pd.concat(matches_data, axis=0)
 
 def load_matches_data(keep_values_from_year=1990):
+    pass
+
+def matches_data_loader(keep_values_from_year=1990, path_to_data="submodules/tennis_atp",
+                        path_to_cache="/cache", flush_cache=True):
     """
     Loads all matches data
     :return:
     """
-    path_to_data = "submodules/tennis_atp"
-    data_files = get_match_files(path_to_data)
 
-    df_players = pd.read_csv(os.path.join(path_to_data, 'atp_players.csv'), header=0,
-                            encoding="ISO-8859-1")
-    players_db = create_player_profiles(df_players)
-    data_years = data_files.year.astype("uint32") # to change when handling different type of tournament (qualifiers, main, etc...)
+    # Check if data already in cache
+    if os.path.exists(os.path.join(path_to_cache, "players_db")):
+        players_db_cached = True
+    else:
+        players_db_cached = False
+    if os.path.exists(os.path.join(path_to_cache, "matches_data.csv")):
+        matches_data_cached = True
+    else:
+        matches_data_cached = False
 
-    data_per_year = []
-    for year in np.sort(data_years.values):
-        print("+---------+---------+")
-        print("  Year %i  " % year)
-        if year >= keep_values_from_year:
-            print("Updating players statistics & saving matches data")
-        else:
-            print("Only updating players statistics")
-        print("+---------+---------+")
-        filepath = data_files.loc[data_files.year == str(year)]["filepath"].values[0]
-        df_year = load_match_data_from_path(players_db, filepath)
-        if year >= keep_values_from_year:
-            data_per_year.append(df_year)
+    if not players_db_cached or flush_cache:
+        df_players = pd.read_csv(os.path.join(path_to_data, 'atp_players.csv'), header=0,
+                                encoding="ISO-8859-1")
+        players_db = create_player_profiles(df_players)
+        with open(os.path.join(path_to_cache, "players_db"), "wb") as file:
+            pickle.dump(players_db, file, protocol=pickle.HIGHEST_PROTOCOL)
+    else:
+        with open(os.path.join(path_to_cache, "players_db"), "rb") as file:
+            players_db = pickle.load(file, protocol=pickle.HIGHEST_PROTOCOL)
 
-    return pd.concat(data_per_year, axis=0)
+    if not matches_data_cached or flush_cache:
+
+        data_files = get_match_files(path_to_data)
+        data_years = data_files.year.astype("uint32") # to change when handling different type of tournament (qualifiers, main, etc...)
+
+        data_per_year = []
+        for year in np.sort(data_years.values):
+            print("+---------+---------+")
+            print("  Year %i  " % year)
+            if year >= keep_values_from_year:
+                print("Updating players statistics & saving matches data")
+            else:
+                print("Only updating players statistics")
+            print("+---------+---------+")
+            filepath = data_files.loc[data_files.year == str(year)]["filepath"].values[0]
+            df_year = load_match_data_from_path(players_db, filepath)
+            if year >= keep_values_from_year:
+                data_per_year.append(df_year)
+
+        data_matches = pd.concat(data_per_year, axis=0)
+        data_matches.to_csv(os.path.join(path_to_cache, "matches_data.csv"), sep=";", index=False)
+    else:
+        data_matches = pd.read_csv(os.path.join(path_to_cache, "matches_data.csv"), sep=";")
+
+    return data_matches
 
 def clean_missing_data(df):
     """
@@ -152,13 +180,20 @@ def clean_missing_data(df):
 
     return df
 
-def data_loader(starting_year=1990, matches_type="main_atp", encoding="integer"):
+def data_loader(starting_year=1990, matches_type="main_atp", encoding="integer", check_cache=False):
     """
     Main data loading function
     :return:
     """
 
-    df = load_matches_data(keep_values_from_year=starting_year)
+    if check_cache:
+        try:
+            df = pd.read_csv("loaded_data.csv")
+        except:
+            df = load_matches_data(keep_values_from_year=starting_year)
+    else:
+        df = load_matches_data(keep_values_from_year=starting_year)
+    df.to_csv("loaded_data.csv")
     df = encode_data(df, mode=encoding)
     df = clean_missing_data(df)
 
@@ -287,7 +322,6 @@ def encode_data(df, mode="integer"):
             "A": [0, 0, 1, 0],
             "U": [0, 0, 0, 1]
         }
-
     print(df_copy.columns)
     for col in df_copy.columns:
         print("col", col)
@@ -300,7 +334,16 @@ def encode_data(df, mode="integer"):
         else:
             print(col)
 
-    df_copy["Versus_1"] = df_copy.apply(lambda row: literal_eval(row["Versus_1"]).get(row["ID_2"], []), axis=1)
+    def get_versus_1(row):
+        vs_1 = row["Versus_1"]
+        if isinstance(vs_1, str):
+            try:
+                vs_1 = literal_eval(vs_1)
+            except:
+                raise ValueError('Err_OR')
+        return vs_1.get(row["ID_2"], [])
+    print("Analyzing versus 1")
+    df_copy["Versus_1"] = df_copy.apply(lambda row: get_versus_1(row), axis=1)
     df_copy["Versus_2"] = df_copy.apply(lambda row: literal_eval(row["Versus_2"]).get(row["ID_1"], []), axis=1)
 
     df_copy["nb_match_versus"] = df_copy.apply(lambda row: len(row["Versus_1"]), axis=1)
