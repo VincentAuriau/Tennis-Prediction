@@ -135,8 +135,6 @@ def load_match_data_from_path(players_db, path_to_matchs_file, get_match_statist
         matches_data.append(final_df)
 
     matches_data = pd.concat(matches_data, axis=0)
-    if get_match_statistics:
-        matches_data = pd.merge(matches_data, match_df, on="match_id")
     return matches_data
 
 def load_matches_data(keep_values_from_year=1990):
