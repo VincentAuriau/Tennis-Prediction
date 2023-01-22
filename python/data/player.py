@@ -66,7 +66,7 @@ class Player:
                + str(self.birthdate) + ' *** Country : ' + str(self.country) + ' *** Hand : ' + str(self.hand) \
                + ' *** Height : ' + str(self.height)
 
-    def _add_victory(self, id_loser):
+    def _add_victory(self, id_loser, tournament_date="19000101"):
         """
         Update last_matches argument with a victories and updates versus argument using id_loser
         :param id_loser: ID of los of match against current player
@@ -78,12 +78,12 @@ class Player:
         self.last_matches[1] = self.last_matches[0]
         self.last_matches[0] = 'V'
         if id_loser in self.versus.keys():
-            self.versus[id_loser].append('V')
+            self.versus[id_loser].append(['V', tournament_date])
         else:
-            self.versus[id_loser] = ['V']
+            self.versus[id_loser] = [['V', tournament_date]]
         self._update_victories_percentage('V')
 
-    def _add_defeat(self, id_winner):
+    def _add_defeat(self, id_winner, tournament_date="19000101"):
         """
         Add a Defeat
         :param id_winner:
@@ -95,9 +95,9 @@ class Player:
         self.last_matches[1] = self.last_matches[0]
         self.last_matches[0] = 'D'
         if id_winner in self.versus.keys():
-            self.versus[id_winner].append('D')
+            self.versus[id_winner].append(['D', tournament_date])
         else:
-            self.versus[id_winner] = ['D']
+            self.versus[id_winner] = [['D', tournament_date]]
         self._update_victories_percentage('D')
 
     def _update_victories_percentage(self, match_outcome):
@@ -310,11 +310,11 @@ class Player:
         # Update Rankings ?
 
         if match.winner.id == self.id:
-            self._add_victory(match.loser.id)
+            self._add_victory(match.loser.id, tournament_date=match.tournament_date)
             self._update_surfaces_victories_percentage(match.surface, "V")
         else:
             assert match.loser.id == self.id
-            self._add_defeat(match.winner.id)
+            self._add_defeat(match.winner.id, tournament_date=match.tournament_date)
             self._update_surfaces_victories_percentage(match.surface, "D")
         self._update_fatigue(match.tournament_date, match.sets_number)
 
