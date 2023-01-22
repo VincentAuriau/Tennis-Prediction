@@ -12,6 +12,7 @@ class Match:
         self.tournament = tournament
         self.surface = surface
 
+
         self.tournament_date = ''
         self.tournament_level = ''
         self.round = ''
@@ -53,6 +54,9 @@ class Match:
         }
 
         self.sets_number = 0
+        self.score = None
+        self.elapsed_minutes = None
+        self.best_of = None
 
     def get_rankings(self, player_id):
         if player_id == self.winner.id:
@@ -126,7 +130,8 @@ class Match:
         match_data = pd.DataFrame({
             "tournament": [self.tournament],
             "tournament_level": [self.tournament_level],
-            "round": [self.round]
+            "round": [self.round],
+            "best_of": [self.best_of]
         })
 
         w_data = self.winner.get_data_df()
@@ -136,12 +141,47 @@ class Match:
         self.loser.update_from_match(self)
         return match_data, w_data, l_data
 
+    def get_match_data_results_statistics(self):
+        match_statistics = {
+            "score": [self.score],
+            "elapsed_minutes": [self.elapsed_minutes]
+        }
+
+        winner_statistics = {
+            "aces_nb": [self.match_time_players_data["winner"]["aces_nb"]],
+            "doublefaults_nb": [self.match_time_players_data["winner"]["df_nb"]],
+            "svpt": [self.match_time_players_data["winner"]["w_svpt"]],
+            "1stIn": [self.match_time_players_data["winner"]["w_1stIn"]],
+            "1stWon": [self.match_time_players_data["winner"]["w_1stWon"]],
+            "2ndWon": [self.match_time_players_data["winner"]["w_2ndWon"]],
+            "SvGms": [self.match_time_players_data["winner"]["w_SvGms"]],
+            "bpSaved": [self.match_time_players_data["winner"]["w_bpSaved"]],
+            "bpFaced": [self.match_time_players_data["winner"]["w_bpFaced"]]
+        }
+        loser_statistics = {
+            "aces_nb": [self.match_time_players_data["loser"]["aces_nb"]],
+            "doublefaults_nb": [self.match_time_players_data["loser"]["df_nb"]],
+            "svpt": [self.match_time_players_data["loser"]["w_svpt"]],
+            "1stIn": [self.match_time_players_data["loser"]["w_1stIn"]],
+            "1stWon": [self.match_time_players_data["loser"]["w_1stWon"]],
+            "2ndWon": [self.match_time_players_data["loser"]["w_2ndWon"]],
+            "SvGms": [self.match_time_players_data["loser"]["w_SvGms"]],
+            "bpSaved": [self.match_time_players_data["loser"]["w_bpSaved"]],
+            "bpFaced": [self.match_time_players_data["loser"]["w_bpFaced"]]
+        }
+
+        return pd.DataFrame(match_statistics), pd.DataFrame(winner_statistics), pd.DataFrame(loser_statistics)
+
     def instantiate_from_data_row(self, data_row):
 
         self.tournament_date = data_row["tourney_date"]
         self.tournament_level = data_row["tourney_level"]
         self.round = data_row["round"]
         self.sets_number = len(str(data_row["score"]).split("-"))
+
+        self.score = data_row["score"]
+        self.elapsed_minutes = data_row["minutes"]
+        self.best_of = data_row["best_of"]
 
         self.match_time_players_data = {
             "winner": {
