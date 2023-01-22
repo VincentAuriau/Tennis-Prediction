@@ -15,6 +15,7 @@ Improvements:
     - encoding last x matches [v, v, v, d, d] => [1, 1, 1, 0, 0]
     - encoding last x matches versus
     - have better historic of matches order & versus matches = [[id, result], [id, result], ...]
+    - use match elapsed minutes to model fatigue
 
 Done:
     - add unique match ID to link to original matches data
