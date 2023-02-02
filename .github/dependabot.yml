@@ -1,0 +1,6 @@
+version: 2
+updates:
+  - package-ecosystem: "gitsubmodule"
+    directory: "/submodules/tennis_atp"
+    schedule:
+      interval: "weekly"
