@@ -1,6 +1,7 @@
 Features to add:
     - Ranking over time: ranking last months
     - Top reached ranking
+    - Ranking should come from ranking files and not match files
 
     - Last x (5 currently) matches could be an argument (5, 10, 15, etc...)
     - Using nb of games played instead of nb of sets ?
@@ -14,7 +15,6 @@ Improvements:
 
     - encoding last x matches [v, v, v, d, d] => [1, 1, 1, 0, 0]
     - encoding last x matches versus
-    - have better historic of matches order & versus matches = [[id, result], [id, result], ...]
     - use match elapsed minutes to model fatigue
 
 Done:
@@ -23,4 +23,5 @@ Done:
     - age at match time not well handled
         # Either get it from match data (easier)
         # Or better handling birthdate vs match date
+    - have better historic of matches order & versus matches = {id: [date, result], [date, result], ...]}
 
