@@ -1,7 +1,6 @@
 from abc import abstractmethod
 
 import numpy as np
-import pandas as pd
 
 class DumbModel:
 
