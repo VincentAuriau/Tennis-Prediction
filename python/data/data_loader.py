@@ -165,7 +165,7 @@ def matches_data_loader(keep_values_from_year=1990, path_to_data="submodules/ten
             pickle.dump(players_db, file, protocol=pickle.HIGHEST_PROTOCOL)
     else:
         with open(os.path.join(path_to_cache, "players_db"), "rb") as file:
-            players_db = pickle.load(file, protocol=pickle.HIGHEST_PROTOCOL)
+            players_db = pickle.load(file)
 
     if not matches_data_cached or flush_cache:
 
