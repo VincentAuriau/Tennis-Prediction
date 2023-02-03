@@ -7,6 +7,8 @@ class Player:
     def __init__(self, name, birthdate, country, nb_id, hand="", height=0):
         self.name = name
         self.birthdate = birthdate
+
+        self.rankings_history = {}
         self.ranking = 0
         self.ranking_points = 0
         self.ranking_over_time = 0
@@ -300,6 +302,9 @@ class Player:
         self.ranking = new_ranking
         self.ranking_points = new_ranking_points
 
+    def _get_best_ranking(self):
+        all_ranks = [self.rankings_history[date][0] for date in self.rankings_history.keys()]
+
     def update_from_match(self, match):
         """
         Updates the whole player profile from a match
@@ -328,6 +333,7 @@ class Player:
                                   breakpoints_saved=match.get_breakpoint_saved(self.id))
 
         self._update_rankings(*match.get_rankings(self.id))
+        self.rankings_history[match.tournament_date] = [self.ranking, self.ranking_points]
 
     def get_data(self):
         data_to_be_used = [self.name, self.id,  self.ranking, self.ranking_points, self.birthdate, self.versus,
@@ -361,6 +367,8 @@ class Player:
                         "ID": [self.id],
                         "Ranking": [self.ranking],
                         "Ranking Points": [self.ranking_points],
+                        "Ranking_History": [self.rankings_history],
+                        "Best_Rank": [self._get_best_ranking()],
                         "Birth Year": [self.birthdate],
                         "Versus": [self.versus],
                         "Hand": [self.hand],
