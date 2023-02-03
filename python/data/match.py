@@ -3,7 +3,6 @@ import ast
 import pandas as pd
 import numpy as np
 
-
 class Match:
 
     def __init__(self, winner, loser, tournament, surface):
