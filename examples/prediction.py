@@ -8,11 +8,13 @@ import numpy as np
 from data.data_loader import matches_data_loader
 from model.dumb_models import RandomModel, BestRankedPlayerWins
 
-data_df = matches_data_loader(path_to_data="../submodules/tennis_atp",
-                               path_to_cache="../cache",
-                              flush_cache=False,
-                              keep_values_from_year=2022,
-                              get_match_statistics=False)
+data_df = matches_data_loader(
+    path_to_data="../submodules/tennis_atp",
+    path_to_cache="../cache",
+    flush_cache=False,
+    keep_values_from_year=2022,
+    get_match_statistics=False,
+)
 
 random_model = RandomModel()
 best_player_model = BestRankedPlayerWins()
@@ -35,7 +37,13 @@ best_player_predictions = np.squeeze(best_player_predictions)
 
 print("Among the", len(ground_truths), "matches analyzed, we have found:")
 
-random_percentage = np.sum(ground_truths == random_predictions) / len(random_predictions) * 100
+random_percentage = (
+    np.sum(ground_truths == random_predictions) / len(random_predictions) * 100
+)
 print("Random Prediction Percentage:", np.round(random_percentage, 2), "%")
-bp_percentage = np.sum(ground_truths == best_player_predictions) / len(best_player_predictions) * 100
+bp_percentage = (
+    np.sum(ground_truths == best_player_predictions)
+    / len(best_player_predictions)
+    * 100
+)
 print("Best Ranked Player Prediction Percentage:", np.round(bp_percentage, 2), "%")

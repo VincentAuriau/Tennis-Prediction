@@ -1,6 +1,6 @@
 import pandas as pd
 
-df = pd.read_csv('test_data_df.csv')
+df = pd.read_csv("test_data_df.csv")
 
 print(df.head())
 
@@ -19,32 +19,31 @@ def cat_col_to_onehot_encode(df, column):
 
 
 df = df.fillna(0)
-df = cat_col_to_onehot_encode(df, 'hand_1')
-df = cat_col_to_onehot_encode(df, 'hand_0')
-df = cat_col_to_onehot_encode(df, 'round')
-df = cat_col_to_onehot_encode(df, 'surface')
-df = cat_col_to_onehot_encode(df, 'tournament')
-df = cat_col_to_onehot_encode(df, 'tournament_level')
+df = cat_col_to_onehot_encode(df, "hand_1")
+df = cat_col_to_onehot_encode(df, "hand_0")
+df = cat_col_to_onehot_encode(df, "round")
+df = cat_col_to_onehot_encode(df, "surface")
+df = cat_col_to_onehot_encode(df, "tournament")
+df = cat_col_to_onehot_encode(df, "tournament_level")
 
 x_cols = list(df.columns)
 print(x_cols)
-x_cols.remove('winner')
-x_cols.remove('Unnamed: 0')
-x_cols.remove('id_0')
-x_cols.remove('id_1')
-x_cols.remove('name_0')
-x_cols.remove('name_1')
-x_cols.remove('tournament_date')
+x_cols.remove("winner")
+x_cols.remove("Unnamed: 0")
+x_cols.remove("id_0")
+x_cols.remove("id_1")
+x_cols.remove("name_0")
+x_cols.remove("name_1")
+x_cols.remove("tournament_date")
 print(x_cols)
 X = df[x_cols].values
-Y = df['winner'].values
+Y = df["winner"].values
 
 
 print(X.shape, Y.shape)
 print(X[0])
-print('___')
+print("___")
 print(Y[:10])
-
 
 
 from sklearn.ensemble import RandomForestClassifier
@@ -59,7 +58,7 @@ for train_index, test_index in kf.split(X):
     score = clf.score(X[test_index], Y[test_index])
     scores.append(score)
 
-print('score: ', sum(scores)/len(scores))
+print("score: ", sum(scores) / len(scores))
 print(scores)
 
 
