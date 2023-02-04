@@ -123,27 +123,7 @@ class Match:
             + self.loser
         )
 
-    def get_data(self):
-        return [
-            [
-                self.tournament,
-                self.tournament_level,
-                self.surface,
-                self.tournament_date,
-                self.round,
-            ],
-            self.winner.get_data(),
-            self.loser.get_data(),
-        ]
-
-    def instantiate(self, tournament_date, tournament_level, tournament_round):
-        self.tournament_date = tournament_date
-        self.tournament_level = tournament_level
-        self.round = tournament_round
-
-        self.data = self.get_data()
-
-    def get_predictable_data_and_update_players_stats(self):
+    def get_prior_data_and_update_players_stats(self):
         match_data = pd.DataFrame(
             {
                 "tournament": [self.tournament],
@@ -154,7 +134,17 @@ class Match:
         )
 
         w_data = self.winner.get_data_df()
+        lr, lrp = self.winner.get_last_months_rankings(
+            date=self.tournament_date, nb_months=12, day_of_month="last"
+        )
+        w_data["last_rankings"] = [lr]
+        w_data["last_ranking_points"] = [lrp]
         l_data = self.loser.get_data_df()
+        lr, lrp = self.loser.get_last_months_rankings(
+            date=self.tournament_date, nb_months=12, day_of_month="last"
+        )
+        l_data["last_rankings"] = [lr]
+        l_data["last_ranking_points"] = [lrp]
 
         self.winner.update_from_match(self)
         self.loser.update_from_match(self)
@@ -237,111 +227,3 @@ class Match:
                 "w_bpFaced": data_row["l_bpFaced"],
             },
         }
-
-    def positions_randomized_data(self):
-        decision = np.random.rand()
-        match_conditions = {}
-        match_conditions["tournament"] = self.tournament
-        match_conditions["tournament_level"] = self.tournament_level
-        match_conditions["tournament_date"] = self.tournament_date
-        match_conditions["surface"] = self.surface
-        match_conditions["round"] = self.round
-        if decision > 0.5:
-            return [
-                match_conditions,
-                self.player_data_formatting(1),
-                self.player_data_formatting(2),
-                {"winner": 0},
-            ]
-            # return np.concatenate([self.data[0], self.data[1], self.data[2], [0]]).tolist()
-        else:
-            return [
-                match_conditions,
-                self.player_data_formatting(2),
-                self.player_data_formatting(1),
-                {"winner": 1},
-            ]
-            # return np.concatenate([self.data[0], self.data[2], self.data[1], [1]]).tolist()
-
-    def player_data_formatting(self, position):
-        data_dict = {}
-        # Straight Forward data
-        data_dict["name"] = self.data[position][0]
-        data_dict["id"] = self.data[position][1]
-        data_dict["ranking"] = self.data[position][2]
-        data_dict["ranking_points"] = self.data[position][3]
-
-        # Age
-        born_year = int(self.data[position][4] // 10000)
-        match_year = ast.literal_eval(self.tournament_date[:4])
-        data_dict["age"] = match_year - born_year
-
-        # Specific Versus
-        specific_versus = self.data[position][5].get(
-            [self.loser, self.winner][position - 1].id, []
-        )
-        if len(specific_versus) == 0:
-            specific_win_percentage = -1
-        else:
-            specific_win_percentage = specific_versus.count("V") / len(specific_versus)
-
-        if len(specific_versus[-5:]) > 0:
-            specific_last_matches = specific_versus[-5:].count("V") / len(
-                specific_versus[-5:]
-            )
-        else:
-            specific_last_matches = -1
-        data_dict["specific_versus"] = specific_win_percentage
-        data_dict["last_specific_versus"] = specific_last_matches
-
-        # Straight Forward data #2
-        data_dict["hand"] = self.data[position][6]
-        data_dict["height"] = self.data[position][8]
-
-        # Win percentages global/surface
-        if len(self.data[position][9][-5:]) > 0:
-            last_matches = self.data[position][9][-5:].count("V") / len(
-                self.data[position][9][-5:]
-            )
-        else:
-            last_matches = -1
-        data_dict["last_matches"] = last_matches
-        if (
-            len(
-                self.data[position][
-                    {"Clay": 10, "Carpet": 11, "Grass": 12, "Hard": 13}.get(
-                        self.surface
-                    )
-                ][-5:]
-            )
-            > 0
-        ):
-            last_matches_surface = self.data[position][
-                {"Clay": 10, "Carpet": 11, "Grass": 12, "Hard": 13}.get(self.surface)
-            ][-5:].count("V") / len(
-                self.data[position][
-                    {"Clay": 10, "Carpet": 11, "Grass": 12, "Hard": 13}.get(
-                        self.surface
-                    )
-                ][-5:]
-            )
-        else:
-            last_matches_surface = -1
-        data_dict["last_matches_surface"] = last_matches_surface
-        data_dict["global_win_percentage"] = self.data[position][14]
-        data_dict["surface_win_percentage"] = self.data[position][
-            {"Clay": 15, "Carpet": 16, "Grass": 17, "Hard": 18}.get(self.surface)
-        ]
-
-        # Straight Forward data #3
-        data_dict["ace_percentage"] = self.data[position][19]
-        data_dict["doublefault_percentage"] = self.data[position][20]
-        data_dict["first_serve_success_percentage"] = self.data[position][21]
-        data_dict["winning_on_1st_serve_percentage"] = self.data[position][22]
-        data_dict["winning_on_2nd_serve_percentage"] = self.data[position][23]
-        data_dict["overall_win_on_serve_percentage"] = self.data[position][24]
-        data_dict["break_point_faced_percentage"] = self.data[position][25]
-        data_dict["break_point_saved_percentage"] = self.data[position][26]
-        data_dict["fatigue"] = self.data[position][27]
-
-        return data_dict
