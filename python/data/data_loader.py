@@ -194,6 +194,7 @@ def matches_data_loader(
     path_to_cache="/cache",
     flush_cache=True,
     get_match_statistics=False,
+    get_reversed_match_data=False,
 ):
     """
     Loads all matches data
@@ -255,8 +256,10 @@ def matches_data_loader(
         data_matches = pd.read_csv(
             os.path.join(path_to_cache, "matches_data.csv"), sep=";"
         )
-
-    return data_matches
+    if get_reversed_match_data:
+        return data_matches
+    else:
+        return data_matches.iloc[::2]
 
 
 def clean_missing_data(df):
