@@ -127,7 +127,7 @@ def load_match_data_from_path(
             match_data,
             w_data,
             l_data,
-        ) = match_o.get_predictable_data_and_update_players_stats()
+        ) = match_o.get_prior_data_and_update_players_stats()
 
         match_data["match_id"] = row["match_id"]
 
@@ -186,10 +186,6 @@ def load_match_data_from_path(
 
     matches_data = pd.concat(matches_data, axis=0)
     return matches_data
-
-
-def load_matches_data(keep_values_from_year=1990):
-    pass
 
 
 def matches_data_loader(
@@ -271,72 +267,6 @@ def clean_missing_data(df):
     """
 
     return df
-
-
-def data_loader(
-    starting_year=1990, matches_type="main_atp", encoding="integer", check_cache=False
-):
-    """
-    Main data loading function
-    :return:
-    """
-
-    if check_cache:
-        try:
-            df = pd.read_csv("loaded_data.csv")
-        except:
-            df = load_matches_data(keep_values_from_year=starting_year)
-    else:
-        df = load_matches_data(keep_values_from_year=starting_year)
-    df.to_csv("loaded_data.csv")
-    df = encode_data(df, mode=encoding)
-    df = clean_missing_data(df)
-
-    x_columns = [
-        "tournament_level",
-        "round",
-        "Ranking_1",
-        "Ranking Points_1",
-        "Hand_1",
-        "Height_1",
-        "Victories Percentage_1",
-        "Clay victories Percentage_1",
-        "Carpet victories Percentage_1",
-        "Grass victories Percentage_1",
-        "Hard victories Percentage_1",
-        "Aces Percentage_1",
-        "Doublefaults Percentage_1",
-        "First Serve Success Percentage_1",
-        "Winning on 1st Serve Percentage_1",
-        "Winning on 2nd Serve Percentage_1",
-        "Overall Win on Serve Percentage_1",
-        "BreakPoint Face Percentage_1",
-        "BreakPoint Saved Percentage_1",
-        "Fatigue_1",
-        "Ranking_2",
-        "Ranking Points_2",
-        "Hand_2",
-        "Height_2",
-        "Victories Percentage_2",
-        "Clay victories Percentage_2",
-        "Carpet victories Percentage_2",
-        "Grass victories Percentage_2",
-        "Hard victories Percentage_2",
-        "Aces Percentage_2",
-        "Doublefaults Percentage_2",
-        "First Serve Success Percentage_2",
-        "Winning on 1st Serve Percentage_2",
-        "Winning on 2nd Serve Percentage_2",
-        "Overall Win on Serve Percentage_2",
-        "BreakPoint Face Percentage_2",
-        "BreakPoint Saved Percentage_2",
-        "Fatigue_2",
-        "nb_match_versus",
-        "v_perc_versus",
-    ]
-    y_columns = ["Winner"]
-
-    return df[x_columns + y_columns]
 
 
 def encode_data(df, mode="integer"):

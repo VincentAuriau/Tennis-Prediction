@@ -412,64 +412,6 @@ class Player:
             self.ranking_points,
         ]
 
-    def get_data(self):
-        data_to_be_used = [
-            self.name,
-            self.id,
-            self.ranking,
-            self.ranking_points,
-            self.birthdate,
-            self.versus,
-            self.hand,
-            self.last_tournament_date,
-            self.height,
-            self.matches,
-            self.matches_clay,
-            self.matches_carpet,
-            self.matches_grass,
-            self.matches_hard,
-            self.victories_percentage,
-            self.clay_victories_percentage,
-            self.carpet_victories_percentage,
-            self.grass_victories_percentage,
-            self.hard_victories_percentage,
-            self.aces_percentage,
-            self.doublefaults_percentage,
-            self.first_serve_success_percentage,
-            self.winning_on_1st_serve_percentage,
-            self.winning_on_2nd_serve_percentage,
-            self.overall_win_on_serve_percentage,
-            self.breakpoint_faced_percentage,
-            self.breakpoint_saved_percentage,
-            self.fatigue,
-        ]
-        return data_to_be_used
-
-    def get_data_profile(self):
-        data_to_be_used = [
-            self.name,
-            self.id,
-            self.ranking,
-            self.ranking_points,
-            self.birthdate,
-            self.versus,
-            self.hand,
-            self.height,
-            self.victories_percentage,
-            self.clay_victories_percentage,
-            self.carpet_victories_percentage,
-            self.grass_victories_percentage,
-            self.hard_victories_percentage,
-            self.aces_percentage,
-            self.doublefaults_percentage,
-            self.first_serve_success_percentage,
-            self.winning_on_1st_serve_percentage,
-            self.winning_on_2nd_serve_percentage,
-            self.overall_win_on_serve_percentage,
-            self.breakpoint_faced_percentage,
-            self.breakpoint_saved_percentage,
-        ]
-        return data_to_be_used
 
     def get_data_df(self):
         data_dict = {
