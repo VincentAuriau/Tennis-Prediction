@@ -449,3 +449,44 @@ class Player:
             "Fatigue": [self.fatigue],
         }
         return pd.DataFrame(data_dict)
+
+    def get_last_months_rankings(self, date, nb_months=12, day_of_month="last"):
+        assert day_of_month in ["last", "first"], \
+            f"For now you can only use first or last month day for ranking, you chose {day_of_month}"
+        if day_of_month == "last":
+            f = max
+        else:
+            f = min
+        date = str(date)
+        last_months_ranks = [9999 for _ in range(nb_months)]
+        last_months_points = [0 for _ in range(nb_months)]
+        date_year = int(date[:4])
+        date_month = int(date[4:6])
+
+        for i in range(nb_months):
+            if date_month == 1:
+                date_month = 12
+                date_year = date_year - 1
+            else:
+                date_month = date_month - 1
+
+            days_with_rankings = []
+            for key in self.rankings_history.keys():
+                if f"{date_year}{date_month:02d}" in str(key):
+                    days_with_rankings.append(int(str(key)[6:]))
+            try:
+                if len(days_with_rankings) > 0:
+                    last_months_ranks[-i] = self.rankings_history[int(f"{date_year}{date_month:02d}{f(days_with_rankings):02d}")][0]
+                    last_months_points[-i] = self.rankings_history[int(f"{date_year}{date_month:02d}{f(days_with_rankings):02d}")][1]
+
+            except:
+
+                print(days_with_rankings)
+                print(self.rankings_history)
+                print(date_month, date_year)
+
+                print(f"{date_year}{date_month:02d}{f(days_with_rankings):02d}")
+                print(self.rankings_history[f"{date_year}{date_month:02d}{f(days_with_rankings):02d}"])
+                raise ValueError
+
+        return last_months_ranks, last_months_points
