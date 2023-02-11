@@ -133,13 +133,13 @@ class Match:
             }
         )
 
-        w_data = self.winner.get_data_df()
+        w_data = self.winner.get_data_df(opponent=self.loser.id)
         lr, lrp = self.winner.get_last_months_rankings(
             date=self.tournament_date, nb_months=12, day_of_month="last"
         )
         w_data["last_rankings"] = [lr]
         w_data["last_ranking_points"] = [lrp]
-        l_data = self.loser.get_data_df()
+        l_data = self.loser.get_data_df(opponent=self.winner)
         lr, lrp = self.loser.get_last_months_rankings(
             date=self.tournament_date, nb_months=12, day_of_month="last"
         )

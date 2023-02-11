@@ -12,7 +12,7 @@ data_df = matches_data_loader(
     path_to_data="../submodules/tennis_atp",
     path_to_cache="../cache",
     flush_cache=False,
-    keep_values_from_year=2022,
+    keep_values_from_year=2015,
     get_match_statistics=True,
     get_reversed_match_data=True,
 )
@@ -34,7 +34,6 @@ for cat_1 in range(len(categories) - 1):
         sub_df = sub_df.loc[sub_df.Ranking_2 >= categories[cat_2]].loc[
             sub_df.Ranking_2 < categories[cat_2 + 1]
         ]
-
         sub_df["best_rank"] = sub_df.apply(
             lambda row: np.argmin([row["Ranking_1"], row["Ranking_2"]]), axis=1
         )
@@ -43,6 +42,7 @@ for cat_1 in range(len(categories) - 1):
             best_player_w_p = np.sum(
                 sub_df.Winner.values == sub_df.best_rank.values
             ) / len(sub_df)
+
         else:
             best_player_w_p = 0
         lines.append(best_player_w_p)
