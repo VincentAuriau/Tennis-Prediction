@@ -17,14 +17,10 @@ data_df = matches_data_loader(
     flush_cache=False,
     keep_values_from_year=2015,
     get_match_statistics=True,
-    get_reversed_match_data=False
+    get_reversed_match_data=False,
 )
 
-forgotten_columns = [
-    "Versus_1",
-    "Best_Rank_1",
-    "Last_Tournament_Date"
-]
+forgotten_columns = ["Versus_1", "Best_Rank_1", "Last_Tournament_Date"]
 
 columns_m = [
     "tournament_level",
@@ -72,23 +68,23 @@ columns_2 = [
     "Fatigue_2",
 ]
 
-data_df = data_df[columns_m+columns_1+columns_2]
+data_df = data_df[columns_m + columns_1 + columns_2]
 
 print(data_df.head())
 print(data_df.shape)
 
 print(encode_data(data_df.iloc[:10]))
 fdf = encode_data(data_df)
-fdf.to_csv('../cache/test.csv')
+fdf.to_csv("../cache/test.csv")
 
-fdf1 = fdf[columns_m+columns_1+columns_2]
-fdf2 = fdf[columns_m+columns_2+columns_1]
+fdf1 = fdf[columns_m + columns_1 + columns_2]
+fdf2 = fdf[columns_m + columns_2 + columns_1]
 fdf = pd.concat([fdf1, fdf2], axis=0)
 fdf.dropna(axis=0)
 
 fdf = fdf.drop(["ID_1", "Versus_1", "ID_2", "Versus_2"], axis=1)
 X = fdf.values
-y = np.concatenate([[0]*len(fdf1), [1]*len(fdf2)])
+y = np.concatenate([[0] * len(fdf1), [1] * len(fdf2)])
 print(X)
 model = RandomForestClassifier(n_estimators=5000)
 print("FIT")
@@ -96,4 +92,4 @@ print(X.shape, y.shape)
 model.fit(X, y)
 
 y_pred = model.predict(X)
-print(len(y), np.sum(y==y_pred))
+print(len(y), np.sum(y == y_pred))
