@@ -412,7 +412,6 @@ class Player:
             self.ranking_points,
         ]
 
-
     def get_data_df(self):
         data_dict = {
             "Name": [self.name],
@@ -451,8 +450,10 @@ class Player:
         return pd.DataFrame(data_dict)
 
     def get_last_months_rankings(self, date, nb_months=12, day_of_month="last"):
-        assert day_of_month in ["last", "first"], \
-            f"For now you can only use first or last month day for ranking, you chose {day_of_month}"
+        assert day_of_month in [
+            "last",
+            "first",
+        ], f"For now you can only use first or last month day for ranking, you chose {day_of_month}"
         if day_of_month == "last":
             f = max
         else:
@@ -476,17 +477,24 @@ class Player:
                     days_with_rankings.append(int(str(key)[6:]))
             try:
                 if len(days_with_rankings) > 0:
-                    last_months_ranks[-i] = self.rankings_history[int(f"{date_year}{date_month:02d}{f(days_with_rankings):02d}")][0]
-                    last_months_points[-i] = self.rankings_history[int(f"{date_year}{date_month:02d}{f(days_with_rankings):02d}")][1]
+                    last_months_ranks[-i] = self.rankings_history[
+                        int(f"{date_year}{date_month:02d}{f(days_with_rankings):02d}")
+                    ][0]
+                    last_months_points[-i] = self.rankings_history[
+                        int(f"{date_year}{date_month:02d}{f(days_with_rankings):02d}")
+                    ][1]
 
             except:
-
                 print(days_with_rankings)
                 print(self.rankings_history)
                 print(date_month, date_year)
 
                 print(f"{date_year}{date_month:02d}{f(days_with_rankings):02d}")
-                print(self.rankings_history[f"{date_year}{date_month:02d}{f(days_with_rankings):02d}"])
+                print(
+                    self.rankings_history[
+                        f"{date_year}{date_month:02d}{f(days_with_rankings):02d}"
+                    ]
+                )
                 raise ValueError
 
         return last_months_ranks, last_months_points
