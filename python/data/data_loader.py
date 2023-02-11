@@ -206,7 +206,8 @@ def matches_data_loader(
         players_db_cached = True
     else:
         players_db_cached = False
-    if os.path.exists(os.path.join(path_to_cache, "matches_data.csv")):
+
+    if os.path.exists(os.path.join(path_to_cache, f"matches_data_{keep_values_from_year}.csv")):
         matches_data_cached = True
     else:
         matches_data_cached = False
@@ -247,15 +248,34 @@ def matches_data_loader(
             )
             if year >= keep_values_from_year:
                 data_per_year.append(df_year)
+                df_year.to_csv(os.path.join(path_to_cache, f"matches_data_{year}.csv"), sep=";", index=False)
 
         data_matches = pd.concat(data_per_year, axis=0)
+        """
         data_matches.to_csv(
             os.path.join(path_to_cache, "matches_data.csv"), sep=";", index=False
         )
+        """
     else:
+        years = []
+        file_pattern = "matches_data_(?P<year>\d+).csv"
+        for file in os.listdir(path_to_cache):
+            regex_match = re.match(file_pattern, file)
+            if regex_match is not None:
+                years.append(regex_match["year"])
+
+        data_per_year = []
+        for year in np.sort(years):
+            if year >= keep_values_from_year:
+                df_year = pd.read_csv(os.path.join(path_to_cache, f"matches_data_{year}.csv"))
+                data_per_year.append(df_year)
+
+        data_matches = pd.concat(data_per_year, axis=0)
+        """
         data_matches = pd.read_csv(
             os.path.join(path_to_cache, "matches_data.csv"), sep=";"
         )
+        """
     if get_reversed_match_data:
         return data_matches
     else:
