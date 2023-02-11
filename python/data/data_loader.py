@@ -271,6 +271,7 @@ def matches_data_loader(
                 data_per_year.append(df_year)
 
         data_matches = pd.concat(data_per_year, axis=0)
+        data_matches = data_matches.reset_index()
         """
         data_matches = pd.read_csv(
             os.path.join(path_to_cache, "matches_data.csv"), sep=";"
