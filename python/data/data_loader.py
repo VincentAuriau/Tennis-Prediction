@@ -262,12 +262,12 @@ def matches_data_loader(
         for file in os.listdir(path_to_cache):
             regex_match = re.match(file_pattern, file)
             if regex_match is not None:
-                years.append(regex_match["year"])
+                years.append(int(regex_match["year"]))
 
         data_per_year = []
         for year in np.sort(years):
             if year >= keep_values_from_year:
-                df_year = pd.read_csv(os.path.join(path_to_cache, f"matches_data_{year}.csv"))
+                df_year = pd.read_csv(os.path.join(path_to_cache, f"matches_data_{year}.csv"), sep=";")
                 data_per_year.append(df_year)
 
         data_matches = pd.concat(data_per_year, axis=0)
