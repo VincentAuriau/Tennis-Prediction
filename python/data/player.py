@@ -421,7 +421,7 @@ class Player:
             "Ranking_History": [self.rankings_history],
             "Best_Rank": [self._get_best_ranking()],
             "Birth_Year": [self.birthdate],
-            "Versus": [self.versus if opponent is None else self.versus[opponent]],
+            "Versus": [self.versus if opponent is None else self.versus.get(opponent, [])],
             "Hand": [self.hand],
             "Last_Tournament_Date": [
                 self.fatigue_features["previous tournament"]["date"]

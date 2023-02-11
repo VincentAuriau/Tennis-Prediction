@@ -133,7 +133,7 @@ class Match:
             }
         )
 
-        w_data = self.winner.get_data_df(opponent=self.loser)
+        w_data = self.winner.get_data_df(opponent=self.loser.id)
         lr, lrp = self.winner.get_last_months_rankings(
             date=self.tournament_date, nb_months=12, day_of_month="last"
         )
