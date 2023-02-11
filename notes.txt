@@ -10,7 +10,6 @@ Features to add:
 
 Improvements:
     - Best Rank does not work
-    - Fix columns names
     - cut cache in several files for dynamic loading with different parameters
     - player.versus should not be given as a whole from match but only versus against adv ?
 
@@ -20,6 +19,8 @@ Improvements:
     - use match elapsed minutes to model fatigue
 
 Done:
+    - Fix columns names
+    - Remove all persons from versus
     - add unique match ID to link to original matches data
     - add concatenation of players stats at match time, result & match stats
     - age at match time not well handled
