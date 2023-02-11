@@ -9,6 +9,8 @@ Features to add:
 
 
 Improvements:
+    - Best Rank does not work
+    - Fix columns names
     - cut cache in several files for dynamic loading with different parameters
     - player.versus should not be given as a whole from match but only versus against adv ?
 
