@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 
 # How to update player's ranking ?
@@ -9,7 +10,7 @@ class Player:
         self.birthdate = birthdate
 
         self.rankings_history = {}
-        self.ranking = 0
+        self.ranking = 9999
         self.ranking_points = 0
         self.ranking_over_time = 0
         self.country = country
@@ -376,6 +377,7 @@ class Player:
         all_ranks = [
             self.rankings_history[date][0] for date in self.rankings_history.keys()
         ]
+        return np.min(all_ranks)
 
     def update_from_match(self, match):
         """
@@ -407,10 +409,16 @@ class Player:
         )
 
         self._update_rankings(*match.get_rankings(self.id))
-        self.rankings_history[match.tournament_date] = [
-            self.ranking,
-            self.ranking_points,
-        ]
+        if self.ranking == self.ranking and isinstance(self.ranking, int):
+            self.rankings_history[match.tournament_date] = [
+                self.ranking,
+                self.ranking_points,
+            ]
+        else:
+            self.rankings_history[match.tournament_date] = [
+                9999,
+                0,
+            ]
 
     def get_data_df(self, opponent=None):
         data_dict = {
