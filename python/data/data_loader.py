@@ -290,6 +290,12 @@ def clean_missing_data(df):
     :return:
     """
 
+    df.dropna(axis=0)
+    df = df.loc[df.Ranking_1 != 9999]
+    df = df.loc[df.Ranking_1 != 0]
+    df = df.loc[df.Ranking_2 != 9999]
+    df = df.loc[df.Ranking_2 != 0]
+
     return df
 
 
