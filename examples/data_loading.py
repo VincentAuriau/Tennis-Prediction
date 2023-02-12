@@ -20,6 +20,8 @@ data_df = matches_data_loader(
 print(data_df.head())
 print(data_df.shape)
 
+print("DATA LOADED")
+
 # Categories of Ranks : 1 - 10 - 50 - 100 - 300 - 1000
 categories = [1, 10, 50, 100, 300, 1000, 9999]
 
@@ -51,6 +53,8 @@ for cat_1 in range(len(categories) - 1):
         nb_matches_lines.append(len(sub_df) / 2)
     best_ranked_player_win_percentage.append(lines)
     categories_number_of_matches.append(nb_matches_lines)
+print("Number of matches with player ranked 0:", len(data_df.loc[data_df.Ranking_1 == 0]))
+print("Number of matches with player ranked > 9999:", len(data_df.loc[data_df.Ranking_1 > 9999]))
 
 colors = ["purple", "blue", "cyan", "green", "yellow", "orange", "red"]
 fig, ax = plt.subplots()
@@ -82,7 +86,7 @@ for i, val1 in enumerate(categories_number_of_matches):
         color = colors[int(val2**0.5 / np.max(categories_number_of_matches)**0.5 * (len(colors) - 1))]
         rect = plt.Rectangle((i, j), 1, 1, fc=color)
         ax.add_patch(rect)
-        plt.text(i + 0.2, j + 0.35, np.round(val2 * 100, 2))
+        plt.text(i + 0.2, j + 0.35, int(val2))
 
 for i in range(len(categories)):
     plt.plot([i, i], [0, len(categories) - 1], c="k")
@@ -95,3 +99,5 @@ plt.ylabel("Player 2 Rank Category")
 plt.title("Number of matches recorded per Rank Category")
 plt.savefig("nb_matches.png")
 plt.show()
+
+print(np.sum(categories_number_of_matches))

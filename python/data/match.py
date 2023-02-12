@@ -139,7 +139,7 @@ class Match:
         )
         w_data["last_rankings"] = [lr]
         w_data["last_ranking_points"] = [lrp]
-        l_data = self.loser.get_data_df(opponent=self.winner)
+        l_data = self.loser.get_data_df(opponent=self.winner.id)
         lr, lrp = self.loser.get_last_months_rankings(
             date=self.tournament_date, nb_months=12, day_of_month="last"
         )
