@@ -248,8 +248,10 @@ def matches_data_loader(
             df_year = load_match_data_from_path(
                 players_db, filepath, get_match_statistics=get_match_statistics
             )
+            df_year["tournament_year"] = year
             if year >= keep_values_from_year:
                 data_per_year.append(df_year)
+
                 df_year.to_csv(
                     os.path.join(path_to_cache, f"matches_data_{year}.csv"),
                     sep=";",
@@ -268,7 +270,7 @@ def matches_data_loader(
         for file in os.listdir(path_to_cache):
             regex_match = re.match(file_pattern, file)
             if regex_match is not None:
-                years.append(regex_match["year"])
+                years.append(int(regex_match["year"]))
 
         data_per_year = []
         for year in np.sort(years):
@@ -279,6 +281,7 @@ def matches_data_loader(
                 data_per_year.append(df_year)
 
         data_matches = pd.concat(data_per_year, axis=0)
+        data_matches = data_matches.reset_index()
         """
         data_matches = pd.read_csv(
             os.path.join(path_to_cache, "matches_data.csv"), sep=";"
@@ -296,6 +299,12 @@ def clean_missing_data(df):
     :param df:
     :return:
     """
+
+    df.dropna(axis=0)
+    df = df.loc[df.Ranking_1 != 9999]
+    df = df.loc[df.Ranking_1 != 0]
+    df = df.loc[df.Ranking_2 != 9999]
+    df = df.loc[df.Ranking_2 != 0]
 
     return df
 

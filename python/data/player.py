@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 
 # How to update player's ranking ?
@@ -9,7 +10,7 @@ class Player:
         self.birthdate = birthdate
 
         self.rankings_history = {}
-        self.ranking = 0
+        self.ranking = 9999
         self.ranking_points = 0
         self.ranking_over_time = 0
         self.country = country
@@ -368,14 +369,32 @@ class Player:
             if verbose > 2:
                 print("Service data not complete...")
 
-    def _update_rankings(self, new_ranking, new_ranking_points):
+    def _update_rankings(self, new_ranking, new_ranking_points, date):
+
+        if new_ranking_points != new_ranking_points or not isinstance(new_ranking_points, float):
+            if new_ranking_points == new_ranking_points:
+                print('No ranking points', new_ranking, new_ranking_points)
+            new_ranking_points = 0
+
+        if new_ranking != new_ranking or not isinstance(new_ranking, float):
+            new_ranking = 9999
+
         self.ranking = new_ranking
         self.ranking_points = new_ranking_points
+
+        self.rankings_history[date] = [
+            int(new_ranking),
+            int(new_ranking_points),
+        ]
 
     def _get_best_ranking(self):
         all_ranks = [
             self.rankings_history[date][0] for date in self.rankings_history.keys()
         ]
+        if len(all_ranks) > 0:
+            return np.min(all_ranks)
+        else:
+            return -1
 
     def update_from_match(self, match):
         """
@@ -406,11 +425,8 @@ class Player:
             breakpoints_saved=match.get_breakpoint_saved(self.id),
         )
 
-        self._update_rankings(*match.get_rankings(self.id))
-        self.rankings_history[match.tournament_date] = [
-            self.ranking,
-            self.ranking_points,
-        ]
+        self._update_rankings(*match.get_rankings(self.id), date=match.tournament_date)
+
 
     def get_data_df(self, opponent=None):
         data_dict = {
