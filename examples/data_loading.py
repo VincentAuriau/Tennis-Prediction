@@ -53,8 +53,13 @@ for cat_1 in range(len(categories) - 1):
         nb_matches_lines.append(len(sub_df) / 2)
     best_ranked_player_win_percentage.append(lines)
     categories_number_of_matches.append(nb_matches_lines)
-print("Number of matches with player ranked 0:", len(data_df.loc[data_df.Ranking_1 == 0]))
-print("Number of matches with player ranked > 9999:", len(data_df.loc[data_df.Ranking_1 > 9999]))
+print(
+    "Number of matches with player ranked 0:", len(data_df.loc[data_df.Ranking_1 == 0])
+)
+print(
+    "Number of matches with player ranked > 9999:",
+    len(data_df.loc[data_df.Ranking_1 > 9999]),
+)
 
 colors = ["purple", "blue", "cyan", "green", "yellow", "orange", "red"]
 fig, ax = plt.subplots()
@@ -83,7 +88,13 @@ fig, ax = plt.subplots()
 
 for i, val1 in enumerate(categories_number_of_matches):
     for j, val2 in enumerate(val1):
-        color = colors[int(val2**0.5 / np.max(categories_number_of_matches)**0.5 * (len(colors) - 1))]
+        color = colors[
+            int(
+                val2**0.5
+                / np.max(categories_number_of_matches) ** 0.5
+                * (len(colors) - 1)
+            )
+        ]
         rect = plt.Rectangle((i, j), 1, 1, fc=color)
         ax.add_patch(rect)
         plt.text(i + 0.2, j + 0.35, int(val2))
