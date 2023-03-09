@@ -246,6 +246,7 @@ def matches_data_loader(
             df_year = load_match_data_from_path(
                 players_db, filepath, get_match_statistics=get_match_statistics
             )
+            df_year["tournament_year"] = year
             if year >= keep_values_from_year:
                 data_per_year.append(df_year)
             df_year.to_csv(os.path.join(path_to_cache, f"matches_data_{year}.csv"), sep=";", index=False)
