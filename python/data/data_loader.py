@@ -1,6 +1,7 @@
 import os
 import pickle
 import re
+import time
 from ast import literal_eval
 
 import numpy as np
@@ -235,6 +236,7 @@ def matches_data_loader(
 
         data_per_year = []
         for year in np.sort(data_years.values):
+            t_start = time.time()
             print("+---------+---------+")
             print("  Year %i  " % year)
             if year >= keep_values_from_year:
@@ -257,6 +259,7 @@ def matches_data_loader(
                     sep=";",
                     index=False,
                 )
+            print(f"Elapsed Time: {time.time() - t_start} seconds")
 
         data_matches = pd.concat(data_per_year, axis=0)
         """

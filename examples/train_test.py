@@ -14,10 +14,10 @@ from data.data_loader import encode_data
 data_df = matches_data_loader(
     path_to_data="../submodules/tennis_atp",
     path_to_cache="../cache",
-    flush_cache=False,
-    keep_values_from_year=2022,
+    flush_cache=True,
+    keep_values_from_year=2023,
     get_match_statistics=True,
-    get_reversed_match_data=False,
+    get_reversed_match_data=True,
 )
 
 forgotten_columns = ["Versus_1", "Best_Rank_1", "Last_Tournament_Date"]
@@ -26,6 +26,7 @@ columns_m = [
     "tournament_level",
     "round",
     "best_of",
+    "Winner"
 ]
 columns_1 = [
     "ID_1",
@@ -79,20 +80,21 @@ print(data_df.shape)
 
 data_df = data_df[columns_m+columns_1+columns_2]
 data_df = data_df.dropna(axis=0)
+
 fdf = encode_data(data_df)
 fdf.to_csv("../cache/test.csv")
 
-fdf1 = fdf[columns_m + columns_1 + columns_2]
-fdf2 = fdf[columns_m + columns_2 + columns_1]
-fdf = pd.concat([fdf1, fdf2], axis=0)
-
 fdf = fdf.drop(["ID_1", "Versus_1", "ID_2", "Versus_2"], axis=1)
+fdf["diff_ranking"] = fdf["Ranking_2"] - fdf["Ranking_1"]
+
+y = fdf.Winner
+
+fdf = fdf[["diff_ranking"]]
 X = fdf.values
 
-y = np.concatenate([[0] * len(fdf1), [1] * len(fdf2)])
 print(X)
 
-model = RandomForestClassifier(n_estimators=1000, max_depth=7)
+model = RandomForestClassifier(n_estimators=1000, max_depth=None)
 print("FIT")
 print(X.shape, y.shape)
 model.fit(X, y)
@@ -100,4 +102,15 @@ model.fit(X, y)
 y_pred = model.predict(X)
 print(len(y), np.sum(y == y_pred))
 print(y_pred)
+print(y)
 print(np.sum(y_pred))
+
+plt.figure()
+plt.scatter(X, y)
+plt.show()
+"""
+z = model.predict(np.expand_dims(list(range(-10000, 10001)), axis=1))
+plt.figure()
+plt.plot(list(range(-10000, 10001)), z)
+plt.show()
+"""
