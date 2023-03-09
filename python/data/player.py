@@ -370,15 +370,23 @@ class Player:
                 print("Service data not complete...")
 
     def _update_rankings(self, new_ranking, new_ranking_points, date):
-        if new_ranking_points != new_ranking_points or not isinstance(
-            new_ranking_points, float
-        ):
+        if new_ranking_points != new_ranking_points:
             if new_ranking_points == new_ranking_points:
                 print("No ranking points", new_ranking, new_ranking_points)
             new_ranking_points = 0
+        else:
+            try:
+                new_ranking_points = int(new_ranking_points)
+            except:
+                new_ranking_points = 0
 
-        if new_ranking != new_ranking or not isinstance(new_ranking, float):
+        if new_ranking != new_ranking:
             new_ranking = 9999
+        else:
+            try:
+                new_ranking = int(new_ranking)
+            except:
+                new_ranking = 9999
 
         self.ranking = new_ranking
         self.ranking_points = new_ranking_points

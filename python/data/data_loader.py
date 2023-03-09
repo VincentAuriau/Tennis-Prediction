@@ -406,9 +406,8 @@ def encode_data(df, mode="integer"):
             "A": [0, 0, 1, 0],
             "U": [0, 0, 0, 1],
         }
-    print(df_copy.columns)
+
     for col in df_copy.columns:
-        print("col", col)
         if "hand" in col.lower():
             df_copy[col] = df_copy.apply(lambda row: hand[str(row[col])], axis=1)
         elif "round" in col.lower():
@@ -416,7 +415,7 @@ def encode_data(df, mode="integer"):
         elif "tournament_level" in col.lower():
             df_copy[col] = df_copy.apply(lambda row: tournament_level[row[col]], axis=1)
         else:
-            print(col)
+            pass
 
     def get_versus_1(row):
         vs_1 = row["Versus_1"]
@@ -427,13 +426,6 @@ def encode_data(df, mode="integer"):
                 raise ValueError("Err_OR")
         return vs_1.get(row["ID_2"], [])
 
-    print("Analyzing versus 1")
-    """
-    df_copy["Versus_1"] = df_copy.apply(lambda row: get_versus_1(row), axis=1)
-    df_copy["Versus_2"] = df_copy.apply(
-        lambda row: literal_eval(row["Versus_2"]).get(row["ID_1"], []), axis=1
-    )
-    """
     df_copy["nb_match_versus"] = df_copy.apply(lambda row: len(row["Versus_1"]), axis=1)
     df_copy["v_perc_versus"] = df_copy.apply(
         lambda row: row["Versus_1"].count("V") / len(row["Versus_1"])
@@ -441,6 +433,5 @@ def encode_data(df, mode="integer"):
         else -1,
         axis=1,
     )
-    # df_copy["v_perc_versus_2"] = df_copy.apply(lambda row: row["Versus_2"].count("V") / len(row["Versus_2"]) if len(row["Versus_2"]) > 0 else -1, axis=1)
 
     return df_copy
