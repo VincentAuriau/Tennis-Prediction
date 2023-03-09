@@ -10,8 +10,6 @@ Features to add:
 
 Improvements:
     - Best Rank does not work
-    - cut cache in several files for dynamic loading with different parameters
-    - player.versus should not be given as a whole from match but only versus against adv ?
 
     - encoding last x matches [v, v, v, d, d] => [1, 1, 1, 0, 0]
     - encoding last x matches versus
@@ -19,6 +17,8 @@ Improvements:
     - use match elapsed minutes to model fatigue
 
 Done:
+    - player.versus should not be given as a whole from match but only versus against adv ?
+    - cut cache in several files for dynamic loading with different parameters
     - Fix columns names
     - Remove all persons from versus
     - add unique match ID to link to original matches data
