@@ -418,11 +418,12 @@ def encode_data(df, mode="integer"):
         return vs_1.get(row["ID_2"], [])
 
     print("Analyzing versus 1")
+    """
     df_copy["Versus_1"] = df_copy.apply(lambda row: get_versus_1(row), axis=1)
     df_copy["Versus_2"] = df_copy.apply(
         lambda row: literal_eval(row["Versus_2"]).get(row["ID_1"], []), axis=1
     )
-
+    """
     df_copy["nb_match_versus"] = df_copy.apply(lambda row: len(row["Versus_1"]), axis=1)
     df_copy["v_perc_versus"] = df_copy.apply(
         lambda row: row["Versus_1"].count("V") / len(row["Versus_1"])
