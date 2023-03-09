@@ -207,7 +207,9 @@ def matches_data_loader(
     else:
         players_db_cached = False
 
-    if os.path.exists(os.path.join(path_to_cache, f"matches_data_{keep_values_from_year}.csv")):
+    if os.path.exists(
+        os.path.join(path_to_cache, f"matches_data_{keep_values_from_year}.csv")
+    ):
         matches_data_cached = True
     else:
         matches_data_cached = False
@@ -249,7 +251,12 @@ def matches_data_loader(
             df_year["tournament_year"] = year
             if year >= keep_values_from_year:
                 data_per_year.append(df_year)
-            df_year.to_csv(os.path.join(path_to_cache, f"matches_data_{year}.csv"), sep=";", index=False)
+
+                df_year.to_csv(
+                    os.path.join(path_to_cache, f"matches_data_{year}.csv"),
+                    sep=";",
+                    index=False,
+                )
 
         data_matches = pd.concat(data_per_year, axis=0)
         """
@@ -268,7 +275,9 @@ def matches_data_loader(
         data_per_year = []
         for year in np.sort(years):
             if year >= keep_values_from_year:
-                df_year = pd.read_csv(os.path.join(path_to_cache, f"matches_data_{year}.csv"), sep=";")
+                df_year = pd.read_csv(
+                    os.path.join(path_to_cache, f"matches_data_{year}.csv")
+                )
                 data_per_year.append(df_year)
 
         data_matches = pd.concat(data_per_year, axis=0)

@@ -370,10 +370,11 @@ class Player:
                 print("Service data not complete...")
 
     def _update_rankings(self, new_ranking, new_ranking_points, date):
-
-        if new_ranking_points != new_ranking_points or not isinstance(new_ranking_points, float):
+        if new_ranking_points != new_ranking_points or not isinstance(
+            new_ranking_points, float
+        ):
             if new_ranking_points == new_ranking_points:
-                print('No ranking points', new_ranking, new_ranking_points)
+                print("No ranking points", new_ranking, new_ranking_points)
             new_ranking_points = 0
 
         if new_ranking != new_ranking or not isinstance(new_ranking, float):
@@ -427,7 +428,6 @@ class Player:
 
         self._update_rankings(*match.get_rankings(self.id), date=match.tournament_date)
 
-
     def get_data_df(self, opponent=None):
         data_dict = {
             "Name": [self.name],
@@ -437,7 +437,9 @@ class Player:
             "Ranking_History": [self.rankings_history],
             "Best_Rank": [self._get_best_ranking()],
             "Birth_Year": [self.birthdate],
-            "Versus": [self.versus if opponent is None else self.versus.get(opponent, [])],
+            "Versus": [
+                self.versus if opponent is None else self.versus.get(opponent, [])
+            ],
             "Hand": [self.hand],
             "Last_Tournament_Date": [
                 self.fatigue_features["previous tournament"]["date"]
