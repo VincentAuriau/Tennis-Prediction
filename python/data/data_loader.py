@@ -276,7 +276,8 @@ def matches_data_loader(
         for year in np.sort(years):
             if year >= keep_values_from_year:
                 df_year = pd.read_csv(
-                    os.path.join(path_to_cache, f"matches_data_{year}.csv")
+                    os.path.join(path_to_cache, f"matches_data_{year}.csv"),
+                    sep=";"
                 )
                 data_per_year.append(df_year)
 

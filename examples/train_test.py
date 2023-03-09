@@ -15,7 +15,7 @@ data_df = matches_data_loader(
     path_to_data="../submodules/tennis_atp",
     path_to_cache="../cache",
     flush_cache=False,
-    keep_values_from_year=20222,
+    keep_values_from_year=2022,
     get_match_statistics=True,
     get_reversed_match_data=False,
 )
@@ -92,10 +92,12 @@ X = fdf.values
 y = np.concatenate([[0] * len(fdf1), [1] * len(fdf2)])
 print(X)
 
-model = RandomForestClassifier(n_estimators=5000)
+model = RandomForestClassifier(n_estimators=1000, max_depth=7)
 print("FIT")
 print(X.shape, y.shape)
 model.fit(X, y)
 
 y_pred = model.predict(X)
 print(len(y), np.sum(y == y_pred))
+print(y_pred)
+print(np.sum(y_pred))
