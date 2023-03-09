@@ -369,15 +369,30 @@ class Player:
             if verbose > 2:
                 print("Service data not complete...")
 
-    def _update_rankings(self, new_ranking, new_ranking_points):
+    def _update_rankings(self, new_ranking, new_ranking_points, date):
         self.ranking = new_ranking
         self.ranking_points = new_ranking_points
+
+        if new_ranking == new_ranking and isinstance(new_ranking, float):
+            self.rankings_history[date] = [
+                int(new_ranking),
+                int(new_ranking_points),
+            ]
+        else:
+            print("WEIRD RANKING", new_ranking, new_ranking_points)
+            self.rankings_history[date] = [
+                9999,
+                0,
+            ]
 
     def _get_best_ranking(self):
         all_ranks = [
             self.rankings_history[date][0] for date in self.rankings_history.keys()
         ]
-        return np.min(all_ranks)
+        if len(all_ranks) > 0:
+            return np.min(all_ranks)
+        else:
+            return -1
 
     def update_from_match(self, match):
         """
@@ -408,17 +423,8 @@ class Player:
             breakpoints_saved=match.get_breakpoint_saved(self.id),
         )
 
-        self._update_rankings(*match.get_rankings(self.id))
-        if self.ranking == self.ranking and isinstance(self.ranking, int):
-            self.rankings_history[match.tournament_date] = [
-                self.ranking,
-                self.ranking_points,
-            ]
-        else:
-            self.rankings_history[match.tournament_date] = [
-                9999,
-                0,
-            ]
+        self._update_rankings(*match.get_rankings(self.id), date=match.tournament_date)
+
 
     def get_data_df(self, opponent=None):
         data_dict = {
