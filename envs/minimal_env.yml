@@ -1,0 +1,6 @@
+name: min_tennis
+channels:
+  - defaults
+dependencies:
+  - pandas
+  - matplotlib
