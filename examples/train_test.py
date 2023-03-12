@@ -14,8 +14,8 @@ from data.data_loader import encode_data
 data_df = matches_data_loader(
     path_to_data="../submodules/tennis_atp",
     path_to_cache="../cache",
-    flush_cache=True,
-    keep_values_from_year=2023,
+    flush_cache=False,
+    keep_values_from_year=2022,
     get_match_statistics=True,
     get_reversed_match_data=True,
 )
