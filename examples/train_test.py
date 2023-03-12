@@ -22,12 +22,7 @@ data_df = matches_data_loader(
 
 forgotten_columns = ["Versus_1", "Best_Rank_1", "Last_Tournament_Date"]
 
-columns_m = [
-    "tournament_level",
-    "round",
-    "best_of",
-    "Winner"
-]
+columns_m = ["tournament_level", "round", "best_of", "Winner"]
 columns_1 = [
     "ID_1",
     "Ranking_1",
@@ -38,8 +33,8 @@ columns_1 = [
     "Victories_Percentage_1",
     "Clay_Victories_Percentage_1",
     "Grass_Victories_Percentage_1",
-    'Carpet_Victories_Percentage_1',
-    'Hard_Victories_Percentage_1',
+    "Carpet_Victories_Percentage_1",
+    "Hard_Victories_Percentage_1",
     "Aces_Percentage_1",
     "Doublefaults_Percentage_1",
     "First_Serve_Success_Percentage_1",
@@ -78,7 +73,7 @@ data_df = data_df[columns_m + columns_1 + columns_2]
 print(data_df.head())
 print(data_df.shape)
 
-data_df = data_df[columns_m+columns_1+columns_2]
+data_df = data_df[columns_m + columns_1 + columns_2]
 data_df = data_df.dropna(axis=0)
 
 fdf = encode_data(data_df)

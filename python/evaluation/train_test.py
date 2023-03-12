@@ -4,11 +4,7 @@ import numpy as np
 from data.data_loader import matches_data_loader
 from data.data_loader import encode_data
 
-default_columns_match = [
-    "tournament_level",
-    "round",
-    "best_of"
-]
+default_columns_match = ["tournament_level", "round", "best_of"]
 
 default_columns_player = [
     "ID",
@@ -20,8 +16,8 @@ default_columns_player = [
     "Victories_Percentage",
     "Clay_Victories_Percentage",
     "Grass_Victories_Percentage",
-    'Carpet_Victories_Percentage',
-    'Hard_Victories_Percentage',
+    "Carpet_Victories_Percentage",
+    "Hard_Victories_Percentage",
     "Aces_Percentage",
     "Doublefaults_Percentage",
     "First_Serve_Success_Percentage",
@@ -34,15 +30,15 @@ default_columns_player = [
 ]
 
 
-def train_test_evaluation(train_years,
-                          test_years,
-                          model_class,
-                          model_params,
-                          match_features=default_columns_match,
-                          player_features=default_columns_player,
-                          encoding_params={},
-                          ):
-
+def train_test_evaluation(
+    train_years,
+    test_years,
+    model_class,
+    model_params,
+    match_features=default_columns_match,
+    player_features=default_columns_player,
+    encoding_params={},
+):
     assert len(set(train_years).intersection(set(test_years))) == 0
     print("[+] Beginning Train/Test Evaluation")
 
@@ -59,7 +55,9 @@ def train_test_evaluation(train_years,
     p1_features = [feat + "_1" for feat in player_features]
     p2_features = [feat + "_2" for feat in player_features]
 
-    data_df = data_df[match_features+p1_features+p2_features+["Winner", "tournament_year"]]
+    data_df = data_df[
+        match_features + p1_features + p2_features + ["Winner", "tournament_year"]
+    ]
     train_data = data_df.loc[data_df.tournament_year.isin(train_years)]
     test_data = data_df.loc[data_df.tournament_year.isin(test_years)]
 
@@ -67,9 +65,10 @@ def train_test_evaluation(train_years,
     test_data = encode_data(test_data, **encoding_params)
 
     model = model_class(**model_params)
-    model.fit(train_data[match_features+p1_features+p2_features], train_data[["Winner"]])
+    model.fit(
+        train_data[match_features + p1_features + p2_features], train_data[["Winner"]]
+    )
 
-    preds = model.predict(test_data[match_features+p1_features+p2_features])
+    preds = model.predict(test_data[match_features + p1_features + p2_features])
 
     return np.sum(preds == test_data["Winner"].values) / len(preds)
-
