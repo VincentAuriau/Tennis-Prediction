@@ -1,6 +1,7 @@
 import os
 import pickle
 import re
+import time
 from ast import literal_eval
 
 import numpy as np
@@ -106,7 +107,6 @@ def load_match_data_from_path(
     """
 
     def extract_file_id(file_path):
-
         file_id = path_to_matchs_file.split("/")[-1].split(".")[0]
         if "\\" in file_id:
             file_id = file_id.split("\\")[1]
@@ -115,9 +115,7 @@ def load_match_data_from_path(
 
     match_df = pd.read_csv(path_to_matchs_file)
     match_df["match_id"] = match_df.apply(
-        lambda row: extract_file_id(path_to_matchs_file)
-        + "_"
-        + str(row.name),
+        lambda row: extract_file_id(path_to_matchs_file) + "_" + str(row.name),
         axis=1,
     )
 
@@ -244,6 +242,7 @@ def matches_data_loader(
 
         data_per_year = []
         for year in np.sort(data_years.values):
+            t_start = time.time()
             print("+---------+---------+")
             print("  Year %i  " % year)
             if year >= keep_values_from_year:
@@ -266,6 +265,7 @@ def matches_data_loader(
                     sep=";",
                     index=False,
                 )
+            print(f"Elapsed Time: {time.time() - t_start} seconds")
 
         data_matches = pd.concat(data_per_year, axis=0)
         """
@@ -285,7 +285,7 @@ def matches_data_loader(
         for year in np.sort(years):
             if year >= keep_values_from_year:
                 df_year = pd.read_csv(
-                    os.path.join(path_to_cache, f"matches_data_{year}.csv")
+                    os.path.join(path_to_cache, f"matches_data_{year}.csv"), sep=";"
                 )
                 data_per_year.append(df_year)
 
@@ -414,9 +414,8 @@ def encode_data(df, mode="integer"):
             "A": [0, 0, 1, 0],
             "U": [0, 0, 0, 1],
         }
-    print(df_copy.columns)
+
     for col in df_copy.columns:
-        print("col", col)
         if "hand" in col.lower():
             df_copy[col] = df_copy.apply(lambda row: hand[str(row[col])], axis=1)
         elif "round" in col.lower():
@@ -424,7 +423,7 @@ def encode_data(df, mode="integer"):
         elif "tournament_level" in col.lower():
             df_copy[col] = df_copy.apply(lambda row: tournament_level[row[col]], axis=1)
         else:
-            print(col)
+            pass
 
     def get_versus_1(row):
         vs_1 = row["Versus_1"]
@@ -435,19 +434,15 @@ def encode_data(df, mode="integer"):
                 raise ValueError("Err_OR")
         return vs_1.get(row["ID_2"], [])
 
-    print("Analyzing versus 1")
-    df_copy["Versus_1"] = df_copy.apply(lambda row: get_versus_1(row), axis=1)
-    df_copy["Versus_2"] = df_copy.apply(
-        lambda row: literal_eval(row["Versus_2"]).get(row["ID_1"], []), axis=1
-    )
-
-    df_copy["nb_match_versus"] = df_copy.apply(lambda row: len(row["Versus_1"]), axis=1)
-    df_copy["v_perc_versus"] = df_copy.apply(
-        lambda row: row["Versus_1"].count("V") / len(row["Versus_1"])
-        if len(row["Versus_1"]) > 0
-        else -1,
-        axis=1,
-    )
-    # df_copy["v_perc_versus_2"] = df_copy.apply(lambda row: row["Versus_2"].count("V") / len(row["Versus_2"]) if len(row["Versus_2"]) > 0 else -1, axis=1)
+    if "Versus_1" in df_copy.columns:
+        df_copy["nb_match_versus"] = df_copy.apply(
+            lambda row: len(row["Versus_1"]), axis=1
+        )
+        df_copy["v_perc_versus"] = df_copy.apply(
+            lambda row: row["Versus_1"].count("V") / len(row["Versus_1"])
+            if len(row["Versus_1"]) > 0
+            else -1,
+            axis=1,
+        )
 
     return df_copy
