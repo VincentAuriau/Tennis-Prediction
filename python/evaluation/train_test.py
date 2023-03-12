@@ -74,7 +74,7 @@ def train_test_evaluation(
 
     model = model_class(**model_params)
     model.fit(
-        train_data[match_features + p1_features + p2_features], np.expand_dims(train_data["Winner"].values, -1)
+        train_data[match_features + p1_features + p2_features], train_data["Winner"].values.ravel()
     )
 
     preds = model.predict(test_data[match_features + p1_features + p2_features])
