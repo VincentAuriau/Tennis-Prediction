@@ -279,8 +279,7 @@ def matches_data_loader(
         for year in np.sort(years):
             if year >= keep_values_from_year:
                 df_year = pd.read_csv(
-                    os.path.join(path_to_cache, f"matches_data_{year}.csv"),
-                    sep=";"
+                    os.path.join(path_to_cache, f"matches_data_{year}.csv"), sep=";"
                 )
                 data_per_year.append(df_year)
 
@@ -429,12 +428,15 @@ def encode_data(df, mode="integer"):
                 raise ValueError("Err_OR")
         return vs_1.get(row["ID_2"], [])
 
-    df_copy["nb_match_versus"] = df_copy.apply(lambda row: len(row["Versus_1"]), axis=1)
-    df_copy["v_perc_versus"] = df_copy.apply(
-        lambda row: row["Versus_1"].count("V") / len(row["Versus_1"])
-        if len(row["Versus_1"]) > 0
-        else -1,
-        axis=1,
-    )
+    if "Versus_1" in df_copy.columns:
+        df_copy["nb_match_versus"] = df_copy.apply(
+            lambda row: len(row["Versus_1"]), axis=1
+        )
+        df_copy["v_perc_versus"] = df_copy.apply(
+            lambda row: row["Versus_1"].count("V") / len(row["Versus_1"])
+            if len(row["Versus_1"]) > 0
+            else -1,
+            axis=1,
+        )
 
     return df_copy
