@@ -429,12 +429,13 @@ def encode_data(df, mode="integer"):
                 raise ValueError("Err_OR")
         return vs_1.get(row["ID_2"], [])
 
-    df_copy["nb_match_versus"] = df_copy.apply(lambda row: len(row["Versus_1"]), axis=1)
-    df_copy["v_perc_versus"] = df_copy.apply(
-        lambda row: row["Versus_1"].count("V") / len(row["Versus_1"])
-        if len(row["Versus_1"]) > 0
-        else -1,
-        axis=1,
-    )
+    if "Versus_1" in df_copy.columns:
+        df_copy["nb_match_versus"] = df_copy.apply(lambda row: len(row["Versus_1"]), axis=1)
+        df_copy["v_perc_versus"] = df_copy.apply(
+            lambda row: row["Versus_1"].count("V") / len(row["Versus_1"])
+            if len(row["Versus_1"]) > 0
+            else -1,
+            axis=1,
+        )
 
     return df_copy

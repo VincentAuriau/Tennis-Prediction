@@ -7,8 +7,7 @@ from data.data_loader import encode_data
 default_columns_match = [
     "tournament_level",
     "round",
-    "best_of",
-    "Winner"
+    "best_of"
 ]
 
 default_columns_player = [
@@ -45,21 +44,22 @@ def train_test_evaluation(train_years,
                           ):
 
     assert len(set(train_years).intersection(set(test_years))) == 0
+    print("[+] Beginning Train/Test Evaluation")
 
     min_year = np.min(train_years + test_years)
     data_df = matches_data_loader(
         path_to_data="../submodules/tennis_atp",
         path_to_cache="../cache",
-        flush_cache=True,
+        flush_cache=False,
         keep_values_from_year=min_year,
-        get_match_statistics=True,
+        get_match_statistics=False,
         get_reversed_match_data=True,
     )
 
     p1_features = [feat + "_1" for feat in player_features]
     p2_features = [feat + "_2" for feat in player_features]
 
-    data_df = data_df[match_features+p1_features+p2_features+["Winner"]]
+    data_df = data_df[match_features+p1_features+p2_features+["Winner", "tournament_year"]]
     train_data = data_df.loc[data_df.tournament_year.isin(train_years)]
     test_data = data_df.loc[data_df.tournament_year.isin(test_years)]
 
@@ -68,8 +68,8 @@ def train_test_evaluation(train_years,
 
     model = model_class(**model_params)
     model.fit(train_data[match_features+p1_features+p2_features], train_data[["Winner"]])
-    
+
     preds = model.predict(test_data[match_features+p1_features+p2_features])
 
-    return np.sum(preds == test_data[["Winner"]].values) / len(test_data)
+    return np.sum(preds == test_data["Winner"].values) / len(preds)
 
