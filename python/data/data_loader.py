@@ -7,8 +7,8 @@ from ast import literal_eval
 import numpy as np
 import pandas as pd
 
-import python.data.player as player
-import python.data.match as match
+import data.player as player
+import data.match as match
 
 
 def create_player_profiles(df):
@@ -105,9 +105,18 @@ def load_match_data_from_path(
     :param path_to_matchs_file:
     :return:
     """
+
+    def extract_file_id(file_path):
+
+        file_id = path_to_matchs_file.split("/")[-1].split(".")[0]
+        if "\\" in file_id:
+            file_id = file_id.split("\\")[1]
+
+        return file_id
+
     match_df = pd.read_csv(path_to_matchs_file)
     match_df["match_id"] = match_df.apply(
-        lambda row: path_to_matchs_file.split("/")[-1].split(".")[0].split("\\")[1]
+        lambda row: extract_file_id(path_to_matchs_file)
         + "_"
         + str(row.name),
         axis=1,
