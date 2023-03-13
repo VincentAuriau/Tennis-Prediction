@@ -86,6 +86,7 @@ def train_test_evaluation(
         try:
             df_res = pd.read_csv(os.path.join(save_path, "results.csv"))
         except:
+            os.makedirs(save_path, exist_ok=True)
             df_res = pd.DataFrame()
 
         df_curr = pd.DataFrame({
