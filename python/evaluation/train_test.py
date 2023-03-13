@@ -1,5 +1,7 @@
-import matplotlib.pyplot as plt
+import os
+
 import numpy as np
+import pandas as pd
 
 from data.data_loader import matches_data_loader
 from data.data_encoding import encode_data, create_additional_features
@@ -39,6 +41,7 @@ def train_test_evaluation(
     player_features=default_columns_player,
     encoding_params={},
     additional_features=[],
+    save_path=None
 ):
     assert len(set(train_years).intersection(set(test_years))) == 0
     print("[+] Beginning Train/Test Evaluation")
@@ -78,5 +81,26 @@ def train_test_evaluation(
     )
 
     preds = model.predict(test_data[match_features + p1_features + p2_features])
+    precision = np.sum(preds == test_data["Winner"].values) / len(preds)
+    if save_path is not None:
+        try:
+            df_res = pd.read_csv(os.path.join(save_path, "results.csv"))
+        except:
+            df_res = pd.DataFrame()
 
-    return np.sum(preds == test_data["Winner"].values) / len(preds)
+        df_curr = pd.DataFrame({
+            "train_years": [train_years],
+            "test_years": [test_years],
+            "model_class": [str(model_class)],
+            "model_params": [model_params],
+            "match_features": [match_features],
+            "player_features": [player_features],
+            "encoding_params": [encoding_params],
+            "additional_features": [additional_features],
+            "precision": [precision]
+        })
+
+        df_res = pd.concat([df_res, df_curr], axis=1)
+        df_res.to_csv(os.path.join(save_path, "results.csv"), index=False, sep=";")
+
+    return precision
