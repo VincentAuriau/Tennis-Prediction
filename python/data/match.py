@@ -129,6 +129,7 @@ class Match:
                 "tournament": [self.tournament],
                 "tournament_level": [self.tournament_level],
                 "tournament_date": [self.tournament_date],
+                "tournament_surface": [self.surface],
                 "round": [self.round],
                 "best_of": [self.best_of],
             }
