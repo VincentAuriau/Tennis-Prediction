@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 
 from data.data_loader import matches_data_loader
-from data.data_encoding import encode_data, create_additional_features
+from data.data_encoding import encode_data, create_additional_features, clean_missing_data
 
 default_columns_match = ["tournament_level", "round", "best_of", "tournament_surface"]
 
@@ -58,7 +58,6 @@ def train_test_evaluation(
 
     train_data = data_df.loc[data_df.tournament_year.isin(train_years)]
     test_data = data_df.loc[data_df.tournament_year.isin(test_years)]
-
     train_data = create_additional_features(train_data, additional_features)
     train_data = encode_data(train_data, **encoding_params)
     test_data = create_additional_features(test_data, additional_features)
@@ -75,6 +74,8 @@ def train_test_evaluation(
         match_features + p1_features + p2_features + ["Winner", "tournament_year"]
     ]
 
+    train_data = clean_missing_data(train_data)
+    test_data = clean_missing_data(test_data)
     model = model_class(**model_params)
     model.fit(
         train_data[match_features + p1_features + p2_features], train_data["Winner"].values.ravel()

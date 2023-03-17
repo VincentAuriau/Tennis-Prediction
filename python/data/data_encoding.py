@@ -8,7 +8,7 @@ def clean_missing_data(df):
     :return:
     """
 
-    df.dropna(axis=0)
+    df = df.dropna(axis=0)
     df = df.loc[df.Ranking_1 != 9999]
     df = df.loc[df.Ranking_1 != 0]
     df = df.loc[df.Ranking_2 != 9999]
@@ -150,7 +150,7 @@ def create_additional_features(df, features):
 
     if "v_perc_versus" in features:
         df["v_perc_versus"] = df.apply(
-            lambda row: row["Versus_1"].count("V") / len(row["Versus_1"])
+            lambda row: [k[0] for k in row["Versus_1"]].count("V") / len(row["Versus_1"])
             if len(row["Versus_1"]) > 0
             else -1,
             axis=1,
