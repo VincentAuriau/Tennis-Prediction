@@ -39,6 +39,7 @@ def encode_data(df, mode="integer"):
     if mode == "integer":
         # Considered Variables:
         tournament_level = {"G": 0, "A": 1, "M": 2, "F": 3, "D": 4}
+        tournament_surface = {"Clay": 0, "Carpet": 1, "Hard": 2, "Grass": 3}
 
         round = {
             "F": 0,
@@ -71,6 +72,11 @@ def encode_data(df, mode="integer"):
             "D": [1, 0, 0, 0],
         }
 
+        tournament_surface = {"Clay": [1, 0, 0, 0],
+                              "Carpet": [0, 1, 0, 0],
+                              "Hard": [0, 0, 1, 0],
+                              "Grass": [0, 0, 0, 1]}
+
         round = {
             "F": [0, 0, 0, 0, 0, 0, 0, 0, 1],
             "SF": [0, 0, 0, 0, 0, 0, 0, 1, 0],
@@ -93,6 +99,10 @@ def encode_data(df, mode="integer"):
     elif mode == "mixing":
         # Considered Variables:
         tournament_level = {"G": 0, "A": 1, "M": 2, "F": 3, "D": 4}
+        tournament_surface = {"Clay": [1, 0, 0, 0],
+                              "Carpet": [0, 1, 0, 0],
+                              "Hard": [0, 0, 1, 0],
+                              "Grass": [0, 0, 0, 1]}
 
         round = {
             "F": 0,
@@ -121,6 +131,8 @@ def encode_data(df, mode="integer"):
             df_copy[col] = df_copy.apply(lambda row: round[row[col]], axis=1)
         elif "tournament_level" in col.lower():
             df_copy[col] = df_copy.apply(lambda row: tournament_level[row[col]], axis=1)
+        elif "tournament_surface" in col.lower():
+            df_copy[col] = df_copy.apply(lambda row: tournament_surface[row[col]], axis=1)
         else:
             pass
 

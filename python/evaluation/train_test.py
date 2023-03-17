@@ -6,7 +6,7 @@ import pandas as pd
 from data.data_loader import matches_data_loader
 from data.data_encoding import encode_data, create_additional_features
 
-default_columns_match = ["tournament_level", "round", "best_of"]
+default_columns_match = ["tournament_level", "round", "best_of", "tournament_surface"]
 
 default_columns_player = [
     "ID",
