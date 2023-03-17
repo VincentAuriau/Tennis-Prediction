@@ -85,15 +85,16 @@ def train_test_evaluation(
     precision = np.sum(preds == test_data["Winner"].values) / len(preds)
     if save_path is not None:
         try:
-            df_res = pd.read_csv(os.path.join(save_path, "results.csv"))
+            df_res = pd.read_csv(os.path.join(save_path, "results.csv"), sep=";")
         except:
+            print("save file not found")
             os.makedirs(save_path, exist_ok=True)
             df_res = pd.DataFrame()
 
         df_curr = pd.DataFrame({
             "train_years": [train_years],
             "test_years": [test_years],
-            "model_class": [str(model_class)],
+            "model_class": ["RF"],
             "model_params": [model_params],
             "match_features": [match_features],
             "player_features": [player_features],
@@ -101,8 +102,8 @@ def train_test_evaluation(
             "additional_features": [additional_features],
             "precision": [precision]
         })
-
-        df_res = pd.concat([df_res, df_curr], axis=1)
+        
+        df_res = pd.concat([df_res, df_curr], axis=0)
         df_res.to_csv(os.path.join(save_path, "results.csv"), index=False, sep=";")
 
     return precision
