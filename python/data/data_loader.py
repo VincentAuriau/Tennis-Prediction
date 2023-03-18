@@ -260,14 +260,15 @@ def matches_data_loader(
             if year >= keep_values_from_year:
                 data_per_year.append(df_year)
 
-                df_year.to_csv(
-                    os.path.join(path_to_cache, f"matches_data_{year}.csv"),
-                    sep=";",
-                    index=False,
-                )
+            df_year.to_csv(
+                os.path.join(path_to_cache, f"matches_data_{year}.csv"),
+                sep=";",
+                index=False,
+            )
             print(f"Elapsed Time: {time.time() - t_start} seconds")
 
         data_matches = pd.concat(data_per_year, axis=0)
+        data_matches = data_matches.reset_index()
         """
         data_matches.to_csv(
             os.path.join(path_to_cache, "matches_data.csv"), sep=";", index=False
