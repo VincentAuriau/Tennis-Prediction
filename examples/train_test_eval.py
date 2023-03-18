@@ -32,7 +32,7 @@ test_score = train_test_evaluation(
     match_features=match_features,
     player_features=player_features,
     encoding_params={},
-    additional_features=additional_features
+    additional_features=additional_features,
 )
 
 print("Test Score", test_score)
@@ -52,7 +52,7 @@ test_score = train_test_evaluation(
     match_features=match_features,
     player_features=player_features,
     encoding_params={},
-    additional_features=additional_features
+    additional_features=additional_features,
 )
 
 print("Test Score", test_score)
@@ -72,7 +72,7 @@ test_score = train_test_evaluation(
     match_features=match_features,
     player_features=player_features,
     encoding_params={},
-    additional_features=additional_features
+    additional_features=additional_features,
 )
 
 print("Test Score", test_score)
@@ -92,16 +92,14 @@ test_score = train_test_evaluation(
     match_features=match_features,
     player_features=player_features,
     encoding_params={},
-    additional_features=additional_features
+    additional_features=additional_features,
 )
 
 print("Test Score", test_score)
 
 
 model_class = GradientBoostingClassifier
-model_params = {"n_estimators": 100,
-                "learning_rate": 1.0,
-                "max_depth": 1}
+model_params = {"n_estimators": 100, "learning_rate": 1.0, "max_depth": 1}
 match_features = []
 player_features = []
 additional_features = ["diff_rank"]
@@ -114,16 +112,14 @@ test_score = train_test_evaluation(
     match_features=match_features,
     player_features=player_features,
     encoding_params={},
-    additional_features=additional_features
+    additional_features=additional_features,
 )
 
 print("Test Score", test_score)
 
 
 model_class = GradientBoostingClassifier
-model_params = {"n_estimators": 1000,
-                "learning_rate": 0.1,
-                "max_depth": 4}
+model_params = {"n_estimators": 1000, "learning_rate": 0.1, "max_depth": 4}
 match_features = []
 player_features = []
 additional_features = ["diff_rank"]
@@ -136,8 +132,7 @@ test_score = train_test_evaluation(
     match_features=match_features,
     player_features=player_features,
     encoding_params={},
-    additional_features=additional_features
+    additional_features=additional_features,
 )
 
 print("Test Score", test_score)
-

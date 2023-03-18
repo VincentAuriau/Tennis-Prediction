@@ -13,7 +13,6 @@ class DumbModel:
 
 
 class BestRankedPlayerWins(DumbModel):
-
     def fit(self, X, y):
         pass
 
