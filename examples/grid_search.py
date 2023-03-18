@@ -6,7 +6,11 @@ sys.path.append("../")
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier, AdaBoostClassifier
+from sklearn.ensemble import (
+    RandomForestClassifier,
+    GradientBoostingClassifier,
+    AdaBoostClassifier,
+)
 from model.dumb_models import BestRankedPlayerWins
 from model.lgbm import LightGBM
 from model.sk_model import ScalerSVC
@@ -50,11 +54,15 @@ test_score = train_test_evaluation(
 lgbm_hyperparams = []
 for num_leaves in [10, 100, 1000, 2000]:
     for min_data_leaf in [10, 100, 1000]:
-        lgbm_hyperparams.append({"params": {
-            "num_leaves": num_leaves,
-            "objective": "binary",
-            "min_data_in_leaf": min_data_leaf,
-        }})
+        lgbm_hyperparams.append(
+            {
+                "params": {
+                    "num_leaves": num_leaves,
+                    "objective": "binary",
+                    "min_data_in_leaf": min_data_leaf,
+                }
+            }
+        )
 test_score = train_test_evaluation(
     train_years=train_years,
     test_years=test_years,
@@ -70,11 +78,13 @@ test_score = train_test_evaluation(
 
 ada_hyperparams = []
 for num_est in [10, 100, 1000, 2000]:
-    for lr in [.1, 1., 2.]:
-        ada_hyperparams.append({
-            "n_estimators": num_est,
-            "learning_rate": lr,
-        })
+    for lr in [0.1, 1.0, 2.0]:
+        ada_hyperparams.append(
+            {
+                "n_estimators": num_est,
+                "learning_rate": lr,
+            }
+        )
 test_score = train_test_evaluation(
     train_years=train_years,
     test_years=test_years,
@@ -88,12 +98,14 @@ test_score = train_test_evaluation(
 )
 
 svc_hyperparams = []
-for C in [.1, 1., 10., 100.]:
+for C in [0.1, 1.0, 10.0, 100.0]:
     for kernel in ["linear", "rbf"]:
-        svc_hyperparams.append({
-            "C": C,
-            "kernel": kernel,
-        })
+        svc_hyperparams.append(
+            {
+                "C": C,
+                "kernel": kernel,
+            }
+        )
 test_score = train_test_evaluation(
     train_years=train_years,
     test_years=test_years,
