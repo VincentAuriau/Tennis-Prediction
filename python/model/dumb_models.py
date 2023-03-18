@@ -1,18 +1,9 @@
-from abc import abstractmethod
-
 import numpy as np
 
-
-class DumbModel:
-    def __init__(self):
-        pass
-
-    @abstractmethod
-    def predict(self, X):
-        pass
+from model.base_model import BaseModel
 
 
-class BestRankedPlayerWins(DumbModel):
+class BestRankedPlayerWins(BaseModel):
 
     def fit(self, X, y):
         pass
@@ -26,6 +17,10 @@ class BestRankedPlayerWins(DumbModel):
         return y_pred
 
 
-class RandomModel(DumbModel):
+class RandomModel(BaseModel):
+
+    def fit(self, X, y):
+        pass
+
     def predict(self, X):
         return np.random.randint(0, 2, 1)
