@@ -16,7 +16,6 @@ class LightGBM(BaseModel):
         return self.model
 
     def predict(self, X):
-        print(np.round(self.model.predict(X), 0))
         return np.round(self.model.predict(X), 0)
 
     def save(self, path):
