@@ -5,7 +5,11 @@ import numpy as np
 import pandas as pd
 
 from data.data_loader import matches_data_loader
-from data.data_encoding import encode_data, create_additional_features, clean_missing_data
+from data.data_encoding import (
+    encode_data,
+    create_additional_features,
+    clean_missing_data,
+)
 
 default_columns_match = ["tournament_level", "round", "best_of", "tournament_surface"]
 
@@ -42,7 +46,7 @@ def train_test_evaluation(
     player_features=default_columns_player,
     encoding_params={},
     additional_features=[],
-    save_path=None
+    save_path=None,
 ):
     assert len(set(train_years).intersection(set(test_years))) == 0
     print("[+] Beginning Train/Test Evaluation")

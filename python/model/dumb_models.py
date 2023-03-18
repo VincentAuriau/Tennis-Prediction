@@ -4,7 +4,7 @@ from model.base_model import BaseModel
 
 
 class BestRankedPlayerWins(BaseModel):
-
+    
     def fit(self, X, y):
         pass
 
