@@ -9,6 +9,7 @@ import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import GradientBoostingClassifier
 from model.dumb_models import BestRankedPlayerWins
+from model.lgbm import LightGBM
 
 from data.data_loader import matches_data_loader
 from data.data_loader import encode_data
@@ -46,7 +47,21 @@ test_score = train_test_evaluation(
     save_path="../results/201820192020_20212022",
 )
 
-for mx_depth in [1, 3, 7, None]:
+
+test_score = train_test_evaluation(
+    train_years=train_years,
+    test_years=test_years,
+    model_class=LightGBM,
+    model_params={"params": {"num_leaves": 31, "objective": "binary"}},
+    match_features=match_features,
+    player_features=player_features,
+    encoding_params={},
+    additional_features=additional_features,
+    save_path="../results/201820192020_20212022",
+)
+
+
+for mx_depth in [1, 3, 5]:
     for n_est in [10, 100, 1000, 2000]:
         model_params = {"n_estimators": n_est, "max_depth": mx_depth}
         model_class = RandomForestClassifier
@@ -65,7 +80,7 @@ for mx_depth in [1, 3, 7, None]:
         print("~~ Current Score ~~", test_score)
 
 
-for mx_depth in [1, 3, 7, None]:
+for mx_depth in [1, 3, 5]:
     for n_est in [10, 100, 1000, 2000]:
         model_params = {"n_estimators": n_est, "max_depth": mx_depth}
         model_class = GradientBoostingClassifier
