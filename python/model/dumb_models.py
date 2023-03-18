@@ -4,7 +4,6 @@ from model.base_model import BaseModel
 
 
 class BestRankedPlayerWins(BaseModel):
-    
     def fit(self, X, y):
         pass
 
@@ -18,7 +17,6 @@ class BestRankedPlayerWins(BaseModel):
 
 
 class RandomModel(BaseModel):
-
     def fit(self, X, y):
         pass
 

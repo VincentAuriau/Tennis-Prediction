@@ -49,16 +49,16 @@ test_score = train_test_evaluation(
 
 
 test_score = train_test_evaluation(
-            train_years=train_years,
-            test_years=test_years,
-            model_class=LightGBM,
-            model_params={"params": {'num_leaves': 31, 'objective': 'binary'}},
-            match_features=match_features,
-            player_features=player_features,
-            encoding_params={},
-            additional_features=additional_features,
-            save_path="../results/201820192020_20212022"
-        )
+    train_years=train_years,
+    test_years=test_years,
+    model_class=LightGBM,
+    model_params={"params": {"num_leaves": 31, "objective": "binary"}},
+    match_features=match_features,
+    player_features=player_features,
+    encoding_params={},
+    additional_features=additional_features,
+    save_path="../results/201820192020_20212022",
+)
 
 
 for mx_depth in [1, 3, 5]:

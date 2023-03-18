@@ -5,7 +5,6 @@ from model.base_model import BaseModel
 
 
 class LightGBM(BaseModel):
-
     def __init__(self, params, num_rounds=10):
         self.params = params
         self.num_rounds = num_rounds
