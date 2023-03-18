@@ -66,7 +66,8 @@ def train_test_evaluation(
 
     p1_features = [feat + "_1" for feat in player_features]
     p2_features = [feat + "_2" for feat in player_features]
-    match_features.extend(additional_features)
+    match_features = match_features.copy()
+    match_features.extend(additional_features.copy())
 
     train_data = train_data[
         match_features + p1_features + p2_features + ["Winner", "tournament_year"]
@@ -110,7 +111,7 @@ def train_test_evaluation(
                     "match_features": [match_features],
                     "player_features": [player_features],
                     "encoding_params": [encoding_params],
-                    "additional_features": [additional_features],
+                    "additional_features": [additional_features.copy()],
                     "precision": [precision]
                 })
 
@@ -120,7 +121,6 @@ def train_test_evaluation(
         return precisions
 
     else:
-
         model = model_class(**model_params)
         t_fit = time.time()
         model.fit(
@@ -147,7 +147,7 @@ def train_test_evaluation(
                 "match_features": [match_features],
                 "player_features": [player_features],
                 "encoding_params": [encoding_params],
-                "additional_features": [additional_features],
+                "additional_features": [additional_features.copy()],
                 "precision": [precision]
             })
 
