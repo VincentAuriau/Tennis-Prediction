@@ -4,7 +4,11 @@ import numpy as np
 import pandas as pd
 
 from data.data_loader import matches_data_loader
-from data.data_encoding import encode_data, create_additional_features, clean_missing_data
+from data.data_encoding import (
+    encode_data,
+    create_additional_features,
+    clean_missing_data,
+)
 
 default_columns_match = ["tournament_level", "round", "best_of", "tournament_surface"]
 
@@ -41,7 +45,7 @@ def train_test_evaluation(
     player_features=default_columns_player,
     encoding_params={},
     additional_features=[],
-    save_path=None
+    save_path=None,
 ):
     assert len(set(train_years).intersection(set(test_years))) == 0
     print("[+] Beginning Train/Test Evaluation")
@@ -78,7 +82,8 @@ def train_test_evaluation(
     test_data = clean_missing_data(test_data)
     model = model_class(**model_params)
     model.fit(
-        train_data[match_features + p1_features + p2_features], train_data["Winner"].values.ravel()
+        train_data[match_features + p1_features + p2_features],
+        train_data["Winner"].values.ravel(),
     )
 
     preds = model.predict(test_data[match_features + p1_features + p2_features])
@@ -91,17 +96,19 @@ def train_test_evaluation(
             os.makedirs(save_path, exist_ok=True)
             df_res = pd.DataFrame()
 
-        df_curr = pd.DataFrame({
-            "train_years": [train_years],
-            "test_years": [test_years],
-            "model_class": [model_class.__name__],
-            "model_params": [model_params],
-            "match_features": [match_features],
-            "player_features": [player_features],
-            "encoding_params": [encoding_params],
-            "additional_features": [additional_features],
-            "precision": [precision]
-        })
+        df_curr = pd.DataFrame(
+            {
+                "train_years": [train_years],
+                "test_years": [test_years],
+                "model_class": [model_class.__name__],
+                "model_params": [model_params],
+                "match_features": [match_features],
+                "player_features": [player_features],
+                "encoding_params": [encoding_params],
+                "additional_features": [additional_features],
+                "precision": [precision],
+            }
+        )
 
         df_res = pd.concat([df_res, df_curr], axis=0)
         df_res.to_csv(os.path.join(save_path, "results.csv"), index=False, sep=";")

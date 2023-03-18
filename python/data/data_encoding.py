@@ -72,10 +72,12 @@ def encode_data(df, mode="integer"):
             "D": [1, 0, 0, 0],
         }
 
-        tournament_surface = {"Clay": [1, 0, 0, 0],
-                              "Carpet": [0, 1, 0, 0],
-                              "Hard": [0, 0, 1, 0],
-                              "Grass": [0, 0, 0, 1]}
+        tournament_surface = {
+            "Clay": [1, 0, 0, 0],
+            "Carpet": [0, 1, 0, 0],
+            "Hard": [0, 0, 1, 0],
+            "Grass": [0, 0, 0, 1],
+        }
 
         round = {
             "F": [0, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -99,10 +101,12 @@ def encode_data(df, mode="integer"):
     elif mode == "mixing":
         # Considered Variables:
         tournament_level = {"G": 0, "A": 1, "M": 2, "F": 3, "D": 4}
-        tournament_surface = {"Clay": [1, 0, 0, 0],
-                              "Carpet": [0, 1, 0, 0],
-                              "Hard": [0, 0, 1, 0],
-                              "Grass": [0, 0, 0, 1]}
+        tournament_surface = {
+            "Clay": [1, 0, 0, 0],
+            "Carpet": [0, 1, 0, 0],
+            "Hard": [0, 0, 1, 0],
+            "Grass": [0, 0, 0, 1],
+        }
 
         round = {
             "F": 0,
@@ -132,7 +136,9 @@ def encode_data(df, mode="integer"):
         elif "tournament_level" in col.lower():
             df_copy[col] = df_copy.apply(lambda row: tournament_level[row[col]], axis=1)
         elif "tournament_surface" in col.lower():
-            df_copy[col] = df_copy.apply(lambda row: tournament_surface[row[col]], axis=1)
+            df_copy[col] = df_copy.apply(
+                lambda row: tournament_surface[row[col]], axis=1
+            )
         else:
             pass
 
@@ -140,28 +146,28 @@ def encode_data(df, mode="integer"):
 
 
 def create_additional_features(df, features):
-
     df = df.copy()
 
     if "nb_match_versus" in features:
-        df["nb_match_versus"] = df.apply(
-            lambda row: len(row["Versus_1"]), axis=1
-        )
+        df["nb_match_versus"] = df.apply(lambda row: len(row["Versus_1"]), axis=1)
 
     if "v_perc_versus" in features:
         df["v_perc_versus"] = df.apply(
-            lambda row: [k[0] for k in row["Versus_1"]].count("V") / len(row["Versus_1"])
+            lambda row: [k[0] for k in row["Versus_1"]].count("V")
+            / len(row["Versus_1"])
             if len(row["Versus_1"]) > 0
             else -1,
             axis=1,
         )
 
     if "diff_rank" in features:
-        df["diff_rank"] = df.apply(lambda row: row["Ranking_2"] - row["Ranking_1"],
-                                   axis=1)
+        df["diff_rank"] = df.apply(
+            lambda row: row["Ranking_2"] - row["Ranking_1"], axis=1
+        )
 
     if "diff_rank_points" in features:
-        df["diff_rank_points"] = df.apply(lambda row: row["Ranking_Points_2"] - row["Ranking_Points_1"],
-                                          axis=1)
+        df["diff_rank_points"] = df.apply(
+            lambda row: row["Ranking_Points_2"] - row["Ranking_Points_1"], axis=1
+        )
 
     return df
