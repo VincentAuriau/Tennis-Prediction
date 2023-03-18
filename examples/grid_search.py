@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import GradientBoostingClassifier
+from model.dumb_models import BestRankedPlayerWins
 
 from data.data_loader import matches_data_loader
 from data.data_loader import encode_data
@@ -18,7 +19,6 @@ train_years = [2018, 2019, 2020]
 test_years = [2021, 2022]
 
 
-model_class = RandomForestClassifier
 match_features = ["tournament_surface", "tournament_level"]
 player_features = ["Ranking",
     "Ranking_Points",
@@ -32,9 +32,42 @@ player_features = ["Ranking",
 additional_features = ["diff_rank", "v_perc_versus"]
 
 
+test_score = train_test_evaluation(
+            train_years=train_years,
+            test_years=test_years,
+            model_class=BestRankedPlayerWins,
+            model_params={},
+            match_features=match_features,
+            player_features=player_features,
+            encoding_params={},
+            additional_features=additional_features,
+            save_path="../results/201820192020_20212022"
+        )
+
 for mx_depth in [1, 3, 7, None]:
     for n_est in [10, 100, 1000, 2000]:
         model_params = {"n_estimators": n_est, "max_depth": mx_depth}
+        model_class = RandomForestClassifier
+
+        test_score = train_test_evaluation(
+            train_years=train_years,
+            test_years=test_years,
+            model_class=model_class,
+            model_params=model_params,
+            match_features=match_features,
+            player_features=player_features,
+            encoding_params={},
+            additional_features=additional_features,
+            save_path="../results/201820192020_20212022"
+        )
+        print("~~ Current Score ~~", test_score)
+
+
+for mx_depth in [1, 3, 7, None]:
+    for n_est in [10, 100, 1000, 2000]:
+
+        model_params = {"n_estimators": n_est, "max_depth": mx_depth}
+        model_class = GradientBoostingClassifier
 
         test_score = train_test_evaluation(
             train_years=train_years,

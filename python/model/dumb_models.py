@@ -13,11 +13,17 @@ class DumbModel:
 
 
 class BestRankedPlayerWins(DumbModel):
-    def predict(self, X):
-        rank_1 = X["Ranking_1"]
-        rank_2 = X["Ranking_2"]
 
-        return np.argmin([rank_1, rank_2])
+    def fit(self, X, y):
+        pass
+
+    def predict(self, X):
+        y_pred = []
+        for n_row, row in X.iterrows():
+            rank_1 = row["Ranking_1"]
+            rank_2 = row["Ranking_2"]
+            y_pred.append([np.argmin([rank_1, rank_2])])
+        return y_pred
 
 
 class RandomModel(DumbModel):
