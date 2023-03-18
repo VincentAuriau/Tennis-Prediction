@@ -94,7 +94,7 @@ def train_test_evaluation(
         df_curr = pd.DataFrame({
             "train_years": [train_years],
             "test_years": [test_years],
-            "model_class": ["RF"],
+            "model_class": [model_class.__name__],
             "model_params": [model_params],
             "match_features": [match_features],
             "player_features": [player_features],
@@ -102,7 +102,7 @@ def train_test_evaluation(
             "additional_features": [additional_features],
             "precision": [precision]
         })
-        
+
         df_res = pd.concat([df_res, df_curr], axis=0)
         df_res.to_csv(os.path.join(save_path, "results.csv"), index=False, sep=";")
 
