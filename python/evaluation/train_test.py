@@ -86,41 +86,49 @@ def train_test_evaluation(
     if isinstance(model_params, list):
         precisions = []
         for params_set in model_params:
-
             model = model_class(**params_set)
             t_fit = time.time()
             model.fit(
-                train_data[match_features + p1_features + p2_features], train_data["Winner"].values.ravel()
+                train_data[match_features + p1_features + p2_features],
+                train_data["Winner"].values.ravel(),
             )
             t_fit = time.time() - t_fit
             print(f"~~ Fit time: {np.round(t_fit, 0)}")
 
             preds = model.predict(test_data[match_features + p1_features + p2_features])
-            precision = np.sum(np.squeeze(preds) == test_data["Winner"].values) / len(preds)
+            precision = np.sum(np.squeeze(preds) == test_data["Winner"].values) / len(
+                preds
+            )
             precisions.append(precision)
 
             if save_path is not None:
                 try:
-                    df_res = pd.read_csv(os.path.join(save_path, "results.csv"), sep=";")
+                    df_res = pd.read_csv(
+                        os.path.join(save_path, "results.csv"), sep=";"
+                    )
                 except:
                     print("save file not found")
                     os.makedirs(save_path, exist_ok=True)
                     df_res = pd.DataFrame()
 
-                df_curr = pd.DataFrame({
-                    "train_years": [train_years],
-                    "test_years": [test_years],
-                    "model_class": [model_class.__name__],
-                    "model_params": [params_set],
-                    "match_features": [match_features],
-                    "player_features": [player_features],
-                    "encoding_params": [encoding_params],
-                    "additional_features": [additional_features.copy()],
-                    "precision": [precision]
-                })
+                df_curr = pd.DataFrame(
+                    {
+                        "train_years": [train_years],
+                        "test_years": [test_years],
+                        "model_class": [model_class.__name__],
+                        "model_params": [params_set],
+                        "match_features": [match_features],
+                        "player_features": [player_features],
+                        "encoding_params": [encoding_params],
+                        "additional_features": [additional_features.copy()],
+                        "precision": [precision],
+                    }
+                )
 
                 df_res = pd.concat([df_res, df_curr], axis=0)
-                df_res.to_csv(os.path.join(save_path, "results.csv"), index=False, sep=";")
+                df_res.to_csv(
+                    os.path.join(save_path, "results.csv"), index=False, sep=";"
+                )
 
         return precisions
 
@@ -128,7 +136,8 @@ def train_test_evaluation(
         model = model_class(**model_params)
         t_fit = time.time()
         model.fit(
-            train_data[match_features + p1_features + p2_features], train_data["Winner"].values.ravel()
+            train_data[match_features + p1_features + p2_features],
+            train_data["Winner"].values.ravel(),
         )
         t_fit = time.time() - t_fit
         print(f"~~ Fit time: {np.round(t_fit, 0)}")
@@ -143,17 +152,19 @@ def train_test_evaluation(
                 os.makedirs(save_path, exist_ok=True)
                 df_res = pd.DataFrame()
 
-            df_curr = pd.DataFrame({
-                "train_years": [train_years],
-                "test_years": [test_years],
-                "model_class": [model_class.__name__],
-                "model_params": [model_params],
-                "match_features": [match_features],
-                "player_features": [player_features],
-                "encoding_params": [encoding_params],
-                "additional_features": [additional_features.copy()],
-                "precision": [precision]
-            })
+            df_curr = pd.DataFrame(
+                {
+                    "train_years": [train_years],
+                    "test_years": [test_years],
+                    "model_class": [model_class.__name__],
+                    "model_params": [model_params],
+                    "match_features": [match_features],
+                    "player_features": [player_features],
+                    "encoding_params": [encoding_params],
+                    "additional_features": [additional_features.copy()],
+                    "precision": [precision],
+                }
+            )
 
             df_res = pd.concat([df_res, df_curr], axis=0)
             df_res.to_csv(os.path.join(save_path, "results.csv"), index=False, sep=";")
