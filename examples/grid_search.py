@@ -44,7 +44,7 @@ test_score = train_test_evaluation(
     player_features=player_features,
     encoding_params={},
     additional_features=additional_features,
-    save_path="../results/201820192020_20212022",
+    save_path="../results/20212022",
 )
 
 lgbm_hyperparams = []
