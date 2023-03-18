@@ -20,7 +20,8 @@ test_years = [2021, 2022]
 
 
 match_features = ["tournament_surface", "tournament_level"]
-player_features = ["Ranking",
+player_features = [
+    "Ranking",
     "Ranking_Points",
     "Height",
     "Victories_Percentage",
@@ -28,21 +29,22 @@ player_features = ["Ranking",
     "Grass_Victories_Percentage",
     "Carpet_Victories_Percentage",
     "Hard_Victories_Percentage",
-    "Aces_Percentage"]
+    "Aces_Percentage",
+]
 additional_features = ["diff_rank", "v_perc_versus"]
 
 
 test_score = train_test_evaluation(
-            train_years=train_years,
-            test_years=test_years,
-            model_class=BestRankedPlayerWins,
-            model_params={},
-            match_features=match_features,
-            player_features=player_features,
-            encoding_params={},
-            additional_features=additional_features,
-            save_path="../results/201820192020_20212022"
-        )
+    train_years=train_years,
+    test_years=test_years,
+    model_class=BestRankedPlayerWins,
+    model_params={},
+    match_features=match_features,
+    player_features=player_features,
+    encoding_params={},
+    additional_features=additional_features,
+    save_path="../results/201820192020_20212022",
+)
 
 for mx_depth in [1, 3, 7, None]:
     for n_est in [10, 100, 1000, 2000]:
@@ -58,14 +60,13 @@ for mx_depth in [1, 3, 7, None]:
             player_features=player_features,
             encoding_params={},
             additional_features=additional_features,
-            save_path="../results/201820192020_20212022"
+            save_path="../results/201820192020_20212022",
         )
         print("~~ Current Score ~~", test_score)
 
 
 for mx_depth in [1, 3, 7, None]:
     for n_est in [10, 100, 1000, 2000]:
-
         model_params = {"n_estimators": n_est, "max_depth": mx_depth}
         model_class = GradientBoostingClassifier
 
@@ -78,6 +79,6 @@ for mx_depth in [1, 3, 7, None]:
             player_features=player_features,
             encoding_params={},
             additional_features=additional_features,
-            save_path="../results/201820192020_20212022"
+            save_path="../results/201820192020_20212022",
         )
         print("~~ Current Score ~~", test_score)
