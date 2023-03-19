@@ -19,9 +19,7 @@ class ScalerSVC(BaseModel):
 
     def fit(self, X, y):
         self.scaler_x.fit(X)
-        self.model.fit(
-            self.scaler_x.transform(X), y.reshape(-1, 1)
-        )
+        self.model.fit(self.scaler_x.transform(X), y.reshape(-1, 1))
 
     def predict(self, X):
         return self.model.predict(self.scaler_x.transform(X)).reshape(-1, 1)
