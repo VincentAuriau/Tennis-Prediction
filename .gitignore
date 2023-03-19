@@ -3,4 +3,5 @@ DataBase/
 
 \.idea/
 cache/
+results/
 *.pyc
