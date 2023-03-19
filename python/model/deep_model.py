@@ -5,11 +5,11 @@ from model.base_model import DeepBaseModel
 
 
 def create_dense_model(
-        input_shape=2,
-        output_shape=2,
-        hidden_units=(4, 8, 4),
-        hidden_activations="relu",
-        last_activation="softmax",
+    input_shape=2,
+    output_shape=2,
+    hidden_units=(4, 8, 4),
+    hidden_activations="relu",
+    last_activation="softmax",
 ):
     hid_activation = tf.keras.layers.Activation(hidden_activations)
     inputs = tf.keras.layers.Input(shape=input_shape)
@@ -26,8 +26,8 @@ def create_dense_model(
 
 
 class SimpleFullyConnected(DeepBaseModel):
-
-    def __init__(self,
+    def __init__(
+        self,
         input_shape=2,
         output_shape=2,
         hidden_units=[4, 8, 4],
@@ -38,8 +38,7 @@ class SimpleFullyConnected(DeepBaseModel):
         optimizer="adamax",
         lr=1e-5,
         loss="cross_entropy",
-                 ):
-
+    ):
         self.input_shape = input_shape
         self.output_shape = output_shape
         self.hidden_units = hidden_units
@@ -54,11 +53,13 @@ class SimpleFullyConnected(DeepBaseModel):
 
     def instantiate_model(self):
         self.scaler_x = StandardScaler()
-        self.model = create_dense_model(input_shape=self.input_shape,
-                                        output_shape=self.output_shape,
-                                        hidden_units=self.hidden_units,
-                                        hidden_activations=self.hidden_activations,
-                                        last_activation=self.last_activation)
+        self.model = create_dense_model(
+            input_shape=self.input_shape,
+            output_shape=self.output_shape,
+            hidden_units=self.hidden_units,
+            hidden_activations=self.hidden_activations,
+            last_activation=self.last_activation,
+        )
 
         if self.optimizer == "adamax":
             self.optimizer = tf.keras.optimizers.Adamax(lr=self.lr)
@@ -69,7 +70,9 @@ class SimpleFullyConnected(DeepBaseModel):
         elif self.optimizer == "Adam":
             self.optimizer = tf.keras.optimizers.Adam(lr=self.lr)
         else:
-            raise ValueError(f"Optimizer {self.optimizer} not understood, must be among ['adam', 'adamax', 'sgd', 'rmsprop']")
+            raise ValueError(
+                f"Optimizer {self.optimizer} not understood, must be among ['adam', 'adamax', 'sgd', 'rmsprop']"
+            )
 
         self.model.compile(optimizer=self.optimizer, loss=self.loss)
 

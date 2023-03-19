@@ -149,7 +149,9 @@ def create_additional_features(df, features):
     df = df.copy()
 
     if "nb_match_versus" in features:
-        df["nb_match_versus"] = df.apply(lambda row: len([k[0] for k in ast.literal_eval(row["Versus_1"])]), axis=1)
+        df["nb_match_versus"] = df.apply(
+            lambda row: len([k[0] for k in ast.literal_eval(row["Versus_1"])]), axis=1
+        )
 
     if "v_perc_versus" in features:
         df["v_perc_versus"] = df.apply(
