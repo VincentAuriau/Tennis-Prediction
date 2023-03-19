@@ -153,8 +153,14 @@ def create_additional_features(df, features):
 
     if "v_perc_versus" in features:
         df["v_perc_versus"] = df.apply(
-            lambda row: [k[0] for k in row["Versus_1"]].count("V")
-            / len([k[0] for k in row["Versus_1"]])
+            lambda row: [k[0] for k in ast.literal_eval(row["Versus_1"])].count("V")
+            / len([k[0] for k in ast.literal_eval(row["Versus_1"])])
+            if len([k[0] for k in ast.literal_eval(row["Versus_1"])]) > 0
+            else -1,
+            axis=1,
+        )
+        df["vvv"] = df.apply(
+            lambda row: [k[0] for k in ast.literal_eval(row["Versus_1"])]
             if len(row["Versus_1"]) > 0
             else -1,
             axis=1,
