@@ -36,9 +36,9 @@ player_features = [
     "Hard_Victories_Percentage",
     "Aces_Percentage",
 ]
-additional_features = ["diff_rank", "v_perc_versus"]
+additional_features = ["diff_rank", "v_perc_versus", "nb_match_versus"]
 
-"""
+
 test_score = train_test_evaluation(
     train_years=train_years,
     test_years=test_years,
@@ -156,7 +156,7 @@ for mx_depth in [1, 3, 5]:
         )
         print("~~ Current Score ~~", test_score)
 
-"""
+
 lgbm_hyperparams = []
 for num_leaves in [10, 100, 1000, 2000]:
     for min_data_leaf in [10, 100, 1000]:
