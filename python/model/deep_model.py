@@ -80,7 +80,7 @@ class SimpleFullyConnected(DeepBaseModel):
         self.model.fit(self.scaler_x.transform(X), y, epochs=self.epochs)
         if self.reduced_lr_epochs > 0:
             self.optimizer.lr.assign(self.lr / 10)
-            self.model.fit(X, y, epochs=self.reduced_lr_epochs)
+            self.model.fit(self.scaler_x.transform(X), y, epochs=self.reduced_lr_epochs)
 
     def predict(self, X):
         y_pred = self.model.predict(self.scaler_x.transform(X))
