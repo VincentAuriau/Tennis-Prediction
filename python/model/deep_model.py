@@ -18,7 +18,7 @@ def create_dense_model(
         hidden_out = tf.keras.layers.Dense(n_cells)(hidden_out)
         hidden_out = hid_activation(hidden_out)
 
-    out = tf.keras.layers.Dense(output_shape)
+    out = tf.keras.layers.Dense(output_shape)(hidden_out)
     out = tf.keras.layers.Activation(last_activation)(out)
 
     return tf.keras.Model(inputs=inputs, outputs=out)
@@ -49,7 +49,7 @@ class SimpleFullyConnected(DeepBaseModel):
         self.optimizer = optimizer
         self.lr = lr
         self.loss = loss
-        super.__init__()
+        super().__init__()
 
     def instantiate_model(self):
         self.model = create_dense_model(input_shape=self.input_shape,
@@ -72,6 +72,8 @@ class SimpleFullyConnected(DeepBaseModel):
         self.model.compile(optimizer=self.optimizer, loss=self.loss)
 
     def fit(self, X, y):
+        if self.output_shape == 2:
+            y = tf.one_hot(y.squeeze(), depth=2)
         self.model.fit(X, y, epochs=self.epochs)
         if self.reduced_lr_epochs > 0:
             self.optimizer.lr.assign(self.lr / 10)
