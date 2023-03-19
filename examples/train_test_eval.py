@@ -22,7 +22,7 @@ model_class = RandomForestClassifier
 model_params = {"n_estimators": 2000, "max_depth": None}
 match_features = []
 player_features = ["Ranking"]
-additional_features = ["diff_rank"]
+additional_features = ["diff_rank", "v_perc_versus"]
 
 test_score = train_test_evaluation(
     train_years=train_years,
@@ -136,3 +136,4 @@ test_score = train_test_evaluation(
 )
 
 print("Test Score", test_score)
+

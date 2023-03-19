@@ -38,7 +38,7 @@ player_features = [
 ]
 additional_features = ["diff_rank", "v_perc_versus"]
 
-
+"""
 test_score = train_test_evaluation(
     train_years=train_years,
     test_years=test_years,
@@ -156,9 +156,22 @@ for mx_depth in [1, 3, 5]:
         )
         print("~~ Current Score ~~", test_score)
 
+"""
+lgbm_hyperparams = []
+for num_leaves in [10, 100, 1000, 2000]:
+    for min_data_leaf in [10, 100, 1000]:
+        lgbm_hyperparams.append(
+            {
+                "params": {
+                    "num_leaves": num_leaves,
+                    "objective": "binary",
+                    "min_data_in_leaf": min_data_leaf,
+                }
+            }
+        )
 
 test_score = train_test_evaluation(
-    train_years=[2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020],
+    train_years=list([year for year in range(1990, 2021)]),
     test_years=test_years,
     model_class=LightGBM,
     model_params=lgbm_hyperparams,
@@ -167,4 +180,5 @@ test_score = train_test_evaluation(
     encoding_params={},
     additional_features=additional_features,
     save_path="../results/20212022",
+    save_all_results=True,
 )

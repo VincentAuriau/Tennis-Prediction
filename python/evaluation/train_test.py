@@ -126,6 +126,12 @@ def train_test_evaluation(
                     }
                 )
 
+                if save_all_results:
+                    eval_id = int(time.time())
+                    df_curr["eval_ID"] = [eval_id]
+                    test_data["y_pred"] = preds
+                    test_data.to_csv(os.path.join(save_path, f"{eval_id}.csv"), index=False, sep=";")
+
                 df_res = pd.concat([df_res, df_curr], axis=0)
                 df_res.to_csv(
                     os.path.join(save_path, "results.csv"), index=False, sep=";"
