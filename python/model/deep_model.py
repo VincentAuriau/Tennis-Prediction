@@ -1,3 +1,4 @@
+from sklearn.preprocessing import StandardScaler
 import tensorflow as tf
 
 from model.base_model import DeepBaseModel
@@ -52,6 +53,7 @@ class SimpleFullyConnected(DeepBaseModel):
         super().__init__()
 
     def instantiate_model(self):
+        self.scaler_x = StandardScaler()
         self.model = create_dense_model(input_shape=self.input_shape,
                                         output_shape=self.output_shape,
                                         hidden_units=self.hidden_units,
@@ -72,12 +74,16 @@ class SimpleFullyConnected(DeepBaseModel):
         self.model.compile(optimizer=self.optimizer, loss=self.loss)
 
     def fit(self, X, y):
+        self.scaler_x.fit(X)
         if self.output_shape == 2:
             y = tf.one_hot(y.squeeze(), depth=2)
-        self.model.fit(X, y, epochs=self.epochs)
+        self.model.fit(self.scaler_x.transform(X), y, epochs=self.epochs)
         if self.reduced_lr_epochs > 0:
             self.optimizer.lr.assign(self.lr / 10)
             self.model.fit(X, y, epochs=self.reduced_lr_epochs)
 
     def predict(self, X):
-        return self.model.predict(X)
+        y_pred = self.model.predict(self.scaler_x.transform(X))
+        if self.output_shape == 2:
+            y_pred = tf.argmax(y_pred, axis=-1)
+        return y_pred
