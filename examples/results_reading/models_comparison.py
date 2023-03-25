@@ -24,7 +24,9 @@ for n_row, row in df_results.iterrows():
                      facecolor=models_color[row["model_class"]], label=row["model_class"])
     ax.add_patch(rect)
 
+ax.autoscale()
 handles, labels = plt.gca().get_legend_handles_labels()
 by_label = dict(zip(labels, handles))
 plt.legend(by_label.values(), by_label.keys())
+plt.savefig("models_performances.png")
 plt.show()
