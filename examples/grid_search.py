@@ -14,6 +14,7 @@ from sklearn.ensemble import (
 from model.dumb_models import BestRankedPlayerWins
 from model.lgbm import LightGBM
 from model.sk_model import ScalerSVC
+from model.xgboost import XGBoost
 
 from data.data_loader import matches_data_loader
 from data.data_loader import encode_data
@@ -49,6 +50,7 @@ test_score = train_test_evaluation(
     encoding_params={},
     additional_features=additional_features,
     save_path="../results/20212022",
+    save_all_results=True,
 )
 
 lgbm_hyperparams = []
@@ -73,6 +75,7 @@ test_score = train_test_evaluation(
     encoding_params={},
     additional_features=additional_features,
     save_path="../results/20212022",
+    save_all_results=True,
 )
 
 
@@ -95,6 +98,7 @@ test_score = train_test_evaluation(
     encoding_params={},
     additional_features=additional_features,
     save_path="../results/20212022",
+    save_all_results=True,
 )
 
 svc_hyperparams = []
@@ -116,6 +120,7 @@ test_score = train_test_evaluation(
     encoding_params={},
     additional_features=additional_features,
     save_path="../results/20212022",
+    save_all_results=True,
 )
 
 
@@ -134,6 +139,7 @@ for mx_depth in [1, 3, 5]:
             encoding_params={},
             additional_features=additional_features,
             save_path="../results/20212022",
+            save_all_results=True,
         )
         print("~~ Current Score ~~", test_score)
 
@@ -153,6 +159,7 @@ for mx_depth in [1, 3, 5]:
             encoding_params={},
             additional_features=additional_features,
             save_path="../results/20212022",
+            save_all_results=True,
         )
         print("~~ Current Score ~~", test_score)
 
@@ -175,6 +182,39 @@ test_score = train_test_evaluation(
     test_years=test_years,
     model_class=LightGBM,
     model_params=lgbm_hyperparams,
+    match_features=match_features,
+    player_features=player_features,
+    encoding_params={},
+    additional_features=additional_features,
+    save_path="../results/20212022",
+    save_all_results=True,
+)
+
+xgb_hyperparams = []
+for eta in [.1, .3, .6]:
+    for gamma in [0, 1, 10]:
+        for max_depth in [2, 4, 6, 8, 10]:
+            for min_child_weight in [1, 2, 8]:
+                for subsample in [.4, .8, 1]:
+
+                    xgb_hyperparams.append(
+                        {
+                            "params": {
+                                "eta": eta,
+                                "objective": "binary:logistic",
+                                "gamma": gamma,
+                                "max_depth": max_depth,
+                                "min_child_weight": min_child_weight,
+                                "subsample": subsample,
+                            }
+                        }
+                    )
+
+test_score = train_test_evaluation(
+    train_years=train_years,
+    test_years=test_years,
+    model_class=XGBoost,
+    model_params=xgb_hyperparams,
     match_features=match_features,
     player_features=player_features,
     encoding_params={},
