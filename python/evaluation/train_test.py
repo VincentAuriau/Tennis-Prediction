@@ -50,7 +50,7 @@ def train_test_evaluation(
     save_all_results=False,
 ):
     assert len(set(train_years).intersection(set(test_years))) == 0
-    print("[+] Beginning Train/Test Evaluation")
+    print(f"[+] Beginning Train/Test Evaluation for model class {model_class}")
 
     min_year = np.min(train_years + test_years)
     data_df = matches_data_loader(
@@ -123,6 +123,7 @@ def train_test_evaluation(
                         "encoding_params": [encoding_params],
                         "additional_features": [additional_features.copy()],
                         "precision": [precision],
+                        "fit_time": [np.round(t_fit, 0)]
                     }
                 )
 
