@@ -112,3 +112,4 @@ plt.savefig("nb_matches.png")
 plt.show()
 
 print(np.sum(categories_number_of_matches))
+

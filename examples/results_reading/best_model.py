@@ -85,3 +85,39 @@ plt.ylabel("Player 2 Rank Category")
 plt.title("Precision Percentage")
 plt.savefig("precision_percentage_players_ranks.png")
 plt.show()
+
+best_ranked_player_wins_results = pd.read_csv(os.path.join("../../results/20212022",
+                                                           f"{df_results.loc[df_results.model_class=='BestRankedPlayerWins'].eval_ID.values[0]}.csv"),
+                                              sep=";")
+ticks = []
+fig, ax = plt.subplots()
+for surface, surface_code in {"Clay": 0, "Carpet": 1, "Hard": 2, "Grass": 3}.items():
+    precision_model = best_results.loc[best_results.tournament_surface==surface_code]
+    precision_brpw = best_ranked_player_wins_results.loc[best_ranked_player_wins_results.tournament_surface==surface_code]
+
+    if len(precision_model) > 0:
+        precision_model = len(precision_model.loc[precision_model.y_pred==precision_model.Winner]) / len(precision_model)
+        prec_brpw = 0
+        for n_row, row in precision_brpw.iterrows():
+            if int(row["y_pred"][1]) == row["Winner"]:
+                prec_brpw += 1
+        precision_brpw = prec_brpw / len(precision_brpw)
+    else:
+        precision_model = 0
+        precision_brpw = 0
+    rect = Rectangle((surface_code * 2, 0), 1, precision_model, edgecolor="k",
+                     facecolor="tab:blue", label="Model")
+    ax.add_patch(rect)
+    rect = Rectangle((surface_code * 2+1, 0), 1, precision_brpw, edgecolor="k",
+                     facecolor="tab:pink", label="Best Ranked Player Wins")
+    ax.add_patch(rect)
+    ticks.append(surface)
+
+ax.autoscale()
+plt.xticks([1, 3, 5, 7], labels=ticks)
+handles, labels = plt.gca().get_legend_handles_labels()
+by_label = dict(zip(labels, handles))
+plt.legend(by_label.values(), by_label.keys())
+plt.title('Win % for each surface')
+plt.savefig("win_per_surface.png")
+plt.show()
