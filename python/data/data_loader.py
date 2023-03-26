@@ -203,6 +203,16 @@ def matches_data_loader(
     get_match_statistics=False,
     get_reversed_match_data=False,
 ):
+    """
+    Main matches data loading function
+    :param keep_values_from_year: int  [1968; present], min year to keep values from
+    :param path_to_data: str, path to tennis_atp submodule
+    :param path_to_cache: str, path to local personal cache
+    :param flush_cache: bool, whether cache should be erased and whole function run again
+    :param get_match_statistics: bool, return each match statistics along pre match statistics
+    :param get_reversed_match_data: bool, should each match be double, with Winner = 0 and Winner = 1
+    :return: pandas.DataFrame with all matches data
+    """
 
     # Check if data already in cache
     if os.path.exists(os.path.join(path_to_cache, "players_db")):
