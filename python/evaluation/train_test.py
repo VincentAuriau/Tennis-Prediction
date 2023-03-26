@@ -128,7 +128,7 @@ def train_test_evaluation(
                 )
 
                 if save_all_results:
-                    eval_id = int(time.time())
+                    eval_id = int(time.time()*100)
                     df_curr["eval_ID"] = [eval_id]
                     test_data["y_pred"] = preds
                     test_data.to_csv(

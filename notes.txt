@@ -9,7 +9,6 @@ Features to add:
 
 
 Improvements:
-    - Best Rank does not work
 
     - encoding last x matches [v, v, v, d, d] => [1, 1, 1, 0, 0]
     - encoding last x matches versus

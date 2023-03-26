@@ -36,6 +36,7 @@ player_features = [
     "Carpet_Victories_Percentage",
     "Hard_Victories_Percentage",
     "Aces_Percentage",
+    "ID",
 ]
 additional_features = ["diff_rank", "v_perc_versus", "nb_match_versus"]
 
