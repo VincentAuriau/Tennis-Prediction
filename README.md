@@ -21,6 +21,9 @@ You can find examples in /examples:
 from data.data_loader import matches_data_loader
 data_df = matches_data_loader(path_to_data="submodules/tennis_atp")
 ```
+data_df contains let you access information about players (statistics prior to the match) along statistics of the match.
+A basic example statistic: the victory percentage of the best ranked player in a match, depending on players rankings.
+![Number of ATP main matches depending on players rank](examples/data/nb_matches.png) [Victory % of best ranked player](examples/data/Best_player_win_percentage.png)
 
 ### Train/Testing on matches outcome:
 
