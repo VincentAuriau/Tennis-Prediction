@@ -5,11 +5,12 @@ import numpy as np
 
 
 class Match:
-    def __init__(self, winner, loser, tournament, surface):
+    def __init__(self, winner, loser, tournament, surface, id_prefix=""):
         self.winner = winner
         self.loser = loser
         self.tournament = tournament
         self.surface = surface
+        self.id_prefix = id_prefix
 
         self.tournament_date = ""
         self.tournament_level = ""
@@ -196,6 +197,8 @@ class Match:
         self.score = data_row["score"]
         self.elapsed_minutes = data_row["minutes"]
         self.best_of = data_row["best_of"]
+
+        self.id = self.id_prefix + "_" + str(data_row.name)
 
         self.match_time_players_data = {
             "winner": {
