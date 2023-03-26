@@ -123,12 +123,12 @@ def train_test_evaluation(
                         "encoding_params": [encoding_params],
                         "additional_features": [additional_features.copy()],
                         "precision": [precision],
-                        "fit_time": [np.round(t_fit, 0)]
+                        "fit_time": [np.round(t_fit, 0)],
                     }
                 )
 
                 if save_all_results:
-                    eval_id = int(time.time()*100)
+                    eval_id = int(time.time() * 100)
                     df_curr["eval_ID"] = [eval_id]
                     test_data["y_pred"] = preds
                     test_data.to_csv(

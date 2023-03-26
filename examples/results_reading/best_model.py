@@ -5,35 +5,39 @@ from matplotlib.patches import Rectangle
 import numpy as np
 import pandas as pd
 
-df_results = pd.read_csv('../../results/20212022/results.csv', sep=";")
+df_results = pd.read_csv("../../results/20212022/results.csv", sep=";")
 
 best_row = df_results.iloc[df_results.precision.argmax()]
 print(best_row)
 
 eval_id = best_row["eval_ID"]
-best_results = pd.read_csv(os.path.join("../../results/20212022", f"{eval_id}.csv"), sep=";")
+best_results = pd.read_csv(
+    os.path.join("../../results/20212022", f"{eval_id}.csv"), sep=";"
+)
 
 fig, ax = plt.subplots()
-df_ww = best_results.loc[best_results.Winner==0].loc[best_results.y_pred==0]
+df_ww = best_results.loc[best_results.Winner == 0].loc[best_results.y_pred == 0]
 plt.scatter(df_ww.diff_rank, df_ww.Winner, c="tab:pink", label="Well Predicted")
-df_wl = best_results.loc[best_results.Winner==0].loc[best_results.y_pred==1]
-plt.scatter(df_wl.diff_rank, df_wl.Winner+0.1, c="tab:blue", label="Predicted Wrong")
-df_ll = best_results.loc[best_results.Winner==1].loc[best_results.y_pred==1]
+df_wl = best_results.loc[best_results.Winner == 0].loc[best_results.y_pred == 1]
+plt.scatter(df_wl.diff_rank, df_wl.Winner + 0.1, c="tab:blue", label="Predicted Wrong")
+df_ll = best_results.loc[best_results.Winner == 1].loc[best_results.y_pred == 1]
 plt.scatter(df_ll.diff_rank, df_ll.Winner, c="tab:orange", label="Well Wrong")
-df_lw = best_results.loc[best_results.Winner==1].loc[best_results.y_pred==0]
-plt.scatter(df_lw.diff_rank, df_lw.Winner-0.1, c="tab:red", label="Predicted Wrong")
+df_lw = best_results.loc[best_results.Winner == 1].loc[best_results.y_pred == 0]
+plt.scatter(df_lw.diff_rank, df_lw.Winner - 0.1, c="tab:red", label="Predicted Wrong")
 plt.legend()
 
-plt.xlabel('Rank Player 0 - Rank Player 1')
-plt.ylabel('Winner')
+plt.xlabel("Rank Player 0 - Rank Player 1")
+plt.ylabel("Winner")
 plt.show()
 
 # Let's evaluate Symmetry
 symmetric_same_results = 0
-for i in range(int(len(best_results)/2)):
-    if best_results.iloc[2*i]["y_pred"] != best_results.iloc[2*i + 1]["y_pred"]:
-        symmetric_same_results +=1
-print(f"{(symmetric_same_results / (len(best_results) / 2))} Results are symmetrically predicted")
+for i in range(int(len(best_results) / 2)):
+    if best_results.iloc[2 * i]["y_pred"] != best_results.iloc[2 * i + 1]["y_pred"]:
+        symmetric_same_results += 1
+print(
+    f"{(symmetric_same_results / (len(best_results) / 2))} Results are symmetrically predicted"
+)
 
 rank_categories = [1, 10, 50, 100, 300, 1000, 9999]
 
@@ -86,17 +90,25 @@ plt.title("Precision Percentage")
 plt.savefig("precision_percentage_players_ranks.png")
 plt.show()
 
-best_ranked_player_wins_results = pd.read_csv(os.path.join("../../results/20212022",
-                                                           f"{df_results.loc[df_results.model_class=='BestRankedPlayerWins'].eval_ID.values[0]}.csv"),
-                                              sep=";")
+best_ranked_player_wins_results = pd.read_csv(
+    os.path.join(
+        "../../results/20212022",
+        f"{df_results.loc[df_results.model_class=='BestRankedPlayerWins'].eval_ID.values[0]}.csv",
+    ),
+    sep=";",
+)
 ticks = []
 fig, ax = plt.subplots()
 for surface, surface_code in {"Clay": 0, "Carpet": 1, "Hard": 2, "Grass": 3}.items():
-    precision_model = best_results.loc[best_results.tournament_surface==surface_code]
-    precision_brpw = best_ranked_player_wins_results.loc[best_ranked_player_wins_results.tournament_surface==surface_code]
+    precision_model = best_results.loc[best_results.tournament_surface == surface_code]
+    precision_brpw = best_ranked_player_wins_results.loc[
+        best_ranked_player_wins_results.tournament_surface == surface_code
+    ]
 
     if len(precision_model) > 0:
-        precision_model = len(precision_model.loc[precision_model.y_pred==precision_model.Winner]) / len(precision_model)
+        precision_model = len(
+            precision_model.loc[precision_model.y_pred == precision_model.Winner]
+        ) / len(precision_model)
         prec_brpw = 0
         for n_row, row in precision_brpw.iterrows():
             if int(row["y_pred"][1]) == row["Winner"]:
@@ -105,11 +117,23 @@ for surface, surface_code in {"Clay": 0, "Carpet": 1, "Hard": 2, "Grass": 3}.ite
     else:
         precision_model = 0
         precision_brpw = 0
-    rect = Rectangle((surface_code * 2, 0), 1, precision_model, edgecolor="k",
-                     facecolor="tab:blue", label="Model")
+    rect = Rectangle(
+        (surface_code * 2, 0),
+        1,
+        precision_model,
+        edgecolor="k",
+        facecolor="tab:blue",
+        label="Model",
+    )
     ax.add_patch(rect)
-    rect = Rectangle((surface_code * 2+1, 0), 1, precision_brpw, edgecolor="k",
-                     facecolor="tab:pink", label="Best Ranked Player Wins")
+    rect = Rectangle(
+        (surface_code * 2 + 1, 0),
+        1,
+        precision_brpw,
+        edgecolor="k",
+        facecolor="tab:pink",
+        label="Best Ranked Player Wins",
+    )
     ax.add_patch(rect)
     ticks.append(surface)
 
@@ -118,6 +142,6 @@ plt.xticks([1, 3, 5, 7], labels=ticks)
 handles, labels = plt.gca().get_legend_handles_labels()
 by_label = dict(zip(labels, handles))
 plt.legend(by_label.values(), by_label.keys())
-plt.title('Win % for each surface')
+plt.title("Win % for each surface")
 plt.savefig("win_per_surface.png")
 plt.show()
