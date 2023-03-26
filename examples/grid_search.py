@@ -192,12 +192,11 @@ test_score = train_test_evaluation(
 )
 
 xgb_hyperparams = []
-for eta in [.1, .3, .6]:
+for eta in [0.1, 0.3, 0.6]:
     for gamma in [0, 1, 10]:
         for max_depth in [2, 4, 6, 8, 10]:
             for min_child_weight in [1, 2, 8]:
-                for subsample in [.4, .8, 1]:
-
+                for subsample in [0.4, 0.8, 1]:
                     xgb_hyperparams.append(
                         {
                             "params": {
@@ -225,12 +224,11 @@ test_score = train_test_evaluation(
 )
 
 xgb_hyperparams = []
-for eta in [.1, .3, .6]:
+for eta in [0.1, 0.3, 0.6]:
     for gamma in [0, 1, 10]:
         for max_depth in [2, 4, 6, 8, 10]:
             for min_child_weight in [1, 2, 8]:
-                for subsample in [.4, .8, 1]:
-
+                for subsample in [0.4, 0.8, 1]:
                     xgb_hyperparams.append(
                         {
                             "params": {

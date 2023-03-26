@@ -12,7 +12,10 @@ class XGBoost(BaseModel):
     def fit(self, X, y, validation_data=None):
         train_data = xgb.DMatrix(X, label=y)
         if validation_data is not None:
-            evallist = [(train_data, 'train'), (xgb.DMatrix(validation_data[0], label=validation_data[1]), 'eval')]
+            evallist = [
+                (train_data, "train"),
+                (xgb.DMatrix(validation_data[0], label=validation_data[1]), "eval"),
+            ]
         else:
             evallist = []
         self.model = xgb.train(self.params, train_data, self.num_rounds, evals=evallist)
