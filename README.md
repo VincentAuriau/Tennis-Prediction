@@ -22,13 +22,6 @@ from data.data_loader import matches_data_loader
 data_df = matches_data_loader(path_to_data="submodules/tennis_atp")
 ```
 
-### Loading players statistics at match time + match outcome
-
-```python
-from data.data_loader import matches_data_loader
-data_df = matches_data_loader(path_to_data="submodules/tennis_atp")
-```
-
 ### Train/Testing on matches outcome:
 
 ```python
