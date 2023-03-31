@@ -1,18 +1,22 @@
+import ast
 import os, sys
 
 sys.path.append("../../python")
 sys.path.append("../../")
 
 import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle
 import numpy as np
+import pandas as pd
 
 from data.data_loader import matches_data_loader
+
 
 data_df = matches_data_loader(
     path_to_data="../../submodules/tennis_atp",
     path_to_cache="../../cache",
     flush_cache=False,
-    keep_values_from_year=2015,
+    keep_values_from_year=2002,
     get_match_statistics=True,
     get_reversed_match_data=True,
 )
@@ -111,4 +115,86 @@ plt.title("Number of matches recorded per Rank Category")
 plt.savefig("nb_matches.png")
 plt.show()
 
-print(np.sum(categories_number_of_matches))
+#### Stan the man
+overall_v = []
+last_hundred_v = []
+
+overall_clay = []
+overall_carpet = []
+overall_grass = []
+overall_hard = []
+dates = []
+stan_df = data_df.loc[data_df.ID_1 == 104527]
+stan_df = stan_df.reset_index()
+
+for n_row, row in stan_df.iterrows():
+    matches = [r[0] for r in ast.literal_eval(row["Matches_1"])]
+    if len(matches) > 0:
+        overall_v.append(matches.count("V") / len(matches) * 100)
+        last_hundred_v.append(matches[-100:].count("V") / len(matches[-100:]) * 100)
+
+        if str(row["tournament_date"])[:4] not in [d[0] for d in dates]:
+            dates.append((str(row["tournament_date"])[:4], n_row))
+        overall_clay.append(row["Clay_Victories_Percentage_1"])
+        overall_grass.append(row["Grass_Victories_Percentage_1"])
+        overall_hard.append(row["Hard_Victories_Percentage_1"])
+        overall_carpet.append(row["Carpet_Victories_Percentage_1"])
+plt.figure()
+plt.plot(overall_v, label="overall")
+plt.plot(last_hundred_v, label="last 100 matches")
+plt.plot(overall_clay, label="overall clay")
+plt.plot(overall_grass, label="overall grass")
+plt.plot(overall_hard, label="overall hard")
+plt.plot(overall_carpet, label="overall carpet")
+plt.legend()
+plt.xticks([d[1] for d in dates], [d[0] for d in dates], rotation="vertical")
+plt.title("Stanislas Wawrinka win percentage on main ATP tournamnents")
+plt.savefig("stan_the_man_win_percentage.png")
+plt.show()
+
+
+aces = {"diff_aces": [], "winner": []}
+
+for n_row, row in stan_df.iterrows():
+    diff_aces = row["Aces_Percentage_1"] - row["Aces_Percentage_2"]
+    winner = row["Winner"]
+    aces["diff_aces"].append(diff_aces)
+    aces["winner"].append(winner)
+
+aces = pd.DataFrame(aces)
+classes = [val * 2.5 for val in range(-6, 4, 1)]
+fig, ax = plt.subplots(1)
+for min_class, max_class in zip(classes[:-1], classes[1:]):
+    values = aces.loc[aces.diff_aces < max_class].loc[aces.diff_aces > min_class]
+    ax.add_patch(
+        Rectangle(
+            xy=(min_class, 0),
+            width=2.5,
+            height=len(values.loc[values.winner == 0]),
+            edgecolor="k",
+            facecolor="blue",
+            label="Victory",
+        )
+    )
+    ax.add_patch(
+        Rectangle(
+            xy=(min_class, len(values.loc[values.winner == 0])),
+            width=2.5,
+            height=len(values.loc[values.winner == 1]),
+            edgecolor="k",
+            facecolor="orange",
+            label="Defeat",
+        )
+    )
+ax.autoscale_view()
+ax.set_xlabel("Career ace percentage difference with adversary")
+ax.set_ylabel("Number of matches")
+ax.set_title(
+    "Histogram of career aces percentage difference for Stan Wawrinka, colored by match results",
+    wrap=True,
+)
+handles, labels = plt.gca().get_legend_handles_labels()
+by_label = dict(zip(labels, handles))
+plt.legend(by_label.values(), by_label.keys())
+plt.savefig("stanimal_aces_percentage_difference.png")
+plt.show()

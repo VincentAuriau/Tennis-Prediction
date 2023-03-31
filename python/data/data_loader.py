@@ -114,11 +114,12 @@ def load_match_data_from_path(
         return file_id
 
     match_df = pd.read_csv(path_to_matchs_file)
+    """
     match_df["match_id"] = match_df.apply(
         lambda row: extract_file_id(path_to_matchs_file) + "_" + str(row.name),
         axis=1,
     )
-
+    """
     matches_data = []
     for n_row, row in match_df.iterrows():
         m_winner = players_db[row["winner_id"]]
@@ -127,7 +128,11 @@ def load_match_data_from_path(
         m_surface = row["surface"]
 
         match_o = match.Match(
-            winner=m_winner, loser=m_loser, tournament=m_tournament, surface=m_surface
+            winner=m_winner,
+            loser=m_loser,
+            tournament=m_tournament,
+            surface=m_surface,
+            id_prefix=extract_file_id(path_to_matchs_file),
         )
         match_o.instantiate_from_data_row(row)
         (
@@ -136,7 +141,7 @@ def load_match_data_from_path(
             l_data,
         ) = match_o.get_prior_data_and_update_players_stats()
 
-        match_data["match_id"] = row["match_id"]
+        match_data["match_id"] = match_o.id
 
         to_1 = {}
         to_2 = {}
@@ -188,7 +193,6 @@ def load_match_data_from_path(
                 [pd.concat([match_stats] * 2, axis=0), ms_concat_1, ms_concat_2], axis=1
             )
             final_df = pd.concat([final_df, match_stats_df], axis=1)
-
         matches_data.append(final_df)
 
     matches_data = pd.concat(matches_data, axis=0)
@@ -204,8 +208,14 @@ def matches_data_loader(
     get_reversed_match_data=False,
 ):
     """
-    Loads all matches data
-    :return:
+    Main matches data loading function
+    :param keep_values_from_year: int  [1968; present], min year to keep values from
+    :param path_to_data: str, path to tennis_atp submodule
+    :param path_to_cache: str, path to local personal cache
+    :param flush_cache: bool, whether cache should be erased and whole function run again
+    :param get_match_statistics: bool, return each match statistics along pre match statistics
+    :param get_reversed_match_data: bool, should each match be double, with Winner = 0 and Winner = 1
+    :return: pandas.DataFrame with all matches data
     """
 
     # Check if data already in cache

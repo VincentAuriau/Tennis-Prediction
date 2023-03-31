@@ -21,3 +21,35 @@ You can find examples in /examples:
 from data.data_loader import matches_data_loader
 data_df = matches_data_loader(path_to_data="submodules/tennis_atp")
 ```
+data_df contains let you access information about players (statistics prior to the match) along statistics of the match.
+A basic example statistic: the victory percentage of the best ranked player in a match, depending on players rankings.
+
+
+Number of ATP main matches depending on players rank             |  Victory % of best ranked player
+:-------------------------:|:-------------------------:
+![](examples/data/nb_matches.png) |  ![](examples/data/Best_player_win_percentage.png)
+
+It can be easily used to also compute players statistics over their carreer, and/or at match time. Here is a simple example with Stan Wawrinka:
+Stan's Victory % in main ATP matches             |  Stan's career aces % diff with adversary
+:-------------------------:|:-------------------------:
+![](examples/data/stan_the_man_win_percentage.png) |  ![](examples/data/stanimal_aces_percentage_difference.png)
+
+### Train/Testing on matches outcome:
+
+```python
+from sklearn.ensemble import RandomForestClassifier
+from evaluation.train_test import train_test_evaluation
+
+test_score = train_test_evaluation(
+    train_years=[2020, 2021],
+    test_years=[2022, 2023],
+    model_class=RandomForestClassifier,
+    model_params={"n_estimators": 2000, "max_depth": None},
+    match_features=[],
+    player_features=["Ranking"],
+    encoding_params={},
+    additional_features=[],
+)
+
+print("Test Score", test_score)
+```
