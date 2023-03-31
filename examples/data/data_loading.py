@@ -5,7 +5,9 @@ sys.path.append("../../python")
 sys.path.append("../../")
 
 import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle
 import numpy as np
+import pandas as pd
 
 from data.data_loader import matches_data_loader
 
@@ -113,8 +115,6 @@ plt.title("Number of matches recorded per Rank Category")
 plt.savefig("nb_matches.png")
 plt.show()
 
-print(np.sum(categories_number_of_matches))
-
 #### Stan the man
 overall_v = []
 last_hundred_v = []
@@ -125,6 +125,7 @@ overall_grass = []
 overall_hard = []
 dates = []
 stan_df = data_df.loc[data_df.ID_1 == 104527]
+stan_df = stan_df.reset_index()
 
 for n_row, row in stan_df.iterrows():
     matches = [r[0] for r in ast.literal_eval(row["Matches_1"])]
@@ -150,3 +151,31 @@ plt.title('Stanislas Wawrinka win percentage on main ATP tournamnents')
 plt.savefig("stan_the_man_win_percentage.png")
 plt.show()
 
+
+aces = {
+    "diff_aces": [],
+    "winner": []
+}
+
+for n_row, row in stan_df.iterrows():
+    diff_aces = row["Aces_Percentage_2"] - row["Aces_Percentage_1"]
+    winner = row["Winner"]
+    aces["diff_aces"].append(diff_aces)
+    aces["winner"].append(winner)
+
+aces = pd.DataFrame(aces)
+classes = [val * 2.5 for val in range(-3, 7, 1)]
+fig, ax = plt.subplots(1)
+for min_class, max_class in zip(classes[:-1], classes[1:]):
+    values = aces.loc[aces.diff_aces < max_class].loc[aces.diff_aces > min_class]
+    ax.add_patch(Rectangle(xy=(min_class, 0), width=2.5, height=len(values.loc[values.winner == 0]), edgecolor="k", facecolor="blue", label="Victory"))
+    ax.add_patch(Rectangle(xy=(min_class, 0), width=2.5, height=len(values.loc[values.winner == 1]), edgecolor="k", facecolor="orange", label="Defeat"))
+ax.autoscale_view()
+ax.set_xlabel('Career ace percentage difference with adversary')
+ax.set_ylabel('Number of matches')
+ax.set_title("Histogram of career aces percentage difference for Stan Wawrinka, colored by match results")
+handles, labels = plt.gca().get_legend_handles_labels()
+by_label = dict(zip(labels, handles))
+plt.legend(by_label.values(), by_label.keys())
+plt.savefig("stanimal_aces_percentage_difference.png")
+plt.show()
