@@ -1,3 +1,4 @@
+import ast
 import os, sys
 
 sys.path.append("../../python")
@@ -7,6 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from data.data_loader import matches_data_loader
+
 
 data_df = matches_data_loader(
     path_to_data="../../submodules/tennis_atp",
@@ -112,3 +114,39 @@ plt.savefig("nb_matches.png")
 plt.show()
 
 print(np.sum(categories_number_of_matches))
+
+#### Stan the man
+overall_v = []
+last_hundred_v = []
+
+overall_clay = []
+overall_carpet = []
+overall_grass = []
+overall_hard = []
+dates = []
+stan_df = data_df.loc[data_df.ID_1 == 104527]
+
+for n_row, row in stan_df.iterrows():
+    matches = [r[0] for r in ast.literal_eval(row["Matches_1"])]
+    overall_v.append(matches.count("V") / len(matches) * 100)
+    last_hundred_v.append(matches[-100:].count("V") / len(matches[-100:]) * 100)
+
+    if str(row["tournament_date"])[:4] not in [d[0] for d in dates]:
+        dates.append((str(row["tournament_date"])[:4], n_row))
+    overall_clay.append(row["Clay_Victories_Percentage_1"])
+    overall_grass.append(row["Grass_Victories_Percentage_1"])
+    overall_hard.append(row["Hard_Victories_Percentage_1"])
+    overall_carpet.append(row["Carpet_Victories_Percentage_1"])
+plt.figure()
+plt.plot(overall_v, label="overall")
+plt.plot(last_hundred_v, label="last 100 matches")
+plt.plot(overall_clay, label="overall clay")
+plt.plot(overall_grass, label="overall grass")
+plt.plot(overall_hard, label="overall hard")
+plt.plot(overall_carpet, label="overall carpet")
+plt.legend()
+plt.xticks([d[1] for d in dates], [d[0] for d in dates], rotation="vertical")
+plt.title('Stanislas Wawrinka win percentage on main ATP tournamnents')
+plt.savefig("stan_the_man_win_percentage.png")
+plt.show()
+
