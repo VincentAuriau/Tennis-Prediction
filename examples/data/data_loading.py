@@ -174,7 +174,7 @@ for min_class, max_class in zip(classes[:-1], classes[1:]):
 ax.autoscale_view()
 ax.set_xlabel('Career ace percentage difference with adversary')
 ax.set_ylabel('Number of matches')
-ax.set_title("Histogram of career aces percentage difference for Stan Wawrinka, colored by match results")
+ax.set_title("Histogram of career aces percentage difference for Stan Wawrinka, colored by match results", wrap=True)
 handles, labels = plt.gca().get_legend_handles_labels()
 by_label = dict(zip(labels, handles))
 plt.legend(by_label.values(), by_label.keys())
