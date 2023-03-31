@@ -43,6 +43,16 @@ def read_matches_file(path_to_file):
     return df_match
 
 
+def reverse_score(score):
+    score = str(score)
+    reversed_score = []
+    sets = score.split(" ")
+    for set in sets:
+        games = set.split('-')
+        reversed_score.append("-".join(games[::-1]))
+    return " ".join(reversed_score)
+
+
 def get_match_files(path_to_data_dir, match_type=["main_atp"]):
     """
     Lists the available csv containing matches
@@ -157,7 +167,6 @@ def load_match_data_from_path(
             [l_data.copy().rename(to_2, axis=1), w_data.copy().rename(to_2, axis=1)],
             axis=0,
         )
-
         final_df = pd.concat(
             [pd.concat([match_data] * 2, axis=0), concat_1, concat_2], axis=1
         )
@@ -189,8 +198,13 @@ def load_match_data_from_path(
                 ],
                 axis=0,
             )
+
+            match_stats_1 = match_stats.copy()
+            match_stats_2 = match_stats.copy()
+            match_stats_2["score"] = match_stats_2.apply(lambda row: reverse_score(row["score"]), axis=1)
+
             match_stats_df = pd.concat(
-                [pd.concat([match_stats] * 2, axis=0), ms_concat_1, ms_concat_2], axis=1
+                [pd.concat([match_stats_1, match_stats_2], axis=0), ms_concat_1, ms_concat_2], axis=1
             )
             final_df = pd.concat([final_df, match_stats_df], axis=1)
         matches_data.append(final_df)
