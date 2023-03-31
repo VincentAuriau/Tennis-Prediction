@@ -57,7 +57,11 @@ print("Test Score", test_score)
 ```
 
 Models and hyperparamters can easily be compared with the file results.csv saved in save_path.
-![](examples/results_reading/models_performances.png "Different models performances")
+
+Different models performances
+:-------------------------:
+![](examples/results_reading/models_performances.png)
+
 If the argument save_all_results is set to True, the whole csv of test data is saved. It helps to get more in-depth analysis of results
 
 Model precision compared with best ranked player wins strategy            |  Model precision depending of players ranks
