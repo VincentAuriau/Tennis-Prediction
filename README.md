@@ -29,6 +29,11 @@ Number of ATP main matches depending on players rank             |  Victory % of
 :-------------------------:|:-------------------------:
 ![](examples/data/nb_matches.png) |  ![](examples/data/Best_player_win_percentage.png)
 
+It can be easily used to also compute players statistics over their carreer, and/or at match time. Here is a simple example with Stan Wawrinka:
+Stan's Victory % in main ATP matches             |  Stan's career aces % diff with adversary
+:-------------------------:|:-------------------------:
+![](examples/data/stan_the_man_win_percentage.png) |  ![](examples/data/stanimal_aces_percentage_difference.png)
+
 ### Train/Testing on matches outcome:
 
 ```python
