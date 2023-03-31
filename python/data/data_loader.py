@@ -128,7 +128,11 @@ def load_match_data_from_path(
         m_surface = row["surface"]
 
         match_o = match.Match(
-            winner=m_winner, loser=m_loser, tournament=m_tournament, surface=m_surface, id_prefix=extract_file_id(path_to_matchs_file)
+            winner=m_winner,
+            loser=m_loser,
+            tournament=m_tournament,
+            surface=m_surface,
+            id_prefix=extract_file_id(path_to_matchs_file),
         )
         match_o.instantiate_from_data_row(row)
         (
