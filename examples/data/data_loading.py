@@ -129,6 +129,7 @@ stan_df = stan_df.reset_index()
 
 for n_row, row in stan_df.iterrows():
     matches = [r[0] for r in ast.literal_eval(row["Matches_1"])]
+
     if len(matches) > 0:
         overall_v.append(matches.count("V") / len(matches) * 100)
         last_hundred_v.append(matches[-100:].count("V") / len(matches[-100:]) * 100)

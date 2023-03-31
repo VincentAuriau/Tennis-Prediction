@@ -293,11 +293,7 @@ def matches_data_loader(
 
         data_matches = pd.concat(data_per_year, axis=0)
         data_matches = data_matches.reset_index()
-        """
-        data_matches.to_csv(
-            os.path.join(path_to_cache, "matches_data.csv"), sep=";", index=False
-        )
-        """
+
     else:
         years = []
         file_pattern = "matches_data_(?P<year>\d+).csv"
@@ -316,11 +312,7 @@ def matches_data_loader(
 
         data_matches = pd.concat(data_per_year, axis=0)
         data_matches = data_matches.reset_index()
-        """
-        data_matches = pd.read_csv(
-            os.path.join(path_to_cache, "matches_data.csv"), sep=";"
-        )
-        """
+
     if get_reversed_match_data:
         return data_matches
     else:
