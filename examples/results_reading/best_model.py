@@ -123,7 +123,7 @@ for surface, surface_code in {"Clay": 0, "Carpet": 1, "Hard": 2, "Grass": 3}.ite
         precision_model,
         edgecolor="k",
         facecolor="tab:blue",
-        label="Model",
+        label="Model - XGBoost",
     )
     ax.add_patch(rect)
     rect = Rectangle(
@@ -141,7 +141,7 @@ ax.autoscale()
 plt.xticks([1, 3, 5, 7], labels=ticks)
 handles, labels = plt.gca().get_legend_handles_labels()
 by_label = dict(zip(labels, handles))
-plt.legend(by_label.values(), by_label.keys())
+plt.legend(by_label.values(), by_label.keys(), loc=4)
 plt.title("Win % for each surface")
 plt.savefig("win_per_surface.png")
 plt.show()
