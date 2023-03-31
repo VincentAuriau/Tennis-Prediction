@@ -159,18 +159,18 @@ aces = {
 }
 
 for n_row, row in stan_df.iterrows():
-    diff_aces = row["Aces_Percentage_2"] - row["Aces_Percentage_1"]
+    diff_aces = row["Aces_Percentage_1"] - row["Aces_Percentage_2"]
     winner = row["Winner"]
     aces["diff_aces"].append(diff_aces)
     aces["winner"].append(winner)
 
 aces = pd.DataFrame(aces)
-classes = [val * 2.5 for val in range(-3, 7, 1)]
+classes = [val * 2.5 for val in range(-6, 4, 1)]
 fig, ax = plt.subplots(1)
 for min_class, max_class in zip(classes[:-1], classes[1:]):
     values = aces.loc[aces.diff_aces < max_class].loc[aces.diff_aces > min_class]
     ax.add_patch(Rectangle(xy=(min_class, 0), width=2.5, height=len(values.loc[values.winner == 0]), edgecolor="k", facecolor="blue", label="Victory"))
-    ax.add_patch(Rectangle(xy=(min_class, 0), width=2.5, height=len(values.loc[values.winner == 1]), edgecolor="k", facecolor="orange", label="Defeat"))
+    ax.add_patch(Rectangle(xy=(min_class, len(values.loc[values.winner == 0])), width=2.5, height=len(values.loc[values.winner == 1]), edgecolor="k", facecolor="orange", label="Defeat"))
 ax.autoscale_view()
 ax.set_xlabel('Career ace percentage difference with adversary')
 ax.set_ylabel('Number of matches')
