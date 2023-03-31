@@ -416,11 +416,17 @@ class Player:
 
         # Update Rankings ?
         if match.winner.id == self.id:
-            self._add_victory(match.loser.id, match_id=match.id, tournament_date=match.tournament_date)
+            self._add_victory(
+                match.loser.id, match_id=match.id, tournament_date=match.tournament_date
+            )
             self._update_surfaces_victories_percentage(match.surface, "V")
         else:
             assert match.loser.id == self.id
-            self._add_defeat(match.winner.id, match_id=match.id, tournament_date=match.tournament_date)
+            self._add_defeat(
+                match.winner.id,
+                match_id=match.id,
+                tournament_date=match.tournament_date,
+            )
             self._update_surfaces_victories_percentage(match.surface, "D")
         self._update_fatigue(match.tournament_date, match.sets_number)
 
@@ -447,7 +453,9 @@ class Player:
             "Best_Rank": [self._get_best_ranking()],
             "Birth_Year": [self.birthdate],
             "Versus": [
-                self.versus.copy() if opponent is None else self.versus.get(opponent, []).copy()
+                self.versus.copy()
+                if opponent is None
+                else self.versus.get(opponent, []).copy()
             ],
             "Hand": [self.hand],
             "Last_Tournament_Date": [

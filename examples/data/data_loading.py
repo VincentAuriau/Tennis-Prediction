@@ -148,15 +148,12 @@ plt.plot(overall_hard, label="overall hard")
 plt.plot(overall_carpet, label="overall carpet")
 plt.legend()
 plt.xticks([d[1] for d in dates], [d[0] for d in dates], rotation="vertical")
-plt.title('Stanislas Wawrinka win percentage on main ATP tournamnents')
+plt.title("Stanislas Wawrinka win percentage on main ATP tournamnents")
 plt.savefig("stan_the_man_win_percentage.png")
 plt.show()
 
 
-aces = {
-    "diff_aces": [],
-    "winner": []
-}
+aces = {"diff_aces": [], "winner": []}
 
 for n_row, row in stan_df.iterrows():
     diff_aces = row["Aces_Percentage_1"] - row["Aces_Percentage_2"]
@@ -169,12 +166,33 @@ classes = [val * 2.5 for val in range(-6, 4, 1)]
 fig, ax = plt.subplots(1)
 for min_class, max_class in zip(classes[:-1], classes[1:]):
     values = aces.loc[aces.diff_aces < max_class].loc[aces.diff_aces > min_class]
-    ax.add_patch(Rectangle(xy=(min_class, 0), width=2.5, height=len(values.loc[values.winner == 0]), edgecolor="k", facecolor="blue", label="Victory"))
-    ax.add_patch(Rectangle(xy=(min_class, len(values.loc[values.winner == 0])), width=2.5, height=len(values.loc[values.winner == 1]), edgecolor="k", facecolor="orange", label="Defeat"))
+    ax.add_patch(
+        Rectangle(
+            xy=(min_class, 0),
+            width=2.5,
+            height=len(values.loc[values.winner == 0]),
+            edgecolor="k",
+            facecolor="blue",
+            label="Victory",
+        )
+    )
+    ax.add_patch(
+        Rectangle(
+            xy=(min_class, len(values.loc[values.winner == 0])),
+            width=2.5,
+            height=len(values.loc[values.winner == 1]),
+            edgecolor="k",
+            facecolor="orange",
+            label="Defeat",
+        )
+    )
 ax.autoscale_view()
-ax.set_xlabel('Career ace percentage difference with adversary')
-ax.set_ylabel('Number of matches')
-ax.set_title("Histogram of career aces percentage difference for Stan Wawrinka, colored by match results", wrap=True)
+ax.set_xlabel("Career ace percentage difference with adversary")
+ax.set_ylabel("Number of matches")
+ax.set_title(
+    "Histogram of career aces percentage difference for Stan Wawrinka, colored by match results",
+    wrap=True,
+)
 handles, labels = plt.gca().get_legend_handles_labels()
 by_label = dict(zip(labels, handles))
 plt.legend(by_label.values(), by_label.keys())
