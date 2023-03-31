@@ -16,7 +16,7 @@ data_df = matches_data_loader(
     path_to_data="../../submodules/tennis_atp",
     path_to_cache="../../cache",
     flush_cache=False,
-    keep_values_from_year=2010,
+    keep_values_from_year=2002,
     get_match_statistics=True,
     get_reversed_match_data=True,
 )
@@ -129,15 +129,16 @@ stan_df = stan_df.reset_index()
 
 for n_row, row in stan_df.iterrows():
     matches = [r[0] for r in ast.literal_eval(row["Matches_1"])]
-    overall_v.append(matches.count("V") / len(matches) * 100)
-    last_hundred_v.append(matches[-100:].count("V") / len(matches[-100:]) * 100)
+    if len(matches) > 0:
+        overall_v.append(matches.count("V") / len(matches) * 100)
+        last_hundred_v.append(matches[-100:].count("V") / len(matches[-100:]) * 100)
 
-    if str(row["tournament_date"])[:4] not in [d[0] for d in dates]:
-        dates.append((str(row["tournament_date"])[:4], n_row))
-    overall_clay.append(row["Clay_Victories_Percentage_1"])
-    overall_grass.append(row["Grass_Victories_Percentage_1"])
-    overall_hard.append(row["Hard_Victories_Percentage_1"])
-    overall_carpet.append(row["Carpet_Victories_Percentage_1"])
+        if str(row["tournament_date"])[:4] not in [d[0] for d in dates]:
+            dates.append((str(row["tournament_date"])[:4], n_row))
+        overall_clay.append(row["Clay_Victories_Percentage_1"])
+        overall_grass.append(row["Grass_Victories_Percentage_1"])
+        overall_hard.append(row["Hard_Victories_Percentage_1"])
+        overall_carpet.append(row["Carpet_Victories_Percentage_1"])
 plt.figure()
 plt.plot(overall_v, label="overall")
 plt.plot(last_hundred_v, label="last 100 matches")
