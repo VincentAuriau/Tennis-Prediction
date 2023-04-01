@@ -1,7 +1,7 @@
 import os, sys
 
-sys.path.append("../python")
-sys.path.append("../")
+sys.path.append("../../python")
+sys.path.append("../../../")
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -50,7 +50,7 @@ test_score = train_test_evaluation(
     player_features=player_features,
     encoding_params={},
     additional_features=additional_features,
-    save_path="../results/20212022",
+    save_path="../../results/20212022",
     save_all_results=True,
 )
 
@@ -75,7 +75,7 @@ test_score = train_test_evaluation(
     player_features=player_features,
     encoding_params={},
     additional_features=additional_features,
-    save_path="../results/20212022",
+    save_path="../../results/20212022",
     save_all_results=True,
 )
 
@@ -98,7 +98,7 @@ test_score = train_test_evaluation(
     player_features=player_features,
     encoding_params={},
     additional_features=additional_features,
-    save_path="../results/20212022",
+    save_path="../../results/20212022",
     save_all_results=True,
 )
 
@@ -120,7 +120,7 @@ test_score = train_test_evaluation(
     player_features=player_features,
     encoding_params={},
     additional_features=additional_features,
-    save_path="../results/20212022",
+    save_path="../../results/20212022",
     save_all_results=True,
 )
 
@@ -139,7 +139,7 @@ for mx_depth in [1, 3, 5]:
             player_features=player_features,
             encoding_params={},
             additional_features=additional_features,
-            save_path="../results/20212022",
+            save_path="../../results/20212022",
             save_all_results=True,
         )
         print("~~ Current Score ~~", test_score)
@@ -159,7 +159,7 @@ for mx_depth in [1, 3, 5]:
             player_features=player_features,
             encoding_params={},
             additional_features=additional_features,
-            save_path="../results/20212022",
+            save_path="../../results/20212022",
             save_all_results=True,
         )
         print("~~ Current Score ~~", test_score)
@@ -187,7 +187,7 @@ test_score = train_test_evaluation(
     player_features=player_features,
     encoding_params={},
     additional_features=additional_features,
-    save_path="../results/20212022",
+    save_path="../../results/20212022",
     save_all_results=True,
 )
 
@@ -219,7 +219,7 @@ test_score = train_test_evaluation(
     player_features=player_features,
     encoding_params={},
     additional_features=additional_features,
-    save_path="../results/20212022",
+    save_path="../../results/20212022",
     save_all_results=True,
 )
 
@@ -251,6 +251,6 @@ test_score = train_test_evaluation(
     player_features=player_features,
     encoding_params={},
     additional_features=additional_features,
-    save_path="../results/20212022",
+    save_path="../../results/20212022",
     save_all_results=True,
 )

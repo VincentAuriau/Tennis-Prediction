@@ -49,7 +49,21 @@ test_score = train_test_evaluation(
     player_features=["Ranking"],
     encoding_params={},
     additional_features=[],
+    save_path="./results",
+    save_all_results=False
 )
 
 print("Test Score", test_score)
 ```
+
+Models and hyperparamters can easily be compared with the file results.csv saved in save_path.
+
+Different models performances
+:-------------------------:
+![](examples/results_reading/models_performances.png)
+
+If the argument save_all_results is set to True, the whole csv of test data is saved. It helps to get more in-depth analysis of results
+
+Model precision compared with best ranked player wins strategy            |  Model precision depending of players ranks
+:-------------------------:|:-------------------------:
+![](examples/results_reading/win_per_surface.png) |  ![](examples/results_reading/precision_percentage_players_ranks.png)

@@ -193,6 +193,15 @@ class Match:
         self.tournament_level = data_row["tourney_level"]
         self.round = data_row["round"]
         self.sets_number = len(str(data_row["score"]).split("-"))
+        self.games_number = 0
+        for set in str(data_row["score"]).split(" "):
+            try:
+                games_0 = int(set.split("-")[0][0])
+                games_a = int(set.split("-")[1][0])
+                self.games_number += games_0
+                self.games_number += games_1
+            except:
+                pass
 
         self.score = data_row["score"]
         self.elapsed_minutes = data_row["minutes"]

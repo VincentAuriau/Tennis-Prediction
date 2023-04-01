@@ -43,6 +43,16 @@ def read_matches_file(path_to_file):
     return df_match
 
 
+def reverse_score(score):
+    score = str(score)
+    reversed_score = []
+    sets = score.split(" ")
+    for set in sets:
+        games = set.split("-")
+        reversed_score.append("-".join(games[::-1]))
+    return " ".join(reversed_score)
+
+
 def get_match_files(path_to_data_dir, match_type=["main_atp"]):
     """
     Lists the available csv containing matches
@@ -157,7 +167,6 @@ def load_match_data_from_path(
             [l_data.copy().rename(to_2, axis=1), w_data.copy().rename(to_2, axis=1)],
             axis=0,
         )
-
         final_df = pd.concat(
             [pd.concat([match_data] * 2, axis=0), concat_1, concat_2], axis=1
         )
@@ -189,8 +198,20 @@ def load_match_data_from_path(
                 ],
                 axis=0,
             )
+
+            match_stats_1 = match_stats.copy()
+            match_stats_2 = match_stats.copy()
+            match_stats_2["score"] = match_stats_2.apply(
+                lambda row: reverse_score(row["score"]), axis=1
+            )
+
             match_stats_df = pd.concat(
-                [pd.concat([match_stats] * 2, axis=0), ms_concat_1, ms_concat_2], axis=1
+                [
+                    pd.concat([match_stats_1, match_stats_2], axis=0),
+                    ms_concat_1,
+                    ms_concat_2,
+                ],
+                axis=1,
             )
             final_df = pd.concat([final_df, match_stats_df], axis=1)
         matches_data.append(final_df)
@@ -218,6 +239,7 @@ def matches_data_loader(
     :return: pandas.DataFrame with all matches data
     """
 
+    total_elapsed_time = 0
     # Check if data already in cache
     if os.path.exists(os.path.join(path_to_cache, "players_db")):
         players_db_cached = True
@@ -275,15 +297,13 @@ def matches_data_loader(
                 sep=";",
                 index=False,
             )
-            print(f"Elapsed Time: {time.time() - t_start} seconds")
+            total_elapsed_time += time.time() - t_start
+            print(f"Elapsed Time: {np.round(time.time() - t_start, 2)} seconds")
+            print(f"Total Elapsed Time: {np.round(total_elapsed_time, 2)} seconds")
 
         data_matches = pd.concat(data_per_year, axis=0)
         data_matches = data_matches.reset_index()
-        """
-        data_matches.to_csv(
-            os.path.join(path_to_cache, "matches_data.csv"), sep=";", index=False
-        )
-        """
+
     else:
         years = []
         file_pattern = "matches_data_(?P<year>\d+).csv"
@@ -302,11 +322,7 @@ def matches_data_loader(
 
         data_matches = pd.concat(data_per_year, axis=0)
         data_matches = data_matches.reset_index()
-        """
-        data_matches = pd.read_csv(
-            os.path.join(path_to_cache, "matches_data.csv"), sep=";"
-        )
-        """
+
     if get_reversed_match_data:
         return data_matches
     else:

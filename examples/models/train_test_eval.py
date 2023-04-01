@@ -1,7 +1,7 @@
 import os, sys
 
-sys.path.append("../python")
-sys.path.append("../")
+sys.path.append("../../python")
+sys.path.append("../../../")
 
 import matplotlib.pyplot as plt
 import numpy as np
