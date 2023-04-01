@@ -74,13 +74,14 @@ def matches_info_norm(matches_info, current_date=""):
     # Ranking points max 16,950 from Djokovic's record -> 20,000
     # Ranking max 9,999
     # Num played minutes max 671 from Mahut/Isner's record -> 700
+    # date: compute number of days since tournament date -> normalize by 365 -> if > 365 give up ?
 
     matches_info = matches_info.copy()
     matches_info["surface"] = matches_info["surface"].apply(lambda val: tournament_surface[val])
     matches_info["num_won_sets"] = matches_info["num_won_sets"].apply(lambda val: val / 3)
     matches_info["num_lost_sets"] = matches_info["num_lost_sets"].apply(lambda val: val / 3)
 
-    matches_info["date"] = matches_info["date"].apply(lambda val: get_days_difference(val, current_date))
+    matches_info["date"] = matches_info["date"].apply(lambda val: get_days_difference(val, current_date)/365)
     matches_info["num_played_minutes"] = matches_info["num_played_minutes"].apply(lambda val: val / 700)
 
     matches_info["adv_ranking"] = matches_info["adv_ranking"].apply(lambda val: np.log(val) / np.log(9999))
