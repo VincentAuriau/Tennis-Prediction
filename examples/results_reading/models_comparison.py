@@ -25,7 +25,7 @@ for n_row, row in df_results.iterrows():
         rect = Rectangle(
             (n_row, 0),
             1,
-            row["precision"]*100,
+            row["precision"] * 100,
             edgecolor=models_color[row["model_class"]],
             facecolor=models_color[row["model_class"]],
             label=row["model_class"],

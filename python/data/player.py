@@ -58,11 +58,25 @@ class Player:
         self.breakpoint_faced_percentage = 0
         self.breakpoint_saved_percentage = 0
 
-        self.games_fatigue = 0 # nb games curr tourney + nb games prev tourney / diff days
-        self.minutes_fatigue = 0 # nb minutes curr tourney + nb minutes prev tourney / diff days
+        self.games_fatigue = (
+            0  # nb games curr tourney + nb games prev tourney / diff days
+        )
+        self.minutes_fatigue = (
+            0  # nb minutes curr tourney + nb minutes prev tourney / diff days
+        )
         self.fatigue_features = {
-            "previous tournament": {"date": "19000000", "num_games": 0, "num_matchs": 0, "num_minutes": 0},
-            "current tournament": {"date": "19000000", "num_games": 0, "num_matchs": 0, "num_minutes": 0},
+            "previous tournament": {
+                "date": "19000000",
+                "num_games": 0,
+                "num_matchs": 0,
+                "num_minutes": 0,
+            },
+            "current tournament": {
+                "date": "19000000",
+                "num_games": 0,
+                "num_matchs": 0,
+                "num_minutes": 0,
+            },
         }
 
     def __str__(self):
@@ -169,7 +183,9 @@ class Player:
         if games_number == games_number and games_number != "nan":
             if tournament_date == self.fatigue_features["current tournament"]["date"]:
                 self.fatigue_features["current tournament"]["num_games"] += games_number
-                self.fatigue_features["current tournament"]["num_minutes"] += minutes_number
+                self.fatigue_features["current tournament"][
+                    "num_minutes"
+                ] += minutes_number
                 self.fatigue_features["current tournament"]["num_matchs"] += 1
             else:
                 self.fatigue_features["previous tournament"] = self.fatigue_features[
@@ -189,7 +205,9 @@ class Player:
                 self.fatigue_features["current tournament"]["date"]
             )
 
-            days_difference_tournaments = get_days_difference(previous_tournament_date, current_tournament_date)
+            days_difference_tournaments = get_days_difference(
+                previous_tournament_date, current_tournament_date
+            )
 
             self.games_fatigue = (
                 self.fatigue_features["previous tournament"]["num_games"]
@@ -429,7 +447,9 @@ class Player:
                 tournament_date=match.tournament_date,
             )
             self._update_surfaces_victories_percentage(match.surface, "D")
-        self._update_fatigue(match.tournament_date, match.games_number, match.elapsed_minutes)
+        self._update_fatigue(
+            match.tournament_date, match.games_number, match.elapsed_minutes
+        )
 
         self._update_service_data(
             service_games_played=match.get_service_points_played(self.id),
