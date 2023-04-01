@@ -1,10 +1,7 @@
 Features to add:
     - Ranking over time: ranking last months
     - Ranking should come from ranking files and not match files
-
     - Last x (5 currently) matches could be an argument (5, 10, 15, etc...)
-    - Using nb of games played instead of nb of sets ?
-
     - % Victory against players of same rank as adv
 
 
@@ -12,10 +9,11 @@ Improvements:
 
     - encoding last x matches [v, v, v, d, d] => [1, 1, 1, 0, 0]
     - encoding last x matches versus
-
-    - use match elapsed minutes to model fatigue
+    - add non main atp matches
 
 Done:
+    - Using nb of games played instead of nb of sets ?
+    - use match elapsed minutes to model fatigue
     - player.versus should not be given as a whole from match but only versus against adv ?
     - cut cache in several files for dynamic loading with different parameters
     - Fix columns names
