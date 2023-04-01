@@ -232,6 +232,7 @@ def matches_data_loader(
     :return: pandas.DataFrame with all matches data
     """
 
+    total_elapsed_time = 0
     # Check if data already in cache
     if os.path.exists(os.path.join(path_to_cache, "players_db")):
         players_db_cached = True
@@ -289,7 +290,9 @@ def matches_data_loader(
                 sep=";",
                 index=False,
             )
-            print(f"Elapsed Time: {time.time() - t_start} seconds")
+            total_elapsed_time += (time.time() - t_start)
+            print(f"Elapsed Time: {np.round(time.time() - t_start, 2)} seconds")
+            print(f"Total Elapsed Time: {np.round(total_elapsed_time, 2)} seconds")
 
         data_matches = pd.concat(data_per_year, axis=0)
         data_matches = data_matches.reset_index()
