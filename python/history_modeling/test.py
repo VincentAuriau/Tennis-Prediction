@@ -26,21 +26,12 @@ def get_match_info(row):
         games_1 = set.split("-")[1]
 
         if "(" in games_0:
-            tie_break_0 = games_0.split("(")[1].split(")")[0]
             games_0 = games_0.split("(")[0]
+            num_tie_break_lost += 1
 
-            tie_break_0 = int(tie_break_0)
-            tie_break_1 = 7 if tie_break_0 <= 0 else tie_break_0 + 2
         elif "(" in games_1:
-            tie_break_1 = games_1.split("(")[1].split(")")[0]
             games_1 = games_1.split("(")[0]
-
-            tie_break_1 = int(tie_break_1)
-            tie_break_0 = 7 if tie_break_1 <= 0 else tie_break_1 + 2
-
-        else:
-            tie_break_0 = 0
-            tie_break_1 = 0
+            num_tie_break_wons += 1
 
         games_0 = int(games_0)
         games_1 = int(games_1)
@@ -49,16 +40,10 @@ def get_match_info(row):
             num_won_sets += 1
         elif games_0 > games_1:
             num_lost_sets += 1
-        elif tie_break_0 > tie_break_1:
-            num_won_sets += 1
-        else:
-            num_lost_sets += 1
 
         num_won_games += games_0
         num_lost_games += games_1
-        num_tie_break_wons += tie_break_0
-        num_tie_break_lost += tie_break_1
-
+        
     match_df = pd.DataFrame({
         "surface": [surface],
         "result": [result],
