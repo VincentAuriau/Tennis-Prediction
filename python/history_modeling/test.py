@@ -1,5 +1,7 @@
+import numpy as np
 import pandas as pd
 
+from data.data_utils import get_days_difference
 
 def get_match_info(row):
     # add adversary age & hand ?
@@ -75,22 +77,32 @@ def get_match_info(row):
 
 
 def matches_info_norm(matches_info, current_date=""):
-
+    # Normalize values
     tournament_surface = {"Clay": 0., "Carpet": 1/3, "Hard": 2/3, "Grass": 1.0}
+    # nb sets won: max 3
+    # nb sets lost: max 3
+    # nb games won: max 100 (from experience - to be validated)
+    # nb games lost: max 100 (from experience - to be validated)
+    # nb tiebreaks won: max 100 (from experience - to be validated) -> not number of points but nb of tiebreaks ?
+    # nb tiebreaks lost: max 100 (from experience - to be validated)
+    # Ranking points max 16,950 from Djokovic's record -> 20,000
+    # Ranking max 9,999
+    # Num played minutes max 671 from Mahut/Isner's record -> 700
+
 
     matches_info = matches_info.copy()
     matches_info["surface"] = matches_info["surface"].apply(lambda val: tournament_surface[val])
     matches_info["num_won_sets"] = matches_info["num_won_sets"].apply(lambda val: val / 3)
     matches_info["num_lost_sets"] = matches_info["num_lost_sets"].apply(lambda val: val / 3)
 
-    matches_info["date"] = matches_info["date"].apply(lambda val: val / 3)
-    matches_info["num_played_minutes"] = matches_info["num_played_minutes"].apply(lambda val: val / 3)
+    matches_info["date"] = matches_info["date"].apply(lambda val: get_days_difference(val, current_date))
+    matches_info["num_played_minutes"] = matches_info["num_played_minutes"].apply(lambda val: val / 700)
 
-    matches_info["adv_ranking"] = matches_info["adv_ranking"].apply(lambda val: val / 3)
-    matches_info["adv_ranking_points"] = matches_info["adv_ranking_points"].apply(lambda val: val / 3)
+    matches_info["adv_ranking"] = matches_info["adv_ranking"].apply(lambda val: np.log(val) / np.log(9999))
+    matches_info["adv_ranking_points"] = matches_info["adv_ranking_points"].apply(lambda val: val / 20000)
 
-    matches_info["num_won_games"] = matches_info["num_won_games"].apply(lambda val: val / 3)
-    matches_info["num_lost_games"] = matches_info["num_lost_games"].apply(lambda val: val / 3)
+    matches_info["num_won_games"] = matches_info["num_won_games"].apply(lambda val: val / 100)
+    matches_info["num_lost_games"] = matches_info["num_lost_games"].apply(lambda val: val / 100)
     matches_info["num_tie_break_wons"] = matches_info["num_tie_break_wons"].apply(lambda val: val / 3)
     matches_info["num_tie_break_lost"] = matches_info["num_tie_break_lost"].apply(lambda val: val / 3)
 
