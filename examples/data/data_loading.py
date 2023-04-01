@@ -128,7 +128,7 @@ stan_df = data_df.loc[data_df.ID_1 == 104527]
 stan_df = stan_df.reset_index()
 
 for n_row, row in stan_df.iterrows():
-    matches = [r[0] for r in ast.literal_eval(row["Matches_1"])]
+    matches = [r[0] for r in ast.literal_eval(str(row["Matches_1"]))]
 
     if len(matches) > 0:
         overall_v.append(matches.count("V") / len(matches) * 100)
