@@ -56,10 +56,11 @@ class Player:
         self.breakpoint_faced_percentage = 0
         self.breakpoint_saved_percentage = 0
 
-        self.fatigue = 0
+        self.games_fatigue = 0 # nb games curr tourney + nb games prev tourney / diff days
+        self.minutes_fatigue = 0 # nb minutes curr tourney + nb minutes prev tourney / diff days
         self.fatigue_features = {
-            "previous tournament": {"date": "19000000", "num_sets": 0, "num_matchs": 0},
-            "current tournament": {"date": "19000000", "num_sets": 0, "num_matchs": 0},
+            "previous tournament": {"date": "19000000", "num_games": 0, "num_matchs": 0, "num_minutes": 0},
+            "current tournament": {"date": "19000000", "num_games": 0, "num_matchs": 0, "num_minutes": 0},
         }
 
     def __str__(self):
@@ -156,16 +157,17 @@ class Player:
                 self.matches_carpet.count("V") / len(self.matches_carpet) * 100
             )
 
-    def _update_fatigue(self, tournament_date, sets_number):
+    def _update_fatigue(self, tournament_date, games_number, minutes_number):
         """
         Updates Fatigue arguments: self.fatigue but also self.fatigue_features
         :param tournament_date:
         :param sets_number:
         :return:
         """
-        if sets_number == sets_number and sets_number != "nan":
+        if games_number == games_number and games_number != "nan":
             if tournament_date == self.fatigue_features["current tournament"]["date"]:
-                self.fatigue_features["current tournament"]["num_sets"] += sets_number
+                self.fatigue_features["current tournament"]["num_games"] += games_number
+                self.fatigue_features["current tournament"]["num_minutes"] += minutes_number
                 self.fatigue_features["current tournament"]["num_matchs"] += 1
             else:
                 self.fatigue_features["previous tournament"] = self.fatigue_features[
@@ -173,7 +175,8 @@ class Player:
                 ]
                 self.fatigue_features["current tournament"] = {
                     "date": tournament_date,
-                    "num_sets": sets_number,
+                    "num_games": games_number,
+                    "num_minutes": minutes_number,
                     "num_matchs": 1,
                 }
 
@@ -195,13 +198,18 @@ class Player:
                 + int(current_tournament_date[6:8])
                 - int(previous_tournament_date[6:8])
             )
-            self.fatigue = (
-                self.fatigue_features["previous tournament"]["num_sets"]
+            self.games_fatigue = (
+                self.fatigue_features["previous tournament"]["num_games"]
                 / days_difference_tournaments
-                + self.fatigue_features["current tournament"]["num_sets"]
+                + self.fatigue_features["current tournament"]["num_games"]
+            )
+            self.minutes_fatigue = (
+                self.fatigue_features["previous tournament"]["num_minutes"]
+                / days_difference_tournaments
+                + self.fatigue_features["current tournament"]["num_minutes"]
             )
         else:
-            print("NaN in sets number", sets_number)
+            print("NaN in sets number", games_number)
 
     def _update_aces_percentage(self, aces_nb):
         """
@@ -428,7 +436,7 @@ class Player:
                 tournament_date=match.tournament_date,
             )
             self._update_surfaces_victories_percentage(match.surface, "D")
-        self._update_fatigue(match.tournament_date, match.sets_number)
+        self._update_fatigue(match.tournament_date, match.games_number, match.elapsed_minutes)
 
         self._update_service_data(
             service_games_played=match.get_service_points_played(self.id),
@@ -480,7 +488,8 @@ class Player:
             "Overall_Win_on_Serve_Percentage": [self.overall_win_on_serve_percentage],
             "BreakPoint_Face_Percentage": [self.breakpoint_faced_percentage],
             "BreakPoint_Saved_Percentage": [self.breakpoint_saved_percentage],
-            "Fatigue": [self.fatigue],
+            "games_fatigue": [self.games_fatigue],
+            "minutes_fatigue": [self.minutes_fatigue],
         }
         return pd.DataFrame(data_dict)
 
