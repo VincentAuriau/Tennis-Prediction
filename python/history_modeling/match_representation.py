@@ -22,28 +22,31 @@ def get_match_info(row):
     num_tie_break_lost = 0
 
     for set in row["score"].split(" "):
+        try:
+            games_0 = set.split("-")[0]
+            games_1 = set.split("-")[1]
 
-        games_0 = set.split("-")[0]
-        games_1 = set.split("-")[1]
+            if "(" in games_0:
+                games_0 = games_0.split("(")[0]
+                num_tie_break_lost += 1
 
-        if "(" in games_0:
-            games_0 = games_0.split("(")[0]
-            num_tie_break_lost += 1
+            elif "(" in games_1:
+                games_1 = games_1.split("(")[0]
+                num_tie_break_wons += 1
 
-        elif "(" in games_1:
-            games_1 = games_1.split("(")[0]
-            num_tie_break_wons += 1
+            games_0 = int(games_0)
+            games_1 = int(games_1)
 
-        games_0 = int(games_0)
-        games_1 = int(games_1)
+            if games_0 > games_1:
+                num_won_sets += 1
+            elif games_0 < games_1:
+                num_lost_sets += 1
 
-        if games_0 > games_1:
-            num_won_sets += 1
-        elif games_0 < games_1:
-            num_lost_sets += 1
-
-        num_won_games += games_0
-        num_lost_games += games_1
+            num_won_games += games_0
+            num_lost_games += games_1
+        except:
+            if set not in ["ABD", "RET", "W/O"]:
+                print(set)
 
     match_df = pd.DataFrame({
         "surface": [surface],
