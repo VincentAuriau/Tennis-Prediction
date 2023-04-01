@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 
+from data.data_utils import get_days_difference
+
 # How to update player's ranking ?
 
 
@@ -187,17 +189,8 @@ class Player:
                 self.fatigue_features["current tournament"]["date"]
             )
 
-            days_difference_tournaments = (
-                (int(current_tournament_date[:4]) - int(previous_tournament_date[:4]))
-                * 365
-                + (
-                    int(current_tournament_date[4:6])
-                    - int(previous_tournament_date[4:6])
-                )
-                * 30
-                + int(current_tournament_date[6:8])
-                - int(previous_tournament_date[6:8])
-            )
+            days_difference_tournaments = get_days_difference(previous_tournament_date, current_tournament_date)
+
             self.games_fatigue = (
                 self.fatigue_features["previous tournament"]["num_games"]
                 / days_difference_tournaments
