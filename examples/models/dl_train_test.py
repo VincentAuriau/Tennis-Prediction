@@ -1,7 +1,7 @@
 import os, sys
 
-sys.path.append("../python")
-sys.path.append("../")
+sys.path.append("../../python")
+sys.path.append("../../")
 
 from model.deep_model import SimpleFullyConnected
 from evaluation.train_test import train_test_evaluation

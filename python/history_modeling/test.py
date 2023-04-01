@@ -8,11 +8,11 @@ def get_match_info(row):
     surface = row["tournament_surface"]
     result = row["Winner"]
     score = row["score"]
-    num_played_minutes = row["minutes"]
-    date = row["tourney_date"]
+    num_played_minutes = row["elapsed_minutes"]
+    date = row["tournament_date"]
 
     adv_ranking = row["Ranking_2"]
-    adv_ranking_points = row["Ranking_points_2"]
+    adv_ranking_points = row["Ranking_Points_2"]
 
     num_won_sets = 0
     num_lost_sets = 0
@@ -22,6 +22,7 @@ def get_match_info(row):
     num_tie_break_lost = 0
 
     for set in row["score"].split(" "):
+
         games_0 = set.split("-")[0]
         games_1 = set.split("-")[1]
 
@@ -36,14 +37,14 @@ def get_match_info(row):
         games_0 = int(games_0)
         games_1 = int(games_1)
 
-        if games_0 < games_1:
+        if games_0 > games_1:
             num_won_sets += 1
-        elif games_0 > games_1:
+        elif games_0 < games_1:
             num_lost_sets += 1
 
         num_won_games += games_0
         num_lost_games += games_1
-        
+
     match_df = pd.DataFrame({
         "surface": [surface],
         "result": [result],
@@ -73,7 +74,6 @@ def matches_info_norm(matches_info, current_date=""):
     # Ranking points max 16,950 from Djokovic's record -> 20,000
     # Ranking max 9,999
     # Num played minutes max 671 from Mahut/Isner's record -> 700
-
 
     matches_info = matches_info.copy()
     matches_info["surface"] = matches_info["surface"].apply(lambda val: tournament_surface[val])
