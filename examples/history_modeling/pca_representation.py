@@ -9,7 +9,7 @@ import pandas as pd
 from sklearn.decomposition import PCA
 
 from data.data_loader import matches_data_loader
-from history_modeling.match_representation import get_match_info,  matches_info_norm
+from history_modeling.match_representation import get_match_info, matches_info_norm
 
 data_df = matches_data_loader(
     path_to_data="../../submodules/tennis_atp",
@@ -20,7 +20,9 @@ data_df = matches_data_loader(
     get_reversed_match_data=True,
 )
 
-ten_matches_history = pd.concat([get_match_info(data_df.iloc[i]) for i in range(len(data_df))], axis=0)
+ten_matches_history = pd.concat(
+    [get_match_info(data_df.iloc[i]) for i in range(len(data_df))], axis=0
+)
 ten_matches_history.reset_index(inplace=True, drop=True)
 match_info = matches_info_norm(ten_matches_history, "20230401")
 
@@ -41,9 +43,9 @@ plt.legend()
 plt.title("Result")
 
 plt.subplot(2, 4, 2)
-c_i = match_info.loc[match_info.surface == 0.].index.values
-h_i = match_info.loc[match_info.surface == 2/3].index.values
-g_i = match_info.loc[match_info.surface == 1.].index.values
+c_i = match_info.loc[match_info.surface == 0.0].index.values
+h_i = match_info.loc[match_info.surface == 2 / 3].index.values
+g_i = match_info.loc[match_info.surface == 1.0].index.values
 plt.scatter(X_r[c_i, 0], X_r[c_i, 1], label="Clay")
 plt.scatter(X_r[h_i, 0], X_r[h_i, 1], label="Hard")
 plt.scatter(X_r[g_i, 0], X_r[g_i, 1], label="Grass")

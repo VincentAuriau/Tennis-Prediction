@@ -48,7 +48,7 @@ def reverse_score(score):
     reversed_score = []
     sets = score.split(" ")
     for set in sets:
-        games = set.split('-')
+        games = set.split("-")
         reversed_score.append("-".join(games[::-1]))
     return " ".join(reversed_score)
 
@@ -201,10 +201,17 @@ def load_match_data_from_path(
 
             match_stats_1 = match_stats.copy()
             match_stats_2 = match_stats.copy()
-            match_stats_2["score"] = match_stats_2.apply(lambda row: reverse_score(row["score"]), axis=1)
+            match_stats_2["score"] = match_stats_2.apply(
+                lambda row: reverse_score(row["score"]), axis=1
+            )
 
             match_stats_df = pd.concat(
-                [pd.concat([match_stats_1, match_stats_2], axis=0), ms_concat_1, ms_concat_2], axis=1
+                [
+                    pd.concat([match_stats_1, match_stats_2], axis=0),
+                    ms_concat_1,
+                    ms_concat_2,
+                ],
+                axis=1,
             )
             final_df = pd.concat([final_df, match_stats_df], axis=1)
         matches_data.append(final_df)
@@ -290,7 +297,7 @@ def matches_data_loader(
                 sep=";",
                 index=False,
             )
-            total_elapsed_time += (time.time() - t_start)
+            total_elapsed_time += time.time() - t_start
             print(f"Elapsed Time: {np.round(time.time() - t_start, 2)} seconds")
             print(f"Total Elapsed Time: {np.round(total_elapsed_time, 2)} seconds")
 
