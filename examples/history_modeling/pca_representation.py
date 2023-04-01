@@ -30,7 +30,7 @@ X = match_info.values
 pca = PCA(n_components=2)
 X_r = pca.fit(X).transform(X)
 
-plt.figure()
+plt.figure(figsize=(20, 12))
 
 plt.subplot(2, 4, 1)
 v_i = match_info.loc[match_info.result == 0].index.values
