@@ -1,7 +1,7 @@
 import os, sys
 
 sys.path.append("../../python")
-sys.path.append("../../")
+sys.path.append("../../../")
 
 import numpy as np
 
@@ -9,8 +9,8 @@ from data.data_loader import matches_data_loader
 from model.dumb_models import RandomModel, BestRankedPlayerWins
 
 data_df = matches_data_loader(
-    path_to_data="../submodules/tennis_atp",
-    path_to_cache="../cache",
+    path_to_data="../../submodules/tennis_atp",
+    path_to_cache="../../cache",
     flush_cache=True,
     keep_values_from_year=2021,
     get_match_statistics=False,

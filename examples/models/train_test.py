@@ -1,7 +1,7 @@
 import os, sys
 
 sys.path.append("../../python")
-sys.path.append("../../")
+sys.path.append("../../../")
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -12,8 +12,8 @@ from data.data_loader import matches_data_loader
 from data.data_loader import encode_data
 
 data_df = matches_data_loader(
-    path_to_data="../submodules/tennis_atp",
-    path_to_cache="../cache",
+    path_to_data="../../submodules/tennis_atp",
+    path_to_cache="../../cache",
     flush_cache=False,
     keep_values_from_year=2022,
     get_match_statistics=True,

@@ -1,7 +1,7 @@
 import os, sys
 
 sys.path.append("../../python")
-sys.path.append("../../")
+sys.path.append("../../../")
 
 from model.deep_model import SimpleFullyConnected
 from evaluation.train_test import train_test_evaluation
@@ -40,6 +40,6 @@ test_score = train_test_evaluation(
     player_features=player_features,
     encoding_params={},
     additional_features=additional_features,
-    save_path="../results/test",
+    save_path="../../results/test",
     save_all_results=True,
 )
