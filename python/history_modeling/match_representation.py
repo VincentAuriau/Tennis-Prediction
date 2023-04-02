@@ -97,3 +97,33 @@ def matches_info_norm(matches_info, current_date=""):
 
     return matches_info
 
+
+def create_dataset(data_df,
+                   num_matches_difference=10,
+                   nb_kept_differences=10):
+    """
+    Creates the match representation dataset
+    :param data_df:
+    :param num_matches_difference:
+    :param nb_kept_differences:
+    :return:
+    """
+    dataset = []
+    for i in range(len(data_df)):
+        current_row = data_df.iloc[i]
+        current_player = current_row.ID_1
+        sub_data_df = data_df.loc[data_df.ID_1 == current_player].iloc[:i-1]
+        if len(sub_data_df) > 0:
+            sub_data_df = sub_data_df.reset_index(drop=True)
+
+            kept_indexes = np.random.permutation(list(range(-min(len(sub_data_df), num_matches_difference), 0)))
+            kept_indexes = kept_indexes[:nb_kept_differences]
+            sub_data_df = sub_data_df.iloc[kept_indexes]
+            sub_data_df = sub_data_df.reset_index(drop=True)
+
+            raw_matches_info = pd.concat([get_match_info(sub_data_df.iloc[i]) for i in range(len(sub_data_df))], axis=0)
+            normalized_matches_info = matches_info_norm(raw_matches_info, current_date=current_row["tournament_date"])
+            dataset.append(normalized_matches_info)
+
+    return pd.concat(dataset, axis=0)
+
