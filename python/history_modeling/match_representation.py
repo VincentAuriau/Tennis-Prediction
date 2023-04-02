@@ -100,7 +100,8 @@ def matches_info_norm(matches_info, current_date=""):
 
 def create_dataset(data_df,
                    num_matches_difference=10,
-                   nb_kept_differences=10):
+                   nb_kept_differences=10,
+                   randomize_indexes=False):
     """
     Creates the match representation dataset
     :param data_df:
@@ -116,7 +117,9 @@ def create_dataset(data_df,
         if len(sub_data_df) > 0:
             sub_data_df = sub_data_df.reset_index(drop=True)
 
-            kept_indexes = np.random.permutation(list(range(-min(len(sub_data_df), num_matches_difference), 0)))
+            kept_indexes = list(range(-min(len(sub_data_df), num_matches_difference), 0))
+            if randomize_indexes:
+                kept_indexes = np.random.permutation(kept_indexes)
             kept_indexes = kept_indexes[:nb_kept_differences]
             sub_data_df = sub_data_df.iloc[kept_indexes]
             sub_data_df = sub_data_df.reset_index(drop=True)
