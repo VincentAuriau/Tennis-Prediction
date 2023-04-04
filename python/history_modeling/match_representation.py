@@ -130,3 +130,14 @@ def create_dataset(data_df,
 
     return pd.concat(dataset, axis=0)
 
+
+def create_timeless_dataset(data_df):
+    dataset = []
+    for i in range(len(data_df)):
+        raw_matches_info = get_match_info(data_df.iloc[i])
+        dataset.append(raw_matches_info)
+    dataset = pd.concat(dataset, axis=0)
+
+    dataset = matches_info_norm(dataset, current_date=data_df["tournament_date"].values[-1])
+    dataset = dataset.drop(["date"], axis=1)
+    return dataset

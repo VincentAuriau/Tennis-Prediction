@@ -3,7 +3,7 @@ from abc import abstractmethod
 import pandas as pd
 from sklearn.decomposition import PCA
 
-from history_modeling.match_representation import create_dataset
+from history_modeling.match_representation import create_timeless_dataset
 
 
 class MatchEncoder:
@@ -14,7 +14,7 @@ class MatchEncoder:
     def select_data(self, X):
         assert isinstance(X, pd.DataFrame)
 
-        X_transformed = create_dataset(X, num_match_differences=self.num_match_differences)
+        X_transformed = create_timeless_dataset(X)
         X_transformed = X_transformed.dropna().reset_index(drop=True)
         return X_transformed
 
@@ -23,10 +23,9 @@ class MatchEncoder:
         pass
 
 
-class PCAEncoder(MatchEncoder):
+class PCAMatchEncoder(MatchEncoder):
 
-    def __init__(self, num_match_differences, num_pca_features, auto_transform=False):
-        self.num_match_differences = num_match_differences
+    def __init__(self, num_pca_features, auto_transform=False):
         self.num_pca_features = num_pca_features
         self.auto_transform = auto_transform
 
@@ -44,7 +43,9 @@ class PCAEncoder(MatchEncoder):
     def predict(self, X, transform_data=False):
         if transform_data or self.auto_transform:
             X = self.select_data(X)
-        return self.model.transform(X)
+            return self.model.transform(X), X
+        else:
+            return self.model.transform(X)
 
     def save_model(self):
         pass
