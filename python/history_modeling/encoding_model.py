@@ -50,15 +50,16 @@ class PCAMatchEncoder(MatchEncoder):
     def save_model(self):
         pass
 
+
 class MatchesHistoryEncoder:
 
-    def __init__(self, num_historic_matches, match_encoder):
-        self.num_historic_matches = num_historic_matches
+    def __init__(self, match_encoder, num_matches, add_days_difference):
         self.match_encoder = match_encoder
-
-    def select_data(self, X):
-        return X
+        self.num_matches = num_matches
+        self.add_days_difference = add_days_difference
 
     @abstractmethod
     def predict(self, match_row):
         pass
+
+
