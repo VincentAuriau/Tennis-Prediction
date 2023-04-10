@@ -1,4 +1,8 @@
 import ast
+import numpy as np
+import pandas as pd
+
+from history_modeling.match_representation import create_timeless_dataset
 
 
 def clean_missing_data(df):
@@ -173,3 +177,56 @@ def create_additional_features(df, features):
         )
 
     return df
+
+
+def create_encoded_history(df, encoder, num_matches, completing_value=0):
+    df = df.copy()
+    history = {
+        "id": [],
+        "ID_1": [],
+        "ID_2": [],
+        "history_1": [],
+        "history_2": [],
+    }
+
+    for n_row, row in df.iterrows():
+        matches_history_1 = ast.literal_eval(row["Matches_1"])[-num_matches:]
+        matches_history_1 = [_[1] for _ in matches_history_1]
+
+        df_history = df.loc[df.id.isin(matches_history_1)].loc[df.ID_1 == row.ID_1]
+
+        if len(df_history) > 0:
+            # df_history = create_timeless_dataset(df_history)
+            # encoded_history_1 = encoder.predict(df_history)
+            encoded_history_1, df_history = encoder.predict(df_history, transform_data=True)
+            print(encoded_history_1)
+            if encoded_history_1.shape[0] < num_matches:
+                encoded_history_1 = np.concatenate([np.ones((num_matches - encoded_history_1.shape[0],
+                                                             encoded_history_1.shape[1])) * completing_value, encoded_history_1], axis=0)
+        else:
+            encoded_history_1 = np.ones((num_matches, encoder.num_pca_features)) * completing_value
+
+        matches_history_2 = ast.literal_eval(row["Matches_2"])[-num_matches:]
+        matches_history_2 = [_[1] for _ in matches_history_2]
+
+        df_history = df.loc[df.id.isin(matches_history_2)].loc[df.ID_1 == row.ID_2]
+
+        if len(df_history) > 0:
+            # df_history = create_timeless_dataset(df_history)
+            encoded_history_2, df_history = encoder.predict(df_history, transform_data=True)
+
+            if encoded_history_2.shape[0] < num_matches:
+                encoded_history_2 = np.concatenate([np.ones((num_matches - encoded_history_2.shape[0],
+                                                             encoded_history_2.shape[1])) * completing_value, encoded_history_2], axis=0)
+        else:
+            encoded_history_2 = np.ones((num_matches, encoder.num_pca_features)) * completing_value
+
+        history["id"].append(row.id)
+        history["ID_1"].append(row.ID_1)
+        history["ID_2"].append(row.ID_2)
+
+        history["history_1"].append(encoded_history_1)
+        history["history_2"].append(encoded_history_2)
+
+    return pd.DataFrame(history)
+
