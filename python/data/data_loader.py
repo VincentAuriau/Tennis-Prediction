@@ -227,6 +227,7 @@ def matches_data_loader(
     flush_cache=True,
     get_match_statistics=False,
     get_reversed_match_data=False,
+    include_davis_cup=False,
 ):
     """
     Main matches data loading function
@@ -322,6 +323,9 @@ def matches_data_loader(
 
         data_matches = pd.concat(data_per_year, axis=0)
         data_matches = data_matches.reset_index()
+
+    if not include_davis_cup:
+        data_matches = data_matches.loc[~data_matches.tournament.str.contains("Davis")]
 
     if get_reversed_match_data:
         return data_matches

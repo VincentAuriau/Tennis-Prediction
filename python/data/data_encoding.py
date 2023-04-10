@@ -199,7 +199,7 @@ def create_encoded_history(df, encoder, num_matches, completing_value=0):
             # df_history = create_timeless_dataset(df_history)
             # encoded_history_1 = encoder.predict(df_history)
             encoded_history_1, df_history = encoder.predict(df_history, transform_data=True)
-            print(encoded_history_1)
+
             if encoded_history_1.shape[0] < num_matches:
                 encoded_history_1 = np.concatenate([np.ones((num_matches - encoded_history_1.shape[0],
                                                              encoded_history_1.shape[1])) * completing_value, encoded_history_1], axis=0)
