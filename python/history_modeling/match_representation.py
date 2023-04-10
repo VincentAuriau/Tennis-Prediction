@@ -155,7 +155,12 @@ def create_dataset(data_df,
     return pd.concat(dataset, axis=0)
 
 
-def create_timeless_dataset(data_df):
+def create_timeless_dataset(data_df,
+                            columns=["surface", "result", "num_played_minutes",
+                                     "adv_ranking", "adv_ranking_points", "num_won_sets",
+                                     "num_lost_sets", "num_won_games", "num_lost_games", "num_tie_break_wons",
+                                     "num_tie_break_lost"]
+                            ):
     dataset = []
     for i in range(len(data_df)):
         raw_matches_info = get_match_info(data_df.iloc[i])
@@ -164,5 +169,5 @@ def create_timeless_dataset(data_df):
 
     dataset = matches_info_norm(dataset, current_date=data_df["tournament_date"].values[-1])
     dataset = dataset.drop(["date"], axis=1)
-    return dataset
+    return dataset[columns]
 

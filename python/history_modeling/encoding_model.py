@@ -11,10 +11,13 @@ class MatchEncoder:
     def __init__(self, num_match_differences):
         self.num_match_differences = num_match_differences
 
-    def select_data(self, X):
+    def select_data(self, X, columns=None):
         assert isinstance(X, pd.DataFrame)
 
-        X_transformed = create_timeless_dataset(X)
+        if columns is not None:
+            X_transformed = create_timeless_dataset(X, columns=columns)
+        else:
+            X_transformed = create_timeless_dataset(X)
         X_transformed = X_transformed.dropna().reset_index(drop=True)
         return X_transformed
 
@@ -25,9 +28,13 @@ class MatchEncoder:
 
 class PCAMatchEncoder(MatchEncoder):
 
-    def __init__(self, num_pca_features, auto_transform=False):
+    def __init__(self, num_pca_features, auto_transform=False, columns=["surface", "result", "num_played_minutes",
+                                     "adv_ranking", "adv_ranking_points", "num_won_sets",
+                                     "num_lost_sets", "num_won_games", "num_lost_games", "num_tie_break_wons",
+                                     "num_tie_break_lost"]):
         self.num_pca_features = num_pca_features
         self.auto_transform = auto_transform
+        self.columns = columns
 
         self.model = self.instantiate_model()
 
@@ -37,12 +44,12 @@ class PCAMatchEncoder(MatchEncoder):
 
     def fit(self, X, transform_data=False):
         if transform_data or self.auto_transform:
-            X = self.select_data(X)
+            X = self.select_data(X, columns=self.columns)
         self.model.fit(X)
 
     def predict(self, X, transform_data=False):
         if transform_data or self.auto_transform:
-            X = self.select_data(X)
+            X = self.select_data(X, columns=self.columns)
             return self.model.transform(X), X
         else:
             return self.model.transform(X)
