@@ -85,10 +85,14 @@ def train_test_evaluation(
                                               num_matches=5,
                                               completing_value=0)
         # encoded_data = encoder.predict(pd.concat([historic_data, train_data, test_data], axis=0))
-        train_data = pd.concat([train_data, encoded_data.iloc[train_data.index]], axis=1)
-        print(test_data.index, encoded_data.index)
-        test_data = pd.concat([test_data, encoded_data.iloc[test_data.index]], axis=1)
+        train_data = pd.merge(train_data, encoded_data, on="id")
+        # train_data = pd.concat([train_data, encoded_data.iloc[train_data.index]], axis=1)
+        # print(test_data.index, encoded_data.index)
+        # test_data = pd.concat([test_data, encoded_data.iloc[test_data.index]], axis=1)
+        test_data = pd.merge(test_data, encoded_data, on="id")
 
+    train_data = data_df.loc[data_df.tournament_year.isin(train_years)]
+    test_data = data_df.loc[data_df.tournament_year.isin(test_years)]
     train_data = create_additional_features(train_data, additional_features)
     train_data = encode_data(train_data, **encoding_params)
     test_data = create_additional_features(test_data, additional_features)
@@ -204,6 +208,7 @@ def train_test_evaluation(
                     "encoding_params": [encoding_params],
                     "additional_features": [additional_features.copy()],
                     "precision": [precision],
+                    "fit_time": [np.round(t_fit, 0)],
                 }
             )
             if save_all_results:
