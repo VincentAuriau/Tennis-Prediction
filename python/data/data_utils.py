@@ -17,4 +17,3 @@ def reverse_score(score):
         games = set.split("-")
         reversed_score.append("-".join(games[::-1]))
     return " ".join(reversed_score)
-

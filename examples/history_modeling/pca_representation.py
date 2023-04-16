@@ -75,4 +75,3 @@ plt.title("Lost games Number")
 
 plt.savefig("2d_pca_match_representation.png")
 plt.show()
-

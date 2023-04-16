@@ -75,21 +75,32 @@ def train_test_evaluation(
     test_data = data_df.loc[data_df.tournament_year.isin(test_years)]
 
     history_columns = []
-    for (encoding_model, encoding_model_params) in encoder_models:
+    for encoding_model, encoding_model_params in encoder_models:
         print(f"[+] Training Encoder Model {encoding_model}")
         encoder = encoding_model(**encoding_model_params)
         encoder.fit(train_data)
 
         print(f"[+] Encoding using encoder {encoding_model}")
-        encoded_data = create_encoded_history(data_df,
-                                              encoder,
-                                              num_matches=5,
-                                              completing_value=0)
+        encoded_data = create_encoded_history(
+            data_df, encoder, num_matches=5, completing_value=0
+        )
 
-        cols = ['history_1', 'history_2']
+        cols = ["history_1", "history_2"]
 
-        flatten_data = pd.concat([pd.DataFrame(np.array(encoded_data[x].values.tolist()).reshape((len(encoded_data), -1))).add_prefix(x) for x in cols], axis=1)
-        encoded_data = pd.concat([flatten_data, encoded_data.drop(cols, axis=1)], axis=1)
+        flatten_data = pd.concat(
+            [
+                pd.DataFrame(
+                    np.array(encoded_data[x].values.tolist()).reshape(
+                        (len(encoded_data), -1)
+                    )
+                ).add_prefix(x)
+                for x in cols
+            ],
+            axis=1,
+        )
+        encoded_data = pd.concat(
+            [flatten_data, encoded_data.drop(cols, axis=1)], axis=1
+        )
         enc_columns = encoded_data.columns
         enc_columns = list(set(enc_columns) - set(["id", "ID_1", "ID_2"]))
         history_columns.extend(enc_columns)
@@ -112,10 +123,18 @@ def train_test_evaluation(
     match_features.extend(additional_features.copy())
 
     train_data = train_data[
-        match_features + p1_features + p2_features + history_columns + ["Winner", "tournament_year"]
+        match_features
+        + p1_features
+        + p2_features
+        + history_columns
+        + ["Winner", "tournament_year"]
     ]
     test_data = test_data[
-        match_features + p1_features + p2_features + history_columns + ["Winner", "tournament_year"]
+        match_features
+        + p1_features
+        + p2_features
+        + history_columns
+        + ["Winner", "tournament_year"]
     ]
 
     print(f"[+] Cleaning Data")
@@ -191,7 +210,6 @@ def train_test_evaluation(
         )
         t_fit = time.time() - t_fit
         print(f"~~ Fit time: {np.round(t_fit, 0)}")
-
 
         print(f"[+] Fit ended, now predicting on test set")
         preds = model.predict(test_data[match_features + p1_features + p2_features])

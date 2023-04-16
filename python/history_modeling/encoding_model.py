@@ -7,7 +7,6 @@ from history_modeling.match_representation import create_timeless_dataset
 
 
 class MatchEncoder:
-
     def __init__(self, num_match_differences):
         self.num_match_differences = num_match_differences
 
@@ -27,11 +26,24 @@ class MatchEncoder:
 
 
 class PCAMatchEncoder(MatchEncoder):
-
-    def __init__(self, num_pca_features, auto_transform=False, columns=["surface", "result", "num_played_minutes",
-                                     "adv_ranking", "adv_ranking_points", "num_won_sets",
-                                     "num_lost_sets", "num_won_games", "num_lost_games", "num_tie_break_wons",
-                                     "num_tie_break_lost"]):
+    def __init__(
+        self,
+        num_pca_features,
+        auto_transform=False,
+        columns=[
+            "surface",
+            "result",
+            "num_played_minutes",
+            "adv_ranking",
+            "adv_ranking_points",
+            "num_won_sets",
+            "num_lost_sets",
+            "num_won_games",
+            "num_lost_games",
+            "num_tie_break_wons",
+            "num_tie_break_lost",
+        ],
+    ):
         self.num_pca_features = num_pca_features
         self.auto_transform = auto_transform
         self.columns = columns
@@ -59,7 +71,6 @@ class PCAMatchEncoder(MatchEncoder):
 
 
 class MatchesHistoryEncoder:
-
     def __init__(self, match_encoder, num_matches, add_days_difference):
         self.match_encoder = match_encoder
         self.num_matches = num_matches
@@ -68,5 +79,3 @@ class MatchesHistoryEncoder:
     @abstractmethod
     def predict(self, match_row):
         pass
-
-
