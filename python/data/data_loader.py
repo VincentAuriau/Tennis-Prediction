@@ -9,6 +9,7 @@ import pandas as pd
 
 import data.player as player
 import data.match as match
+from data.data_utils import reverse_score
 
 
 def create_player_profiles(df):
@@ -41,16 +42,6 @@ def read_matches_file(path_to_file):
     """
     df_match = pd.read_csv(path_to_file)
     return df_match
-
-
-def reverse_score(score):
-    score = str(score)
-    reversed_score = []
-    sets = score.split(" ")
-    for set in sets:
-        games = set.split("-")
-        reversed_score.append("-".join(games[::-1]))
-    return " ".join(reversed_score)
 
 
 def get_match_files(path_to_data_dir, match_type=["main_atp"]):

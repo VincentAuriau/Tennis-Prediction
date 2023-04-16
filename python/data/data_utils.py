@@ -7,3 +7,14 @@ def get_days_difference(prev_date, curr_date):
         - int(prev_date[6:8])
     )
     return days_difference
+
+
+def reverse_score(score):
+    score = str(score)
+    reversed_score = []
+    sets = score.split(" ")
+    for set in sets:
+        games = set.split("-")
+        reversed_score.append("-".join(games[::-1]))
+    return " ".join(reversed_score)
+

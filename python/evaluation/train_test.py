@@ -113,6 +113,7 @@ def train_test_evaluation(
     print(f"[+] Cleaning Data")
     train_data = clean_missing_data(train_data)
     test_data = clean_missing_data(test_data)
+    print(f"Training on {len(train_data)} data and testing on {len(test_data)} data")
 
     print(f"[+] Data Ready, now beginning modelling")
     if isinstance(model_params, list):

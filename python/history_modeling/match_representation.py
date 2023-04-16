@@ -4,7 +4,8 @@ import pandas as pd
 from data.data_utils import get_days_difference
 
 
-def get_match_info(row):
+def get_match_info(row,
+                   verbose=0):
     # add adversary age & hand ?
     surface = row["tournament_surface"]
     result = row["Winner"]
@@ -47,7 +48,10 @@ def get_match_info(row):
             num_lost_games += games_1
         except:
             if set not in ["ABD", "RET", "W/O"]:
-                print(set)
+                if verbose == 2:
+                    print(set)
+                else:
+                    pass
 
     match_df = pd.DataFrame(
         {
