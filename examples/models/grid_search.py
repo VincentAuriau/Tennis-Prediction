@@ -36,7 +36,6 @@ player_features = [
     "Carpet_Victories_Percentage",
     "Hard_Victories_Percentage",
     "Aces_Percentage",
-    "ID",
 ]
 additional_features = ["diff_rank", "v_perc_versus", "nb_match_versus"]
 
@@ -50,7 +49,7 @@ test_score = train_test_evaluation(
     player_features=player_features,
     encoding_params={},
     additional_features=additional_features,
-    save_path="../../results/20212022",
+    save_path="../../results/20212022_",
     save_all_results=True,
 )
 
@@ -75,7 +74,7 @@ test_score = train_test_evaluation(
     player_features=player_features,
     encoding_params={},
     additional_features=additional_features,
-    save_path="../../results/20212022",
+    save_path="../../results/20212022_",
     save_all_results=True,
 )
 
@@ -98,7 +97,7 @@ test_score = train_test_evaluation(
     player_features=player_features,
     encoding_params={},
     additional_features=additional_features,
-    save_path="../../results/20212022",
+    save_path="../../results/20212022_",
     save_all_results=True,
 )
 
@@ -120,7 +119,7 @@ test_score = train_test_evaluation(
     player_features=player_features,
     encoding_params={},
     additional_features=additional_features,
-    save_path="../../results/20212022",
+    save_path="../../results/20212022_",
     save_all_results=True,
 )
 
@@ -139,7 +138,7 @@ for mx_depth in [1, 3, 5]:
             player_features=player_features,
             encoding_params={},
             additional_features=additional_features,
-            save_path="../../results/20212022",
+            save_path="../../results/20212022_",
             save_all_results=True,
         )
         print("~~ Current Score ~~", test_score)
@@ -159,7 +158,7 @@ for mx_depth in [1, 3, 5]:
             player_features=player_features,
             encoding_params={},
             additional_features=additional_features,
-            save_path="../../results/20212022",
+            save_path="../../results/20212022_",
             save_all_results=True,
         )
         print("~~ Current Score ~~", test_score)
@@ -187,7 +186,7 @@ test_score = train_test_evaluation(
     player_features=player_features,
     encoding_params={},
     additional_features=additional_features,
-    save_path="../../results/20212022",
+    save_path="../../results/20212022_",
     save_all_results=True,
 )
 
@@ -219,7 +218,7 @@ test_score = train_test_evaluation(
     player_features=player_features,
     encoding_params={},
     additional_features=additional_features,
-    save_path="../../results/20212022",
+    save_path="../../results/20212022_",
     save_all_results=True,
 )
 
@@ -251,6 +250,6 @@ test_score = train_test_evaluation(
     player_features=player_features,
     encoding_params={},
     additional_features=additional_features,
-    save_path="../../results/20212022",
+    save_path="../../results/20212022_",
     save_all_results=True,
 )
