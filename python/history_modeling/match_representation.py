@@ -4,8 +4,7 @@ import pandas as pd
 from data.data_utils import get_days_difference
 
 
-def get_match_info(row,
-                   verbose=0):
+def get_match_info(row, verbose=0):
     # add adversary age & hand ?
     surface = row["tournament_surface"]
     result = row["Winner"]
@@ -126,10 +125,10 @@ def matches_info_norm(matches_info, current_date=""):
 
     return matches_info
 
-def create_dataset(data_df,
-                   num_matches_difference=10,
-                   nb_kept_differences=10,
-                   randomize_indexes=False):
+
+def create_dataset(
+    data_df, num_matches_difference=10, nb_kept_differences=10, randomize_indexes=False
+):
     """
     Creates the match representation dataset
     :param data_df:
@@ -141,37 +140,55 @@ def create_dataset(data_df,
     for i in range(len(data_df)):
         current_row = data_df.iloc[i]
         current_player = current_row.ID_1
-        sub_data_df = data_df.loc[data_df.ID_1 == current_player].iloc[:i-1]
+        sub_data_df = data_df.loc[data_df.ID_1 == current_player].iloc[: i - 1]
         if len(sub_data_df) > 0:
             sub_data_df = sub_data_df.reset_index(drop=True)
 
-            kept_indexes = list(range(-min(len(sub_data_df), num_matches_difference), 0))
+            kept_indexes = list(
+                range(-min(len(sub_data_df), num_matches_difference), 0)
+            )
             if randomize_indexes:
                 kept_indexes = np.random.permutation(kept_indexes)
             kept_indexes = kept_indexes[:nb_kept_differences]
             sub_data_df = sub_data_df.iloc[kept_indexes]
             sub_data_df = sub_data_df.reset_index(drop=True)
 
-            raw_matches_info = pd.concat([get_match_info(sub_data_df.iloc[i]) for i in range(len(sub_data_df))], axis=0)
-            normalized_matches_info = matches_info_norm(raw_matches_info, current_date=current_row["tournament_date"])
+            raw_matches_info = pd.concat(
+                [get_match_info(sub_data_df.iloc[i]) for i in range(len(sub_data_df))],
+                axis=0,
+            )
+            normalized_matches_info = matches_info_norm(
+                raw_matches_info, current_date=current_row["tournament_date"]
+            )
             dataset.append(normalized_matches_info)
 
     return pd.concat(dataset, axis=0)
 
 
-def create_timeless_dataset(data_df,
-                            columns=["surface", "result", "num_played_minutes",
-                                     "adv_ranking", "adv_ranking_points", "num_won_sets",
-                                     "num_lost_sets", "num_won_games", "num_lost_games", "num_tie_break_wons",
-                                     "num_tie_break_lost"]
-                            ):
+def create_timeless_dataset(
+    data_df,
+    columns=[
+        "surface",
+        "result",
+        "num_played_minutes",
+        "adv_ranking",
+        "adv_ranking_points",
+        "num_won_sets",
+        "num_lost_sets",
+        "num_won_games",
+        "num_lost_games",
+        "num_tie_break_wons",
+        "num_tie_break_lost",
+    ],
+):
     dataset = []
     for i in range(len(data_df)):
         raw_matches_info = get_match_info(data_df.iloc[i])
         dataset.append(raw_matches_info)
     dataset = pd.concat(dataset, axis=0)
 
-    dataset = matches_info_norm(dataset, current_date=data_df["tournament_date"].values[-1])
+    dataset = matches_info_norm(
+        dataset, current_date=data_df["tournament_date"].values[-1]
+    )
     dataset = dataset.drop(["date"], axis=1)
     return dataset[columns]
-
