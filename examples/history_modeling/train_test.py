@@ -29,7 +29,16 @@ player_features = [
     "Aces_Percentage",
 ]
 additional_features = ["diff_rank", "v_perc_versus", "nb_match_versus"]
-xgb_hyperparams = {'params': {'eta': 0.3, 'objective': 'binary:logistic', 'gamma': 10, 'max_depth': 10, 'min_child_weight': 8, 'subsample': 1}}
+xgb_hyperparams = {
+    "params": {
+        "eta": 0.3,
+        "objective": "binary:logistic",
+        "gamma": 10,
+        "max_depth": 10,
+        "min_child_weight": 8,
+        "subsample": 1,
+    }
+}
 
 xgb_hyperparams = []
 for eta in [0.1, 0.3, 0.6]:
@@ -54,12 +63,27 @@ test_score = train_test_evaluation(
     test_years=test_years,
     model_class=XGBoost,
     model_params=xgb_hyperparams,
-    encoder_models=[(PCAMatchEncoder, {"num_pca_features": 2,
-                                       "auto_transform": True,
-                                       "columns": ["surface", "result",
-                                     "adv_ranking", "adv_ranking_points", "num_won_sets",
-                                     "num_lost_sets", "num_won_games", "num_lost_games", "num_tie_break_wons",
-                                     "num_tie_break_lost"]})],
+    encoder_models=[
+        (
+            PCAMatchEncoder,
+            {
+                "num_pca_features": 2,
+                "auto_transform": True,
+                "columns": [
+                    "surface",
+                    "result",
+                    "adv_ranking",
+                    "adv_ranking_points",
+                    "num_won_sets",
+                    "num_lost_sets",
+                    "num_won_games",
+                    "num_lost_games",
+                    "num_tie_break_wons",
+                    "num_tie_break_lost",
+                ],
+            },
+        )
+    ],
     match_features=match_features,
     player_features=player_features,
     encoding_params={},
