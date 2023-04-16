@@ -9,6 +9,7 @@ import pandas as pd
 
 import data.player as player
 import data.match as match
+from data.data_utils import reverse_score
 
 
 def create_player_profiles(df):
@@ -41,16 +42,6 @@ def read_matches_file(path_to_file):
     """
     df_match = pd.read_csv(path_to_file)
     return df_match
-
-
-def reverse_score(score):
-    score = str(score)
-    reversed_score = []
-    sets = score.split(" ")
-    for set in sets:
-        games = set.split("-")
-        reversed_score.append("-".join(games[::-1]))
-    return " ".join(reversed_score)
 
 
 def get_match_files(path_to_data_dir, match_type=["main_atp"]):
@@ -227,6 +218,7 @@ def matches_data_loader(
     flush_cache=True,
     get_match_statistics=False,
     get_reversed_match_data=False,
+    include_davis_cup=False,
 ):
     """
     Main matches data loading function
@@ -322,6 +314,9 @@ def matches_data_loader(
 
         data_matches = pd.concat(data_per_year, axis=0)
         data_matches = data_matches.reset_index()
+
+    if not include_davis_cup:
+        data_matches = data_matches.loc[~data_matches.tournament.str.contains("Davis")]
 
     if get_reversed_match_data:
         return data_matches

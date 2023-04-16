@@ -183,9 +183,10 @@ class Player:
         if games_number == games_number and games_number != "nan":
             if tournament_date == self.fatigue_features["current tournament"]["date"]:
                 self.fatigue_features["current tournament"]["num_games"] += games_number
-                self.fatigue_features["current tournament"][
-                    "num_minutes"
-                ] += minutes_number
+                if minutes_number == minutes_number and minutes_number != "nan":
+                    self.fatigue_features["current tournament"][
+                        "num_minutes"
+                    ] += minutes_number
                 self.fatigue_features["current tournament"]["num_matchs"] += 1
             else:
                 self.fatigue_features["previous tournament"] = self.fatigue_features[

@@ -67,3 +67,18 @@ If the argument save_all_results is set to True, the whole csv of test data is s
 Model precision compared with best ranked player wins strategy            |  Model precision depending of players ranks
 :-------------------------:|:-------------------------:
 ![](examples/results_reading/win_per_surface.png) |  ![](examples/results_reading/precision_percentage_players_ranks.png)
+
+### Encoding match
+In order to represent history of a player, one can use MatchEncoders:
+
+```python
+from history_modeling.encoding_model import PCAMatchEncoder
+
+model = PCAMatchEncoder(num_pca_features=2)
+model.fit(data_df, transform_data=True)
+X_r, match_info = model.predict(data_df, transform_data=True)
+```
+
+2D representation of match outcome:
+:-------------------------:
+![](examples/history_modeling/2d_pca_match_representation_test.png)

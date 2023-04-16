@@ -127,6 +127,7 @@ class Match:
     def get_prior_data_and_update_players_stats(self):
         match_data = pd.DataFrame(
             {
+                "id": [self.id],
                 "tournament": [self.tournament],
                 "tournament_level": [self.tournament_level],
                 "tournament_date": [self.tournament_date],
