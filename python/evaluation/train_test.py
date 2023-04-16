@@ -74,6 +74,7 @@ def train_test_evaluation(
     train_data = data_df.loc[data_df.tournament_year.isin(train_years)]
     test_data = data_df.loc[data_df.tournament_year.isin(test_years)]
 
+    history_columns = []
     for (encoding_model, encoding_model_params) in encoder_models:
         print(f"[+] Training Encoder Model {encoding_model}")
         encoder = encoding_model(**encoding_model_params)
@@ -84,12 +85,19 @@ def train_test_evaluation(
                                               encoder,
                                               num_matches=5,
                                               completing_value=0)
-        # encoded_data = encoder.predict(pd.concat([historic_data, train_data, test_data], axis=0))
-        train_data = pd.merge(train_data, encoded_data, on="id")
-        # train_data = pd.concat([train_data, encoded_data.iloc[train_data.index]], axis=1)
-        # print(test_data.index, encoded_data.index)
-        # test_data = pd.concat([test_data, encoded_data.iloc[test_data.index]], axis=1)
-        test_data = pd.merge(test_data, encoded_data, on="id")
+
+        cols = ['history_1', 'history_2']
+
+        flatten_data = pd.concat([pd.DataFrame(np.array(encoded_data[x].values.tolist()).reshape((len(encoded_data), -1))).add_prefix(x) for x in cols], axis=1)
+        encoded_data = pd.concat([flatten_data, encoded_data.drop(cols, axis=1)], axis=1)
+        enc_columns = encoded_data.columns
+        enc_columns = list(set(enc_columns) - set(["id", "ID_1", "ID_2"]))
+        history_columns.extend(enc_columns)
+
+        data_df = pd.merge(data_df, encoded_data, on=["id", "ID_1", "ID_2"])
+
+        # train_data = pd.merge(train_data, encoded_data, on=["id", "ID_1", "ID_2"])
+        # test_data = pd.merge(test_data, encoded_data, on=["id", "ID_1", "ID_2"])
 
     train_data = data_df.loc[data_df.tournament_year.isin(train_years)]
     test_data = data_df.loc[data_df.tournament_year.isin(test_years)]
@@ -104,10 +112,10 @@ def train_test_evaluation(
     match_features.extend(additional_features.copy())
 
     train_data = train_data[
-        match_features + p1_features + p2_features + ["Winner", "tournament_year"]
+        match_features + p1_features + p2_features + history_columns + ["Winner", "tournament_year"]
     ]
     test_data = test_data[
-        match_features + p1_features + p2_features + ["Winner", "tournament_year"]
+        match_features + p1_features + p2_features + history_columns + ["Winner", "tournament_year"]
     ]
 
     print(f"[+] Cleaning Data")
