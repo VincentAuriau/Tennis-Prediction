@@ -98,7 +98,7 @@ def get_match_files(path_to_data_dir, match_type=["main_atp"]):
 
 
 def load_match_data_from_path(
-    players_db, path_to_matchs_file, get_match_statistics=False
+    players_db, paths_to_matchs_file, get_match_statistics=False
 ):
     """
     Loads file from path and creates the matches data while updating players databaser
@@ -108,13 +108,24 @@ def load_match_data_from_path(
     """
 
     def extract_file_id(file_path):
-        file_id = path_to_matchs_file.split("/")[-1].split(".")[0]
+        file_id = file_path.split("/")[-1].split(".")[0]
         if "\\" in file_id:
             file_id = file_id.split("\\")[1]
 
         return file_id
+    if not isinstance(paths_to_matchs_file, list):
+        paths_to_matchs_file = [paths_to_matchs_file]
 
-    match_df = pd.read_csv(path_to_matchs_file)
+    files = []
+    for path in paths_to_matchs_file:
+        match_df = pd.read_csv(path)
+        match_df["filepath"] = path
+        files.append(match_df)
+    match_df = pd.concat(files, axis=0)
+    match_df.to_csv("before_test.csv", sep=";", index=False)
+    match_df = match_df.sort_values(["tourney_date", "tourney_id", "match_num"])
+    match_df = match_df.reset_index(drop=True)
+    match_df.to_csv("test.csv", sep=";", index=False)
     """
     match_df["match_id"] = match_df.apply(
         lambda row: extract_file_id(path_to_matchs_file) + "_" + str(row.name),
@@ -133,7 +144,7 @@ def load_match_data_from_path(
             loser=m_loser,
             tournament=m_tournament,
             surface=m_surface,
-            id_prefix=extract_file_id(path_to_matchs_file),
+            id_prefix=extract_file_id(row["filepath"]),
         )
         match_o.instantiate_from_data_row(row)
         (
@@ -219,6 +230,7 @@ def matches_data_loader(
     get_match_statistics=False,
     get_reversed_match_data=False,
     include_davis_cup=False,
+    match_type=["main_atp", "futures", "qualifying_challengers"],
 ):
     """
     Main matches data loading function
@@ -259,7 +271,7 @@ def matches_data_loader(
             players_db = pickle.load(file)
 
     if not matches_data_cached or flush_cache:
-        data_files = get_match_files(path_to_data)
+        data_files = get_match_files(path_to_data, match_type=match_type)
         data_years = data_files.year.astype(
             "uint32"
         )  # to change when handling different type of tournament (qualifiers, main, etc...)
@@ -274,11 +286,9 @@ def matches_data_loader(
             else:
                 print("Only updating players statistics")
             print("+---------+---------+")
-            filepath = data_files.loc[data_files.year == str(year)]["filepath"].values[
-                0
-            ]
+            filepaths = data_files.loc[data_files.year == str(year)]["filepath"].values.tolist()
             df_year = load_match_data_from_path(
-                players_db, filepath, get_match_statistics=get_match_statistics
+                players_db, filepaths, get_match_statistics=get_match_statistics
             )
             df_year["tournament_year"] = year
             if year >= keep_values_from_year:
