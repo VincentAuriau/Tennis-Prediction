@@ -9,7 +9,10 @@ import pandas as pd
 from sklearn.decomposition import PCA
 
 from data.data_loader import matches_data_loader
-from history_modeling.match_representation import create_timeless_dataset, create_dataset
+from history_modeling.match_representation import (
+    create_timeless_dataset,
+    create_dataset,
+)
 from history_modeling.encoding_model import PCAMatchEncoder
 
 data_df = matches_data_loader(
@@ -46,9 +49,9 @@ plt.legend()
 plt.title("Result")
 
 plt.subplot(2, 4, 2)
-c_i = match_info.loc[match_info.surface == 0.].index.values
-h_i = match_info.loc[match_info.surface == 2/3].index.values
-g_i = match_info.loc[match_info.surface == 1.].index.values
+c_i = match_info.loc[match_info.surface == 0.0].index.values
+h_i = match_info.loc[match_info.surface == 2 / 3].index.values
+g_i = match_info.loc[match_info.surface == 1.0].index.values
 plt.scatter(X_r[c_i, 0], X_r[c_i, 1], label="Clay")
 plt.scatter(X_r[h_i, 0], X_r[h_i, 1], label="Hard")
 plt.scatter(X_r[g_i, 0], X_r[g_i, 1], label="Grass")
@@ -78,4 +81,3 @@ plt.title("Lost games Number")
 
 plt.savefig("2d_pca_match_representation.png")
 plt.show()
-
