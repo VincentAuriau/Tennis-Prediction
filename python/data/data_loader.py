@@ -277,7 +277,7 @@ def matches_data_loader(
         )  # to change when handling different type of tournament (qualifiers, main, etc...)
 
         data_per_year = []
-        for year in np.sort(data_years.values):
+        for year in np.sort(np.unique(data_years.values)):
             t_start = time.time()
             print("+---------+---------+")
             print("  Year %i  " % year)
