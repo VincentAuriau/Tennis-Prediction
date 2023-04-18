@@ -20,7 +20,7 @@ data_df = matches_data_loader(
     get_match_statistics=True,
     get_reversed_match_data=True,
     include_davis_cup=True,
-    match_type=["main_atp", "futures", "qualifying_challengers"],
+    match_type=["main_atp", "qualifying_challengers"],
 )
 
 print(data_df.head())
