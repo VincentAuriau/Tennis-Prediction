@@ -42,7 +42,7 @@ def encode_data(df, mode="integer"):
     df_copy = df.copy()
     if mode == "integer":
         # Considered Variables:
-        tournament_level = {"G": 0, "A": 1, "M": 2, "F": 3, "D": 4}
+        tournament_level = {"G": 0, "A": 1, "M": 2, "F": 3, "D": 4, "C": 5}
         tournament_surface = {"Clay": 0, "Carpet": 1, "Hard": 2, "Grass": 3}
 
         round = {
@@ -57,6 +57,9 @@ def encode_data(df, mode="integer"):
             "RR": 8,
             "BR": 9,
             "ER": 10,
+            "Q1": 11,
+            "Q2": 12,
+            "Q3": 13,
         }
 
         hand = {
@@ -70,10 +73,11 @@ def encode_data(df, mode="integer"):
     elif mode == "one_hot":
         # Considered Variables:
         tournament_level = {
-            "G": [0, 0, 0, 1],
-            "A": [0, 0, 1, 0],
-            "M": [0, 1, 0, 0],
-            "D": [1, 0, 0, 0],
+            "G": [0, 0, 0, 1, 0],
+            "A": [0, 0, 1, 0, 0],
+            "M": [0, 1, 0, 0, 0],
+            "D": [1, 0, 0, 0, 0],
+            "C": [0, 0, 0, 0, 1]
         }
 
         tournament_surface = {
@@ -104,7 +108,7 @@ def encode_data(df, mode="integer"):
 
     elif mode == "mixing":
         # Considered Variables:
-        tournament_level = {"G": 0, "A": 1, "M": 2, "F": 3, "D": 4}
+        tournament_level = {"G": 0, "A": 1, "M": 2, "F": 3, "D": 4, "C": 5}
         tournament_surface = {
             "Clay": [1, 0, 0, 0],
             "Carpet": [0, 1, 0, 0],
