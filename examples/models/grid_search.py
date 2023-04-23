@@ -50,7 +50,7 @@ test_score = train_test_evaluation(
     encoding_params={},
     additional_features=additional_features,
     save_path="../../results/20212022_",
-    save_all_results=True,
+    save_all_results=False,
 )
 
 lgbm_hyperparams = []
@@ -74,8 +74,8 @@ test_score = train_test_evaluation(
     player_features=player_features,
     encoding_params={},
     additional_features=additional_features,
-    save_path="../../results/20212022_",
-    save_all_results=True,
+    save_path="../../results/20212022_chall",
+    save_all_results=False,
 )
 
 
@@ -97,8 +97,8 @@ test_score = train_test_evaluation(
     player_features=player_features,
     encoding_params={},
     additional_features=additional_features,
-    save_path="../../results/20212022_",
-    save_all_results=True,
+    save_path="../../results/20212022_chall",
+    save_all_results=False,
 )
 
 svc_hyperparams = []
@@ -119,8 +119,8 @@ test_score = train_test_evaluation(
     player_features=player_features,
     encoding_params={},
     additional_features=additional_features,
-    save_path="../../results/20212022_",
-    save_all_results=True,
+    save_path="../../results/20212022_chall",
+    save_all_results=False,
 )
 
 
@@ -138,8 +138,8 @@ for mx_depth in [1, 3, 5]:
             player_features=player_features,
             encoding_params={},
             additional_features=additional_features,
-            save_path="../../results/20212022_",
-            save_all_results=True,
+            save_path="../../results/20212022_chall",
+            save_all_results=False,
         )
         print("~~ Current Score ~~", test_score)
 
@@ -158,8 +158,8 @@ for mx_depth in [1, 3, 5]:
             player_features=player_features,
             encoding_params={},
             additional_features=additional_features,
-            save_path="../../results/20212022_",
-            save_all_results=True,
+            save_path="../../results/20212022_chall",
+            save_all_results=False,
         )
         print("~~ Current Score ~~", test_score)
 
@@ -186,8 +186,8 @@ test_score = train_test_evaluation(
     player_features=player_features,
     encoding_params={},
     additional_features=additional_features,
-    save_path="../../results/20212022_",
-    save_all_results=True,
+    save_path="../../results/20212022_chall",
+    save_all_results=False,
 )
 
 xgb_hyperparams = []
@@ -218,8 +218,8 @@ test_score = train_test_evaluation(
     player_features=player_features,
     encoding_params={},
     additional_features=additional_features,
-    save_path="../../results/20212022_",
-    save_all_results=True,
+    save_path="../../results/20212022_chall",
+    save_all_results=False,
 )
 
 xgb_hyperparams = []
@@ -250,6 +250,6 @@ test_score = train_test_evaluation(
     player_features=player_features,
     encoding_params={},
     additional_features=additional_features,
-    save_path="../../results/20212022_",
-    save_all_results=True,
+    save_path="../../results/20212022_chall",
+    save_all_results=False,
 )

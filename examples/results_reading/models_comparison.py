@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
 import pandas as pd
 
-df_results = pd.read_csv("../../results/20212022_/results.csv", sep=";")
+df_results = pd.read_csv("../../results/20212022/results.csv", sep=";")
 
 print(df_results.head())
 models_color = {}
