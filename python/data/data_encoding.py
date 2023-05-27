@@ -1,6 +1,7 @@
 import ast
 import numpy as np
 import pandas as pd
+import tqdm
 
 from history_modeling.match_representation import create_timeless_dataset
 
@@ -193,7 +194,7 @@ def create_encoded_history(df, encoder, num_matches, completing_value=0):
         "history_2": [],
     }
 
-    for n_row, row in df.iterrows():
+    for n_row, row in tqdm.tqdm(df.iterrows(), total=len(df)):
         matches_history_1 = ast.literal_eval(row["Matches_1"])[-num_matches:]
         matches_history_1 = [_[1] for _ in matches_history_1]
 

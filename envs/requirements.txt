@@ -4,4 +4,5 @@ numpy==1.22.3
 pandas==1.5.2
 scikit_learn==1.2.2
 tensorflow==2.8.0
+tqdm==4.65.0
 xgboost==1.7.4
