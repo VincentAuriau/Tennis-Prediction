@@ -222,7 +222,7 @@ def create_encoded_history(df, encoder, num_matches, completing_value=0):
                 )
         else:
             encoded_history_1 = (
-                np.ones((num_matches, encoder.num_pca_features)) * completing_value
+                np.ones((num_matches, encoder.output_shape)) * completing_value
             )
 
         matches_history_2 = ast.literal_eval(row["Matches_2"])[-num_matches:]
@@ -252,7 +252,7 @@ def create_encoded_history(df, encoder, num_matches, completing_value=0):
                 )
         else:
             encoded_history_2 = (
-                np.ones((num_matches, encoder.num_pca_features)) * completing_value
+                np.ones((num_matches, encoder.output_shape)) * completing_value
             )
 
         history["id"].append(row.id)
