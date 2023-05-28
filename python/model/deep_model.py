@@ -178,7 +178,7 @@ class ConvolutionalHistoryAndFullyConnected(DeepBaseModel):
         self.model.compile(optimizer=self.optimizer, loss=self.loss)
 
     def fit(self, X, X_history, y):
-        #print(X.columns)
+        # print(X.columns)
         self.scaler_x.fit(X)
         if self.output_shape == 2:
             y = tf.one_hot(y.squeeze(), depth=2)
@@ -186,7 +186,11 @@ class ConvolutionalHistoryAndFullyConnected(DeepBaseModel):
         self.model.fit([X_history, self.scaler_x.transform(X)], y, epochs=self.epochs)
         if self.reduced_lr_epochs > 0:
             self.optimizer.lr.assign(self.lr / 10)
-            self.model.fit([X_history, self.scaler_x.transform(X)], y, epochs=self.reduced_lr_epochs)
+            self.model.fit(
+                [X_history, self.scaler_x.transform(X)],
+                y,
+                epochs=self.reduced_lr_epochs,
+            )
 
     def predict(self, X):
         y_pred = self.model.predict(self.scaler_x.transform(X))

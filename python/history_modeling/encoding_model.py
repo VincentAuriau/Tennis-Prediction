@@ -15,7 +15,6 @@ class MatchEncoder:
     def output_shape(self):
         pass
 
-
     def select_data(self, X, columns=None):
         assert isinstance(X, pd.DataFrame)
 

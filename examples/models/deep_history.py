@@ -84,9 +84,7 @@ for encoding_model, encoding_model_params in encoder_models:
         ],
         axis=1,
     )
-    encoded_data = pd.concat(
-        [flatten_data, encoded_data.drop(cols, axis=1)], axis=1
-    )
+    encoded_data = pd.concat([flatten_data, encoded_data.drop(cols, axis=1)], axis=1)
     enc_columns = encoded_data.columns
     enc_columns = list(set(enc_columns) - set(["id", "ID_1", "ID_2"]))
     history_columns.extend(enc_columns)
@@ -96,11 +94,16 @@ for encoding_model, encoding_model_params in encoder_models:
 print(data_df.head())
 print(data_df.columns)
 
-model = ConvolutionalHistoryAndFullyConnected(num_history_signals=22, **{"output_shape": 2,
+model = ConvolutionalHistoryAndFullyConnected(
+    num_history_signals=22,
+    **{
+        "output_shape": 2,
         "last_activation": "softmax",
         "epochs": 10,
         "reduced_lr_epochs": 10,
-        "loss": "categorical_crossentropy"})
+        "loss": "categorical_crossentropy",
+    },
+)
 # model.instantiate_model()
 
 print(model.model.summary())
@@ -113,9 +116,13 @@ non_hist_cols = []
 for col in data_df.columns:
     if "history" in col:
         hist_cols.append(col)
-    else :
+    else:
         non_hist_cols.append(col)
 print(data_df[hist_cols])
 print(data_df[hist_cols].head())
 
-model.fit(data_df[["Ranking_1", "Ranking_2"]].values, data_df[hist_cols].values.reshape((len(data_df), 5, 22)), data_df["Winner"].values)
+model.fit(
+    data_df[["Ranking_1", "Ranking_2"]].values,
+    data_df[hist_cols].values.reshape((len(data_df), 5, 22)),
+    data_df["Winner"].values,
+)

@@ -14,7 +14,6 @@ class BaseModel:
         pass
 
 
-
 class DeepBaseModel(BaseModel):
     def __init__(self):
         super().__init__()
