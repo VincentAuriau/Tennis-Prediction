@@ -113,6 +113,7 @@ def load_match_data_from_path(
             file_id = file_id.split("\\")[1]
 
         return file_id
+
     if not isinstance(paths_to_matchs_file, list):
         paths_to_matchs_file = [paths_to_matchs_file]
 
@@ -286,7 +287,9 @@ def matches_data_loader(
             else:
                 print("Only updating players statistics")
             print("+---------+---------+")
-            filepaths = data_files.loc[data_files.year == str(year)]["filepath"].values.tolist()
+            filepaths = data_files.loc[data_files.year == str(year)][
+                "filepath"
+            ].values.tolist()
             df_year = load_match_data_from_path(
                 players_db, filepaths, get_match_statistics=get_match_statistics
             )

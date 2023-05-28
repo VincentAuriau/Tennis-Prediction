@@ -78,7 +78,7 @@ def encode_data(df, mode="integer"):
             "A": [0, 0, 1, 0, 0],
             "M": [0, 1, 0, 0, 0],
             "D": [1, 0, 0, 0, 0],
-            "C": [0, 0, 0, 0, 1]
+            "C": [0, 0, 0, 0, 1],
         }
 
         tournament_surface = {
