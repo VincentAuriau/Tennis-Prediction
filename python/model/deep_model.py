@@ -104,6 +104,7 @@ def create_conv_dense_model(
 
     history_inputs = tf.keras.layers.Input(shape=history_input_shape)
     print(history_inputs.shape, history_input_shape)
+    encoded_history = tf.keras.layers.Conv1D(filters=8, kernel_size=3, padding="same")(history_inputs)
     encoded_history = tf.keras.layers.Conv1D(filters=4, kernel_size=3)(history_inputs)
     encoded_history = tf.keras.layers.Conv1D(filters=1, kernel_size=3)(encoded_history)
     encoded_history = tf.keras.layers.Flatten()(encoded_history)
@@ -192,8 +193,8 @@ class ConvolutionalHistoryAndFullyConnected(DeepBaseModel):
                 epochs=self.reduced_lr_epochs,
             )
 
-    def predict(self, X):
-        y_pred = self.model.predict(self.scaler_x.transform(X))
+    def predict(self, X, X_history):
+        y_pred = self.model.predict([X_history, self.scaler_x.transform(X)])
         if self.output_shape == 2:
             y_pred = tf.argmax(y_pred, axis=-1)
         return y_pred

@@ -19,31 +19,20 @@ from model.deep_model import ConvolutionalHistoryAndFullyConnected
 
 
 absolute_path = os.path.dirname(os.path.abspath(__file__))
-default_columns_match = ["tournament_level", "round", "best_of", "tournament_surface"]
-
-
-default_columns_player = [
-    "ID",
+match_features = ["tournament_surface", "tournament_level", "round"]
+player_features = [
     "Ranking",
     "Ranking_Points",
-    "Hand",
     "Height",
-    "Versus",
     "Victories_Percentage",
     "Clay_Victories_Percentage",
     "Grass_Victories_Percentage",
     "Carpet_Victories_Percentage",
     "Hard_Victories_Percentage",
     "Aces_Percentage",
-    "Doublefaults_Percentage",
-    "First_Serve_Success_Percentage",
-    "Winning_on_1st_Serve_Percentage",
-    "Winning_on_2nd_Serve_Percentage",
-    "Overall_Win_on_Serve_Percentage",
-    "BreakPoint_Face_Percentage",
-    "BreakPoint_Saved_Percentage",
-    "Fatigue",
 ]
+additional_features = ["diff_rank", "v_perc_versus", "nb_match_versus"]
+encoding_params={}
 
 data_df = matches_data_loader(
     path_to_data=os.path.join(absolute_path, "../../submodules/tennis_atp"),
@@ -57,6 +46,8 @@ data_df = matches_data_loader(
 print(f"[+] Data Loaded, Now Encoding Data and create additional Features")
 print(data_df.head())
 print(data_df.columns)
+
+data_df = pd.concat([data_df.iloc[:10], data_df.iloc[-10:]])
 
 
 history_columns = []
@@ -91,16 +82,45 @@ for encoding_model, encoding_model_params in encoder_models:
 
     data_df = pd.merge(data_df, encoded_data, on=["id", "ID_1", "ID_2"])
 
+train_data = data_df.loc[data_df.tournament_year == 2022]
+test_data = data_df.loc[data_df.tournament_year == 2023]
+train_data = create_additional_features(train_data, additional_features)
+train_data = encode_data(train_data, **encoding_params)
+test_data = create_additional_features(test_data, additional_features)
+test_data = encode_data(test_data, **encoding_params)
+
+p1_features = [feat + "_1" for feat in player_features]
+p2_features = [feat + "_2" for feat in player_features]
+match_features = match_features.copy()
+
+train_data_ = train_data[
+    match_features
+    + p1_features
+    + p2_features
+    + ["Winner", "tournament_year"]
+    ]
+test_data_ = test_data[
+    match_features
+    + p1_features
+    + p2_features
+    + ["Winner", "tournament_year"]
+    ]
+
+train_data_ = clean_missing_data(train_data_)
+test_data_ = clean_missing_data(test_data_)
+
 print(data_df.head())
 print(data_df.columns)
 
 model = ConvolutionalHistoryAndFullyConnected(
     num_history_signals=22,
     **{
+        "input_shape": 23,
+        "hidden_units": (22, 44, 44, 22, 11, 4),
         "output_shape": 2,
         "last_activation": "softmax",
-        "epochs": 10,
-        "reduced_lr_epochs": 10,
+        "epochs": 1,
+        "reduced_lr_epochs": 5,
         "loss": "categorical_crossentropy",
     },
 )
@@ -112,17 +132,23 @@ print(model.summary())
 print(data_df.head())
 
 hist_cols = []
-non_hist_cols = []
 for col in data_df.columns:
     if "history" in col:
         hist_cols.append(col)
-    else:
-        non_hist_cols.append(col)
-print(data_df[hist_cols])
-print(data_df[hist_cols].head())
 
+print(len(train_data), len(hist_cols))
+print(train_data_.shape)
 model.fit(
-    data_df[["Ranking_1", "Ranking_2"]].values,
-    data_df[hist_cols].values.reshape((len(data_df), 5, 22)),
-    data_df["Winner"].values,
+    train_data_.values,
+    train_data[hist_cols].values.reshape((len(train_data), 5, 22)),
+    train_data["Winner"].values,
 )
+
+train_data_.to_csv("train.csv")
+print(train_data[hist_cols].isnull().values.any(), "NaN ?")
+print(train_data_.isnull().values.any(), "NaN ?")
+
+y_pred = model.predict(test_data_.values, test_data[hist_cols].values.reshape((len(test_data), 5, 22)))
+
+print(np.sum(y_pred == test_data["Winner"]))
+print(len(y_pred))

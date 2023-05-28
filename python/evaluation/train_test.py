@@ -16,7 +16,6 @@ absolute_path = os.path.dirname(os.path.abspath(__file__))
 default_columns_match = ["tournament_level", "round", "best_of", "tournament_surface"]
 
 default_columns_player = [
-    "ID",
     "Ranking",
     "Ranking_Points",
     "Hand",
