@@ -29,8 +29,10 @@ def create_player_profiles(df):
             height=row["height"],
         )
 
-        assert row["player_id"] not in players_db.keys()
-        players_db[row["player_id"]] = pl
+        if row["player_id"] in players_db.keys():
+            print(f"Player ID {row['player_id']} already in database, appears twice ?")
+        else:
+            players_db[row["player_id"]] = pl
     return players_db
 
 
