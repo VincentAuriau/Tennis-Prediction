@@ -253,7 +253,7 @@ def matches_data_loader(
         players_db_cached = False
 
     if os.path.exists(
-        os.path.join(path_to_cache, f"matches_dFata_{keep_values_from_year}.csv")
+        os.path.join(path_to_cache, f"matches_data_{keep_values_from_year}.csv")
     ):
         matches_data_cached = True
     else:
@@ -273,6 +273,7 @@ def matches_data_loader(
             players_db = pickle.load(file)
 
     if not matches_data_cached or flush_cache:
+        print("data not cached or flush=True")
         data_files = get_match_files(path_to_data, match_type=match_type)
         data_years = data_files.year.astype(
             "uint32"

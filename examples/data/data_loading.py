@@ -18,7 +18,7 @@ data_df = matches_data_loader(
     flush_cache=False,
     keep_values_from_year=2002,
     get_match_statistics=True,
-    get_reversed_match_data=False,
+    get_reversed_match_data=True,
     include_davis_cup=True,
     match_type=["main_atp", "qualifying_challengers"],
 )
@@ -123,6 +123,12 @@ overall_clay = []
 overall_carpet = []
 overall_grass = []
 overall_hard = []
+
+wins_clay = []
+wins_carpet = []
+wins_grass = []
+wins_hard = []
+
 dates = []
 stan_df = data_df.loc[data_df.ID_1 == 104527]
 stan_df = stan_df.reset_index()
@@ -142,6 +148,12 @@ for n_row, row in stan_df.iterrows():
         overall_grass.append(row["Grass_Victories_Percentage_1"])
         overall_hard.append(row["Hard_Victories_Percentage_1"])
         overall_carpet.append(row["Carpet_Victories_Percentage_1"])
+
+    wins_clay.append(list(row.Matches_Clay_1).count("V"))
+    wins_carpet.append(list(row.Matches_Carpet_1).count("V"))
+    wins_grass.append(list(row.Matches_Grass_1).count("V"))
+    wins_hard.append(list(row.Matches_Hard_1).count("V"))
+
 plt.figure()
 plt.plot(overall_v, label="overall")
 plt.plot(last_hundred_v, label="last 100 matches")
@@ -152,6 +164,32 @@ plt.plot(overall_carpet, label="overall carpet")
 plt.legend()
 plt.xticks([d[1] for d in dates], [d[0] for d in dates], rotation="vertical")
 plt.title("Stanislas Wawrinka win percentage on main ATP tournamnents")
+plt.savefig("stan_the_man_win_percentage.png")
+plt.show()
+
+
+fig, ax1 = plt.subplots()
+ax1.plot(overall_v, label="overall", c="k")
+ax1.plot(last_hundred_v, label="last 100 matches", c="purple")
+ax1.plot(overall_clay, label="overall clay", c="orange")
+ax1.plot(overall_grass, label="overall grass", c="green")
+ax1.plot(overall_hard, label="overall hard", c="blue")
+ax1.plot(overall_carpet, label="overall carpet", c="gray")
+ax1.set_ylabel("Win %")
+plt.legend()
+
+ax2 = ax1.twinx()
+for i, (wcarpet, wgrass, wclay, whard) in enumerate(zip(wins_carpet, wins_grass, wins_clay, wins_hard)):
+    ax2.add_patch(Rectangle((i, 0), width=1, height=wcarpet, edgecolor=None, facecolor="gray", alpha=.2))
+    ax2.add_patch(Rectangle((i, wcarpet), width=1, height=wgrass, edgecolor=None, facecolor="green", alpha=.2))
+    ax2.add_patch(Rectangle((i, wcarpet+wgrass), width=1, height=wclay, edgecolor=None, facecolor="orange", alpha=.2))
+    ax2.add_patch(Rectangle((i, wcarpet+wgrass+wclay), width=1, height=whard, edgecolor=None, facecolor="blue", alpha=.2))
+
+ax2.set_yticks([0, 100, 200, 300, 400, 500, 600])
+ax2.set_ylabel("Number of victory for each surface")
+plt.tight_layout()
+ax1.set_xticks([d[1] for d in dates], [d[0] for d in dates], rotation="vertical")
+plt.title("Stanislas Wawrinka vicotires on ATP tournamnents")
 plt.savefig("stan_the_man_win_percentage.png")
 plt.show()
 
