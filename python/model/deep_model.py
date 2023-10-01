@@ -104,7 +104,9 @@ def create_conv_dense_model(
 
     history_inputs = tf.keras.layers.Input(shape=history_input_shape)
     print(history_inputs.shape, history_input_shape)
-    encoded_history = tf.keras.layers.Conv1D(filters=8, kernel_size=3, padding="same")(history_inputs)
+    encoded_history = tf.keras.layers.Conv1D(filters=8, kernel_size=3, padding="same")(
+        history_inputs
+    )
     encoded_history = tf.keras.layers.Conv1D(filters=4, kernel_size=3)(history_inputs)
     encoded_history = tf.keras.layers.Conv1D(filters=1, kernel_size=3)(encoded_history)
     encoded_history = tf.keras.layers.Flatten()(encoded_history)
