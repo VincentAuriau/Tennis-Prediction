@@ -184,6 +184,9 @@ class ConvolutionalHistoryAndFullyConnected(DeepBaseModel):
         if self.output_shape == 2:
             y = tf.one_hot(y.squeeze(), depth=2)
 
+        print("X shape", X.shape)
+        print("X history shape", X_history.shape)
+        print("y shape", y.shape)
         self.model.fit([X_history, self.scaler_x.transform(X)], y, epochs=self.epochs)
         if self.reduced_lr_epochs > 0:
             self.optimizer.lr.assign(self.lr / 10)

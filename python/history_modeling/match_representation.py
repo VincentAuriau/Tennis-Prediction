@@ -8,7 +8,12 @@ def get_match_info(row, verbose=0):
     # add adversary age & hand ?
     surface = row["tournament_surface"]
     result = row["Winner"]
-    score = row["score"]
+    try:
+        score = row["score"]
+    except:
+        print(row)
+        print(row.index)
+        print(row.values)
     num_played_minutes = row["elapsed_minutes"]
     date = row["tournament_date"]
 

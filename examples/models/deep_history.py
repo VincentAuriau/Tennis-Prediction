@@ -49,16 +49,8 @@ data_df = matches_data_loader(
 print(f"[+] Data Loaded, Now Encoding Data and create additional Features")
 print(data_df.head())
 print(data_df.columns)
-data_df[:1000].drop(["Matches_1", "Matches_2"], axis=1).to_csv("uncleaned_sub_df_1000.csv")
-data_df = complete_missing_data(data_df, ("Hand_1", "U"), ("Hand_2", "U"), ("Height_1", 100), ("Height_2", 100),
-                                ("Birth_Year_1", "20220101"), ('Birth_Year_2', "20220101"))
-data_df[:10000].drop(["Matches_1", "Matches_2"], axis=1).to_csv("completed_sub_df_1000.csv")
-data_df = clean_missing_data(data_df)
-
-data_df[:1000].drop(["Matches_1", "Matches_2"], axis=1).to_csv("sub_df_1000.csv")
 
 # data_df = pd.concat([data_df.iloc[:1000], data_df.iloc[-1000:]])
-
 
 history_columns = []
 encoder_models = [(IdentityEncoder, {})]
@@ -124,10 +116,6 @@ test_data_ = test_data[
 print(data_df.head())
 print(data_df.columns)
 
-
-train_data.to_csv("tr.csv", sep=";")
-test_data.to_csv("tt.csv", sep=";")
-
 model = ConvolutionalHistoryAndFullyConnected(
     num_history_signals=22,
     **{
@@ -142,7 +130,6 @@ model = ConvolutionalHistoryAndFullyConnected(
 )
 # model.instantiate_model()
 
-print(model.model.summary())
 print(model.summary())
 
 print(data_df.head())
@@ -153,7 +140,7 @@ for col in data_df.columns:
         hist_cols.append(col)
 
 print(len(train_data), len(hist_cols))
-print(train_data_.shape)
+
 model.fit(
     train_data_.values,
     train_data[hist_cols].values.reshape((len(train_data), 5, 22)),
@@ -163,8 +150,6 @@ model.fit(
 y_pred = model.predict(test_data_.values, test_data[hist_cols].values.reshape((len(test_data), 5, 22)))
 
 print(np.sum(y_pred == test_data["Winner"]))
-print(len(y_pred))
-print(y_pred)
 
 plt.plot(y_pred)
 plt.show()

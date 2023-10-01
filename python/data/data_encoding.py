@@ -12,7 +12,7 @@ def clean_missing_data(df):
     :param df:
     :return:
     """
-    print(len(df))
+    print("Length df before cleaning:", len(df))
     df = df.dropna(axis=0)
     print("after dropna", len(df))
     # df = df.loc[df.Ranking_1 != 9999]

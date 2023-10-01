@@ -123,10 +123,8 @@ def load_match_data_from_path(
         match_df["filepath"] = path
         files.append(match_df)
     match_df = pd.concat(files, axis=0)
-    match_df.to_csv("before_test.csv", sep=";", index=False)
     match_df = match_df.sort_values(["tourney_date", "tourney_id", "match_num"])
     match_df = match_df.reset_index(drop=True)
-    match_df.to_csv("test.csv", sep=";", index=False)
     """
     match_df["match_id"] = match_df.apply(
         lambda row: extract_file_id(path_to_matchs_file) + "_" + str(row.name),
@@ -253,7 +251,7 @@ def matches_data_loader(
         players_db_cached = False
 
     if os.path.exists(
-        os.path.join(path_to_cache, f"matches_data_{keep_values_from_year}.csv")
+        os.path.join(path_to_cache, f"matches_dFata_{keep_values_from_year}.csv")
     ):
         matches_data_cached = True
     else:
