@@ -34,6 +34,12 @@ Stan's Victory % in main ATP matches             |  Stan's career aces % diff wi
 :-------------------------:|:-------------------------:
 ![](examples/data/stan_the_man_win_percentage.png) |  ![](examples/data/stanimal_aces_percentage_difference.png)
 
+Here is an example of a data row:
+
+| id | tournament    | tournament_level    | tournament_date    | tournament_surface    | round    | best_of    | match_id    |
+| :---:   | :---: | :---: |
+| atp_matches_qual_chall_2003_5427 | San Benedetto CH   | C   | 20030811   | Clay   | SF   | 3   | 20030811   |
+
 ### Train/Testing on matches outcome:
 
 ```python
