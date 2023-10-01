@@ -37,8 +37,13 @@ Stan's Victory % in main ATP matches             |  Stan's career aces % diff wi
 Here is an example of a data row:
 
 | id | tournament    | tournament_level    | tournament_date    | tournament_surface    | round    | best_of    | match_id    |
-| :---:   | :---: | :---: |
+| :---:   | :---: | :---: | :---:   | :---: | :---: | :---:   | :---: |
 | atp_matches_qual_chall_2003_5427 | San Benedetto CH   | C   | 20030811   | Clay   | SF   | 3   | 20030811   |
+
+
+| Name_1 | ID_1    | Ranking_1    | Ranking_Points_1    | Ranking_History_1    | Best_Rank_1    | Birth_Year_1    | Versus_1    | Hand_1 | Last_Tournament_Date_1    | Height_1    | Matches_1    | Matchs_Clay_1    | Matches_Carpet_1    | Matches_Grass_1    | Matches_Hard_1    | Victories_Percentage_1    | Clay_Victories_Percentage_1    | Carpet_Victories_Percentage_1    | Grass_Victories_Percentage_1    | Hard_Victories_Percentage_1    | Aces_Percentage_1    | Doublefaults_Percentage_1    | First_Save_Success_Percentage_1    | Winning_on_1st_Serve_Percentage_1    | Winning_on_2nd_Serve_Percentage_1    | Overall_Win_on_Serve_Percentage_1    | BreakPoint_Face_Percentage_1 | BreakPoint_Saved_Percentage_1 | last_rankings_1 | last_ranking_points_1 |
+| :---:   | :---: | :---: | :---:   | :---: | :---: | :---:   | :---: | :---:   | :---: | :---: | :---:   | :---: | :---: | :---:   | :---: | :---:   | :---: | :---: | :---:   | :---: | :---: | :---:   | :---: | :---:   | :---: | :---: | :---:   | :---: |
+| Stan.Wawrinka | 104527  | 184   | 114   | {20030616: [387, 68], 20030707: [363, 74], 20030714: [348, 79], 20030721: [303, 99], 20030811: [284, 114]}   | 284   | 19850328   | []   | R | 20030721 | 183 | [['V', 'atp_matches_qual_chall_2003_3466'], ['D', 'atp_matches_qual_chall_2003_3481'], ['D', 'atp_matches_2003_4049'], ['V', 'atp_matches_2003_4315'], ['D', 'atp_matches_2003_4328'], ['V', 'atp_matches_2003_4773'], ['D', 'atp_matches_2003_4782'], ['V', 'atp_matches_qual_chall_2003_5408'], ['V', 'atp_matches_qual_chall_2003_5419'], ['V', 'atp_matches_qual_chall_2003_5424']] | ['V', 'D', 'D', 'V', 'D', 'V', 'D', 'V', 'V', 'V'] | [] | [] | [] | 60 | 60 | 0 | 0 | 0 | 3.41880341880342 | 4.27350427350427 | 64.957264957265 | 54.985754985755 | 15.6695156695157 | 70.6552706552707 | 11.3960113960114 | 7.69230769230769 | [303, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 387] | [99, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 68] |
 
 ### Train/Testing on matches outcome:
 
