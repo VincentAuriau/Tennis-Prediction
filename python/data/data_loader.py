@@ -125,10 +125,8 @@ def load_match_data_from_path(
         match_df["filepath"] = path
         files.append(match_df)
     match_df = pd.concat(files, axis=0)
-    match_df.to_csv("before_test.csv", sep=";", index=False)
     match_df = match_df.sort_values(["tourney_date", "tourney_id", "match_num"])
     match_df = match_df.reset_index(drop=True)
-    match_df.to_csv("test.csv", sep=";", index=False)
     """
     match_df["match_id"] = match_df.apply(
         lambda row: extract_file_id(path_to_matchs_file) + "_" + str(row.name),
@@ -249,12 +247,13 @@ def matches_data_loader(
     total_elapsed_time = 0
     # Check if data already in cache
     if os.path.exists(os.path.join(path_to_cache, "players_db")):
+        print("Payers DB exists")
         players_db_cached = True
     else:
         players_db_cached = False
 
     if os.path.exists(
-        os.path.join(path_to_cache, f"matches_data_{keep_values_from_year}.csv")
+        os.path.join(path_to_cache, f"matches_dFata_{keep_values_from_year}.csv")
     ):
         matches_data_cached = True
     else:
@@ -328,7 +327,7 @@ def matches_data_loader(
                 data_per_year.append(df_year)
 
         data_matches = pd.concat(data_per_year, axis=0)
-        data_matches = data_matches.reset_index()
+        data_matches.reset_index(drop=True, inplace=True)
 
     if not include_davis_cup:
         data_matches = data_matches.loc[~data_matches.tournament.str.contains("Davis")]
