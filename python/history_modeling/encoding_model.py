@@ -3,7 +3,7 @@ from abc import abstractmethod
 import pandas as pd
 from sklearn.decomposition import PCA
 
-from history_modeling.match_representation import create_timeless_dataset
+from history_modeling.match_representation import create_timeless_dataset, get_match_info
 
 
 class MatchEncoder:
@@ -113,8 +113,8 @@ class IdentityEncoder(MatchEncoder):
 
     def predict(self, X, transform_data=False):
         if transform_data or self.auto_transform:
-            X = self.select_data(X, columns=self.columns)
-            return X, X
+            X_tr = self.select_data(X, columns=self.columns)
+            return X_tr, X
         else:
             return X
 

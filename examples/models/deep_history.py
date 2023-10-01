@@ -1,6 +1,8 @@
 import os
 import sys
 
+import matplotlib.pyplot as plt
+
 sys.path.append("../../python")
 import time
 
@@ -13,6 +15,7 @@ from data.data_encoding import (
     create_additional_features,
     clean_missing_data,
     create_encoded_history,
+    complete_missing_data
 )
 from history_modeling.encoding_model import IdentityEncoder
 from model.deep_model import ConvolutionalHistoryAndFullyConnected
@@ -39,7 +42,7 @@ data_df = matches_data_loader(
     path_to_cache=os.path.join(absolute_path, "../../cache"),
     flush_cache=False,
     keep_values_from_year=2022,
-    get_match_statistics=False,
+    get_match_statistics=True,
     get_reversed_match_data=True,
     include_davis_cup=False,
 )
@@ -47,8 +50,7 @@ print(f"[+] Data Loaded, Now Encoding Data and create additional Features")
 print(data_df.head())
 print(data_df.columns)
 
-data_df = pd.concat([data_df.iloc[:10], data_df.iloc[-10:]])
-
+# data_df = pd.concat([data_df.iloc[:1000], data_df.iloc[-1000:]])
 
 history_columns = []
 encoder_models = [(IdentityEncoder, {})]
@@ -82,8 +84,10 @@ for encoding_model, encoding_model_params in encoder_models:
 
     data_df = pd.merge(data_df, encoded_data, on=["id", "ID_1", "ID_2"])
 
-train_data = data_df.loc[data_df.tournament_year == 2022]
-test_data = data_df.loc[data_df.tournament_year == 2023]
+train_data = data_df.loc[data_df.tournament_year.isin([2022])]
+test_data = data_df.loc[data_df.tournament_year.isin([2023])]
+#train_data = data_df.loc[data_df.tournament_year.isin([2019, 2020, 2021])]
+#test_data = data_df.loc[data_df.tournament_year.isin([2022, 2023])]
 train_data = create_additional_features(train_data, additional_features)
 train_data = encode_data(train_data, **encoding_params)
 test_data = create_additional_features(test_data, additional_features)
@@ -106,8 +110,8 @@ test_data_ = test_data[
     + ["Winner", "tournament_year"]
     ]
 
-train_data_ = clean_missing_data(train_data_)
-test_data_ = clean_missing_data(test_data_)
+# train_data_ = clean_missing_data(train_data_)
+# test_data_ = clean_missing_data(test_data_)
 
 print(data_df.head())
 print(data_df.columns)
@@ -116,17 +120,16 @@ model = ConvolutionalHistoryAndFullyConnected(
     num_history_signals=22,
     **{
         "input_shape": 23,
-        "hidden_units": (22, 44, 44, 22, 11, 4),
+        "hidden_units": (22, 44, 22, 11, 4),
         "output_shape": 2,
         "last_activation": "softmax",
-        "epochs": 1,
-        "reduced_lr_epochs": 5,
+        "epochs": 100,
+        "reduced_lr_epochs": 50,
         "loss": "categorical_crossentropy",
     },
 )
 # model.instantiate_model()
 
-print(model.model.summary())
 print(model.summary())
 
 print(data_df.head())
@@ -137,18 +140,16 @@ for col in data_df.columns:
         hist_cols.append(col)
 
 print(len(train_data), len(hist_cols))
-print(train_data_.shape)
+
 model.fit(
     train_data_.values,
     train_data[hist_cols].values.reshape((len(train_data), 5, 22)),
     train_data["Winner"].values,
 )
 
-train_data_.to_csv("train.csv")
-print(train_data[hist_cols].isnull().values.any(), "NaN ?")
-print(train_data_.isnull().values.any(), "NaN ?")
-
 y_pred = model.predict(test_data_.values, test_data[hist_cols].values.reshape((len(test_data), 5, 22)))
 
 print(np.sum(y_pred == test_data["Winner"]))
-print(len(y_pred))
+
+plt.plot(y_pred)
+plt.show()
