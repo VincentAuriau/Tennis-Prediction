@@ -35,7 +35,7 @@ player_features = [
     "Aces_Percentage",
 ]
 additional_features = ["diff_rank", "v_perc_versus", "nb_match_versus"]
-encoding_params={}
+encoding_params = {}
 
 data_df = matches_data_loader(
     path_to_data=os.path.join(absolute_path, "../../submodules/tennis_atp"),
@@ -98,17 +98,11 @@ p2_features = [feat + "_2" for feat in player_features]
 match_features = match_features.copy()
 
 train_data_ = train_data[
-    match_features
-    + p1_features
-    + p2_features
-    + ["Winner", "tournament_year"]
-    ]
+    match_features + p1_features + p2_features + ["Winner", "tournament_year"]
+]
 test_data_ = test_data[
-    match_features
-    + p1_features
-    + p2_features
-    + ["Winner", "tournament_year"]
-    ]
+    match_features + p1_features + p2_features + ["Winner", "tournament_year"]
+]
 
 # train_data_ = clean_missing_data(train_data_)
 # test_data_ = clean_missing_data(test_data_)
@@ -147,7 +141,10 @@ model.fit(
     train_data["Winner"].values,
 )
 
-y_pred = model.predict(test_data_.values, test_data[hist_cols].values.reshape((len(test_data), 5, 22)))
+y_pred = model.predict(
+    test_data_.values, test_data[hist_cols].values.reshape((len(test_data), 5, 22))
+)
+
 
 print(np.sum(y_pred == test_data["Winner"]))
 
