@@ -247,6 +247,7 @@ def matches_data_loader(
     total_elapsed_time = 0
     # Check if data already in cache
     if os.path.exists(os.path.join(path_to_cache, "players_db")):
+        print("Payers DB exists")
         players_db_cached = True
     else:
         players_db_cached = False
@@ -326,7 +327,7 @@ def matches_data_loader(
                 data_per_year.append(df_year)
 
         data_matches = pd.concat(data_per_year, axis=0)
-        data_matches = data_matches.reset_index()
+        data_matches.reset_index(drop=True, inplace=True)
 
     if not include_davis_cup:
         data_matches = data_matches.loc[~data_matches.tournament.str.contains("Davis")]
