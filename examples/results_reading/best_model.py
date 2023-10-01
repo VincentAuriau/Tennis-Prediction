@@ -5,14 +5,14 @@ from matplotlib.patches import Rectangle
 import numpy as np
 import pandas as pd
 
-df_results = pd.read_csv("../../results/20212022_/results.csv", sep=";")
+df_results = pd.read_csv("../../results/20212022/results.csv", sep=";")
 
 best_row = df_results.iloc[df_results.precision.argmax()]
 print(best_row)
 
 eval_id = best_row["eval_ID"]
 best_results = pd.read_csv(
-    os.path.join("../../results/20212022_", f"{eval_id}.csv"), sep=";"
+    os.path.join("../../results/20212022", f"{eval_id}.csv"), sep=";"
 )
 
 fig, ax = plt.subplots()
@@ -92,7 +92,7 @@ plt.show()
 
 best_ranked_player_wins_results = pd.read_csv(
     os.path.join(
-        "../../results/20212022_",
+        "../../results/20212022",
         f"{df_results.loc[df_results.model_class=='BestRankedPlayerWins'].eval_ID.values[0]}.csv",
     ),
     sep=";",

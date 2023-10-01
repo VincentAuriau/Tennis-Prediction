@@ -16,7 +16,6 @@ absolute_path = os.path.dirname(os.path.abspath(__file__))
 default_columns_match = ["tournament_level", "round", "best_of", "tournament_surface"]
 
 default_columns_player = [
-    "ID",
     "Ranking",
     "Ranking_Points",
     "Hand",
@@ -45,6 +44,7 @@ def train_test_evaluation(
     model_class,
     model_params,
     encoder_models=[],
+    use_davis_data=False,
     history_encoder_years=1,
     match_features=default_columns_match,
     player_features=default_columns_player,
@@ -67,6 +67,7 @@ def train_test_evaluation(
         keep_values_from_year=min_year,
         get_match_statistics=False,
         get_reversed_match_data=True,
+        include_davis_cup=use_davis_data,
     )
     print(f"[+] Data Loaded, Now Encoding Data and create additional Features")
 

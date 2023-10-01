@@ -79,5 +79,5 @@ plt.subplot(2, 4, 8)
 plt.scatter(X_r[:, 0], X_r[:, 1], c=match_info.num_lost_games)
 plt.title("Lost games Number")
 
-plt.savefig("2d_pca_match_representation_test.png")
+plt.savefig("2d_pca_match_representation.png")
 plt.show()

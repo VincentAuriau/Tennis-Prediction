@@ -1,8 +1,9 @@
 import ast
 import numpy as np
 import pandas as pd
+import tqdm
 
-from history_modeling.match_representation import create_timeless_dataset
+from history_modeling.match_representation import create_timeless_dataset, get_match_info
 
 
 def clean_missing_data(df):
@@ -11,15 +12,23 @@ def clean_missing_data(df):
     :param df:
     :return:
     """
-
+    print("Length df before cleaning:", len(df))
     df = df.dropna(axis=0)
-    df = df.loc[df.Ranking_1 != 9999]
+    print("after dropna", len(df))
+    # df = df.loc[df.Ranking_1 != 9999]
     df = df.loc[df.Ranking_1 != 0]
-    df = df.loc[df.Ranking_2 != 9999]
+    # df = df.loc[df.Ranking_2 != 9999]
     df = df.loc[df.Ranking_2 != 0]
 
     return df
 
+
+def complete_missing_data(df, *args):
+
+    for (column, value) in args:
+        df[column].fillna(value, inplace=True)
+
+    return df
 
 def encode_data(df, mode="integer"):
     # Remove:
@@ -42,7 +51,7 @@ def encode_data(df, mode="integer"):
     df_copy = df.copy()
     if mode == "integer":
         # Considered Variables:
-        tournament_level = {"G": 0, "A": 1, "M": 2, "F": 3, "D": 4}
+        tournament_level = {"G": 0, "A": 1, "M": 2, "F": 3, "D": 4, "C": 5}
         tournament_surface = {"Clay": 0, "Carpet": 1, "Hard": 2, "Grass": 3}
 
         round = {
@@ -57,6 +66,9 @@ def encode_data(df, mode="integer"):
             "RR": 8,
             "BR": 9,
             "ER": 10,
+            "Q1": 11,
+            "Q2": 12,
+            "Q3": 13,
         }
 
         hand = {
@@ -70,10 +82,11 @@ def encode_data(df, mode="integer"):
     elif mode == "one_hot":
         # Considered Variables:
         tournament_level = {
-            "G": [0, 0, 0, 1],
-            "A": [0, 0, 1, 0],
-            "M": [0, 1, 0, 0],
-            "D": [1, 0, 0, 0],
+            "G": [0, 0, 0, 1, 0],
+            "A": [0, 0, 1, 0, 0],
+            "M": [0, 1, 0, 0, 0],
+            "D": [1, 0, 0, 0, 0],
+            "C": [0, 0, 0, 0, 1],
         }
 
         tournament_surface = {
@@ -104,7 +117,7 @@ def encode_data(df, mode="integer"):
 
     elif mode == "mixing":
         # Considered Variables:
-        tournament_level = {"G": 0, "A": 1, "M": 2, "F": 3, "D": 4}
+        tournament_level = {"G": 0, "A": 1, "M": 2, "F": 3, "D": 4, "C": 5}
         tournament_surface = {
             "Clay": [1, 0, 0, 0],
             "Carpet": [0, 1, 0, 0],
@@ -189,8 +202,14 @@ def create_encoded_history(df, encoder, num_matches, completing_value=0):
         "history_2": [],
     }
 
-    for n_row, row in df.iterrows():
-        matches_history_1 = ast.literal_eval(row["Matches_1"])[-num_matches:]
+    for n_row, row in tqdm.tqdm(df.iterrows(), total=len(df)):
+        try:
+            matches_history_1 = ast.literal_eval(row["Matches_1"])[-num_matches:]
+        except:
+            with open("error.txt", 'w') as file:
+                file.write(str(row["Matches_1"]))
+            matches_history_1 = ast.literal_eval(row["Matches_1"])[-num_matches:]
+
         matches_history_1 = [_[1] for _ in matches_history_1]
 
         df_history = df.loc[df.id.isin(matches_history_1)].loc[df.ID_1 == row.ID_1]
@@ -218,7 +237,7 @@ def create_encoded_history(df, encoder, num_matches, completing_value=0):
                 )
         else:
             encoded_history_1 = (
-                np.ones((num_matches, encoder.num_pca_features)) * completing_value
+                np.ones((num_matches, encoder.output_shape)) * completing_value
             )
 
         matches_history_2 = ast.literal_eval(row["Matches_2"])[-num_matches:]
@@ -248,7 +267,7 @@ def create_encoded_history(df, encoder, num_matches, completing_value=0):
                 )
         else:
             encoded_history_2 = (
-                np.ones((num_matches, encoder.num_pca_features)) * completing_value
+                np.ones((num_matches, encoder.output_shape)) * completing_value
             )
 
         history["id"].append(row.id)
@@ -258,4 +277,8 @@ def create_encoded_history(df, encoder, num_matches, completing_value=0):
         history["history_1"].append(encoded_history_1)
         history["history_2"].append(encoded_history_2)
 
+        if n_row < 100 and len(df_history) > 0:
+            row.to_csv('row.csv')
+            df_history.to_csv("df_history.csv")
+            np.save("encoded_history.npy", encoded_history_2)
     return pd.DataFrame(history)

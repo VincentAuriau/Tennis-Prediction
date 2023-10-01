@@ -18,13 +18,13 @@ data_df = matches_data_loader(
     flush_cache=False,
     keep_values_from_year=2002,
     get_match_statistics=True,
-    get_reversed_match_data=True,
+    get_reversed_match_data=False,
+    include_davis_cup=True,
+    match_type=["main_atp", "qualifying_challengers"],
 )
 
 print(data_df.head())
 print(data_df.shape)
-
-print("DATA LOADED")
 
 # Categories of Ranks : 1 - 10 - 50 - 100 - 300 - 1000
 categories = [1, 10, 50, 100, 300, 1000, 9999]
@@ -126,6 +126,8 @@ overall_hard = []
 dates = []
 stan_df = data_df.loc[data_df.ID_1 == 104527]
 stan_df = stan_df.reset_index()
+
+stan_df.iloc[100].to_csv("single_row_example.csv")
 
 for n_row, row in stan_df.iterrows():
     matches = [r[0] for r in ast.literal_eval(str(row["Matches_1"]))]

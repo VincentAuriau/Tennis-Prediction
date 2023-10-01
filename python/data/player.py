@@ -209,6 +209,9 @@ class Player:
             days_difference_tournaments = get_days_difference(
                 previous_tournament_date, current_tournament_date
             )
+            if days_difference_tournaments == 0:
+                print(previous_tournament_date, current_tournament_date)
+                print(tournament_date)
 
             self.games_fatigue = (
                 self.fatigue_features["previous tournament"]["num_games"]
