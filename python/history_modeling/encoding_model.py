@@ -3,7 +3,10 @@ from abc import abstractmethod
 import pandas as pd
 from sklearn.decomposition import PCA
 
-from history_modeling.match_representation import create_timeless_dataset, get_match_info
+from history_modeling.match_representation import (
+    create_timeless_dataset,
+    get_match_info,
+)
 
 
 class MatchEncoder:

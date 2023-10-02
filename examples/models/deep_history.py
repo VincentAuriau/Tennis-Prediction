@@ -15,7 +15,7 @@ from data.data_encoding import (
     create_additional_features,
     clean_missing_data,
     create_encoded_history,
-    complete_missing_data
+    complete_missing_data,
 )
 from history_modeling.encoding_model import IdentityEncoder
 from model.deep_model import ConvolutionalHistoryAndFullyConnected
@@ -35,7 +35,7 @@ player_features = [
     "Aces_Percentage",
 ]
 additional_features = ["diff_rank", "v_perc_versus", "nb_match_versus"]
-encoding_params={}
+encoding_params = {}
 
 data_df = matches_data_loader(
     path_to_data=os.path.join(absolute_path, "../../submodules/tennis_atp"),
@@ -86,8 +86,8 @@ for encoding_model, encoding_model_params in encoder_models:
 
 train_data = data_df.loc[data_df.tournament_year.isin([2022])]
 test_data = data_df.loc[data_df.tournament_year.isin([2023])]
-#train_data = data_df.loc[data_df.tournament_year.isin([2019, 2020, 2021])]
-#test_data = data_df.loc[data_df.tournament_year.isin([2022, 2023])]
+# train_data = data_df.loc[data_df.tournament_year.isin([2019, 2020, 2021])]
+# test_data = data_df.loc[data_df.tournament_year.isin([2022, 2023])]
 train_data = create_additional_features(train_data, additional_features)
 train_data = encode_data(train_data, **encoding_params)
 test_data = create_additional_features(test_data, additional_features)
@@ -98,17 +98,11 @@ p2_features = [feat + "_2" for feat in player_features]
 match_features = match_features.copy()
 
 train_data_ = train_data[
-    match_features
-    + p1_features
-    + p2_features
-    + ["Winner", "tournament_year"]
-    ]
+    match_features + p1_features + p2_features + ["Winner", "tournament_year"]
+]
 test_data_ = test_data[
-    match_features
-    + p1_features
-    + p2_features
-    + ["Winner", "tournament_year"]
-    ]
+    match_features + p1_features + p2_features + ["Winner", "tournament_year"]
+]
 
 # train_data_ = clean_missing_data(train_data_)
 # test_data_ = clean_missing_data(test_data_)
@@ -147,7 +141,10 @@ model.fit(
     train_data["Winner"].values,
 )
 
-y_pred = model.predict(test_data_.values, test_data[hist_cols].values.reshape((len(test_data), 5, 22)))
+y_pred = model.predict(
+    test_data_.values, test_data[hist_cols].values.reshape((len(test_data), 5, 22))
+)
+
 
 print(np.sum(y_pred == test_data["Winner"]))
 
