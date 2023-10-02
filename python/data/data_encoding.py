@@ -3,7 +3,10 @@ import numpy as np
 import pandas as pd
 import tqdm
 
-from history_modeling.match_representation import create_timeless_dataset, get_match_info
+from history_modeling.match_representation import (
+    create_timeless_dataset,
+    get_match_info,
+)
 
 
 def clean_missing_data(df):
@@ -24,11 +27,11 @@ def clean_missing_data(df):
 
 
 def complete_missing_data(df, *args):
-
-    for (column, value) in args:
+    for column, value in args:
         df[column].fillna(value, inplace=True)
 
     return df
+
 
 def encode_data(df, mode="integer"):
     # Remove:
@@ -206,7 +209,7 @@ def create_encoded_history(df, encoder, num_matches, completing_value=0):
         try:
             matches_history_1 = ast.literal_eval(row["Matches_1"])[-num_matches:]
         except:
-            with open("error.txt", 'w') as file:
+            with open("error.txt", "w") as file:
                 file.write(str(row["Matches_1"]))
             matches_history_1 = ast.literal_eval(row["Matches_1"])[-num_matches:]
 
@@ -278,7 +281,7 @@ def create_encoded_history(df, encoder, num_matches, completing_value=0):
         history["history_2"].append(encoded_history_2)
 
         if n_row < 100 and len(df_history) > 0:
-            row.to_csv('row.csv')
+            row.to_csv("row.csv")
             df_history.to_csv("df_history.csv")
             np.save("encoded_history.npy", encoded_history_2)
     return pd.DataFrame(history)

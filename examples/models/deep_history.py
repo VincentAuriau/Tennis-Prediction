@@ -15,7 +15,7 @@ from data.data_encoding import (
     create_additional_features,
     clean_missing_data,
     create_encoded_history,
-    complete_missing_data
+    complete_missing_data,
 )
 from history_modeling.encoding_model import IdentityEncoder
 from model.deep_model import ConvolutionalHistoryAndFullyConnected
@@ -86,8 +86,8 @@ for encoding_model, encoding_model_params in encoder_models:
 
 train_data = data_df.loc[data_df.tournament_year.isin([2022])]
 test_data = data_df.loc[data_df.tournament_year.isin([2023])]
-#train_data = data_df.loc[data_df.tournament_year.isin([2019, 2020, 2021])]
-#test_data = data_df.loc[data_df.tournament_year.isin([2022, 2023])]
+# train_data = data_df.loc[data_df.tournament_year.isin([2019, 2020, 2021])]
+# test_data = data_df.loc[data_df.tournament_year.isin([2022, 2023])]
 train_data = create_additional_features(train_data, additional_features)
 train_data = encode_data(train_data, **encoding_params)
 test_data = create_additional_features(test_data, additional_features)
