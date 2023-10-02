@@ -180,16 +180,18 @@ plt.legend()
 
 ax2 = ax1.twinx()
 for i, (wcarpet, wgrass, wclay, whard) in enumerate(zip(wins_carpet, wins_grass, wins_clay, wins_hard)):
-    ax2.add_patch(Rectangle((i, 0), width=1, height=wcarpet, edgecolor=None, facecolor="gray", alpha=.2))
-    ax2.add_patch(Rectangle((i, wcarpet), width=1, height=wgrass, edgecolor=None, facecolor="green", alpha=.2))
-    ax2.add_patch(Rectangle((i, wcarpet+wgrass), width=1, height=wclay, edgecolor=None, facecolor="orange", alpha=.2))
-    ax2.add_patch(Rectangle((i, wcarpet+wgrass+wclay), width=1, height=whard, edgecolor=None, facecolor="blue", alpha=.2))
 
-ax2.set_yticks([0, 100, 200, 300, 400, 500, 600])
+    if i % 2 == 0:
+        ax2.add_patch(Rectangle((i, 0), width=2, height=wcarpet, edgecolor=None, facecolor="gray", alpha=.2))
+        ax2.add_patch(Rectangle((i, wcarpet), width=2, height=wgrass, edgecolor=None, facecolor="green", alpha=.2))
+        ax2.add_patch(Rectangle((i, wcarpet+wgrass), width=2, height=wclay, edgecolor=None, facecolor="orange", alpha=.2))
+        ax2.add_patch(Rectangle((i, wcarpet+wgrass+wclay), width=2, height=whard, edgecolor=None, facecolor="blue", alpha=.2))
+
+ax2.set_yticks([0, 100, 200, 300, 400, 500, 600, 700])
 ax2.set_ylabel("Number of victory for each surface")
 plt.tight_layout()
 ax1.set_xticks([d[1] for d in dates], [d[0] for d in dates], rotation="vertical")
-plt.title("Stanislas Wawrinka vicotires on ATP tournamnents")
+plt.title("Stanislas Wawrinka victories on ATP tournamnents")
 plt.savefig("stan_the_man_win_percentage.png")
 plt.show()
 
