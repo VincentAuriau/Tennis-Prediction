@@ -16,6 +16,7 @@ git clone --recurse-submodules https://github.com/VincentAuriau/Tennis-Predictio
 You can find examples in /examples:
 
 ### Loading players statistics at match time + match outcome
+[Example](examples/data/data_loading.py)
 
 ```python
 from data.data_loader import matches_data_loader
@@ -54,6 +55,10 @@ Additional match statistics: elapsed_minutes, aces_nb_1, doublefaults_nb_1, svpt
 | Martin.Vassallo Arguello | 103506 | 125 | 296 | {19990201: [817, 13], 20000710: [398, 61], 20000731: [354, 75], 20000807: [377, 70], 20010625: [459, 48], 20010709: [405, 61], 20010813: [391, 68], 20010820: [374, 72], 20010827: [342, 88], 20010917: [291, 117], 20010924: [286, 122], etc...} | 123 | 19800210 | []   | R | 20030804 | 183 | [['V', 'atp_matches_qual_chall_1999_380'], ['D', 'atp_matches_qual_chall_1999_393'], ['V', 'atp_matches_qual_chall_2000_3972'], ['V', 'atp_matches_qual_chall_2000_3988'], ['D', 'atp_matches_qual_chall_2000_3996'], ['D', 'atp_matches_qual_chall_2000_4725'], ['D', 'atp_matches_qual_chall_2000_4758'], ['V', 'atp_matches_qual_chall_2001_3699'], etc...] | ['V', 'D', 'V', 'V', 'D', 'V', 'V', 'D', 'V', 'V', 'D', 'V', 'D', 'V', 'V', 'D', 'V', 'V', 'V', 'D', 'V', 'D', 'V', 'V', 'V', 'V', 'D', 'D', 'V', 'V', 'V', 'D', 'V', 'D', 'V', 'D', 'D', etc...] | ['D', 'V', 'D', 'V', 'D'] | ['D'] | ['D', 'D', 'D', 'V', 'V', 'V', 'V', 'D', 'V', 'D', 'V', 'D'] | 61.0294117647059 | 63.5593220338983 | 40 | 0 | 50 | 4.82456140350877 | 5.26315789473684 | 61.4035087719298 | 46.4912280701754 | 18.859649122807 | 65.3508771929825 | 9.64912280701754 | 5.70175438596491 | [157, 136, 165, 158, 9999, 9999, 204, 198, 197, 188, 204, 233] | [247, 304, 220, 232, 0, 0, 164, 172, 177, 188, 167, 137] |
 
 ### Train/Testing on matches outcome:
+[Example](examples/models/train_test.py)
+
+A generic function lets you evaluate your model with a train/test scheme without much work. Your model only needs a scikit-learn like signature.
+By playing with the years, columns to use in modelling and models & hyperparmaters, you can easily create your own best-performing model.
 
 ```python
 from sklearn.ensemble import RandomForestClassifier
@@ -88,6 +93,7 @@ Model precision compared with best ranked player wins strategy            |  Mod
 ![](examples/results_reading/win_per_surface.png) |  ![](examples/results_reading/precision_percentage_players_ranks.png)
 
 ### Encoding match
+[Example](examples/history_modeling/first_example.py)
 In order to represent history of a player, one can use MatchEncoders:
 
 ```python
