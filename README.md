@@ -56,6 +56,8 @@ Additional match statistics: elapsed_minutes, aces_nb_1, doublefaults_nb_1, svpt
 
 ### Train/Testing on matches outcome:
 [Example](examples/models/train_test.py)
+A generic function lets you evaluate your model with a train/test scheme without much work. Your model only needs a scikit-learn like signature.
+By playing with the years, columns to use in modelling and models & hyperparmaters, you can easily create your own best-performing model.
 
 ```python
 from sklearn.ensemble import RandomForestClassifier
