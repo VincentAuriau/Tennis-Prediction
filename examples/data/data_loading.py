@@ -13,20 +13,23 @@ from data.data_loader import matches_data_loader
 
 
 data_df = matches_data_loader(
-    path_to_data="../../submodules/tennis_atp",
-    path_to_cache="../../cache",
-    flush_cache=False,
-    keep_values_from_year=2002,
-    get_match_statistics=True,
-    get_reversed_match_data=True,
-    include_davis_cup=True,
-    match_type=["main_atp", "qualifying_challengers"],
+    path_to_data="../../submodules/tennis_atp", # Path to tennis_atp submodule, keep as is if repo cloned with subdmodule
+    path_to_cache="../../cache", # Path to caching directory
+    flush_cache=False, # Whether or not to flush a potentially existing cache. Set to True if you want to create the data from scratch
+    keep_values_from_year=2002, # Returned data will date back to January 2002 up to today
+    get_match_statistics=True, # Whether to also retrun match statistics (time, score, etc...)
+    get_reversed_match_data=True, # Whether to duplicate the mathc row and exchange winner and loser positions
+    include_davis_cup=True, # Whether or not to include davis cup matches
+    match_type=["main_atp", "qualifying_challengers"], # Which match to keep. You can look at tennis_atp submodule to see possibilities
 )
 
 print(data_df.head())
 print(data_df.shape)
 
-# Categories of Ranks : 1 - 10 - 50 - 100 - 300 - 1000
+# Creation of first figure
+# Win percentages considering the ranks of players
+
+# Rank categories
 categories = [1, 10, 50, 100, 300, 1000, 9999]
 
 best_ranked_player_win_percentage = []
@@ -87,7 +90,8 @@ plt.title("Best player Win percentage per Rank Category")
 plt.savefig("Best_player_win_percentage.png")
 plt.show()
 
-
+# Second figure
+# Number of matches considering players ranks
 fig, ax = plt.subplots()
 
 for i, val1 in enumerate(categories_number_of_matches):
@@ -116,6 +120,7 @@ plt.savefig("nb_matches.png")
 plt.show()
 
 #### Stan the man
+# Statistics analysis of Stan Wawrinka over time
 overall_v = []
 last_hundred_v = []
 
@@ -154,6 +159,7 @@ for n_row, row in stan_df.iterrows():
     wins_grass.append(list(row.Matches_Grass_1).count("V"))
     wins_hard.append(list(row.Matches_Hard_1).count("V"))
 
+# % Victory over time and surfaces
 plt.figure()
 plt.plot(overall_v, label="overall")
 plt.plot(last_hundred_v, label="last 100 matches")
