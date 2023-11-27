@@ -13,14 +13,17 @@ from data.data_loader import matches_data_loader
 
 
 data_df = matches_data_loader(
-    path_to_data="../../submodules/tennis_atp", # Path to tennis_atp submodule, keep as is if repo cloned with subdmodule
-    path_to_cache="../../cache", # Path to caching directory
-    flush_cache=False, # Whether or not to flush a potentially existing cache. Set to True if you want to create the data from scratch
-    keep_values_from_year=2002, # Returned data will date back to January 2002 up to today
-    get_match_statistics=True, # Whether to also retrun match statistics (time, score, etc...)
-    get_reversed_match_data=True, # Whether to duplicate the mathc row and exchange winner and loser positions
-    include_davis_cup=True, # Whether or not to include davis cup matches
-    match_type=["main_atp", "qualifying_challengers"], # Which match to keep. You can look at tennis_atp submodule to see possibilities
+    path_to_data="../../submodules/tennis_atp",  # Path to tennis_atp submodule, keep as is if repo cloned with subdmodule
+    path_to_cache="../../cache",  # Path to caching directory
+    flush_cache=False,  # Whether or not to flush a potentially existing cache. Set to True if you want to create the data from scratch
+    keep_values_from_year=2002,  # Returned data will date back to January 2002 up to today
+    get_match_statistics=True,  # Whether to also retrun match statistics (time, score, etc...)
+    get_reversed_match_data=True,  # Whether to duplicate the mathc row and exchange winner and loser positions
+    include_davis_cup=True,  # Whether or not to include davis cup matches
+    match_type=[
+        "main_atp",
+        "qualifying_challengers",
+    ],  # Which match to keep. You can look at tennis_atp submodule to see possibilities
 )
 
 print(data_df.head())
