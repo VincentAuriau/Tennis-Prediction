@@ -101,7 +101,7 @@ Model precision compared with best ranked player wins strategy            |  Mod
 :-------------------------:|:-------------------------:
 ![](examples/results_reading/win_per_surface.png) |  ![](examples/results_reading/precision_percentage_players_ranks.png)
 
-### Encoding match
+### Encoding matches
 [Example](examples/history_modeling/first_example.py)
 In order to represent history of a player, one can use MatchEncoders:
 
