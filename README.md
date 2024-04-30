@@ -82,9 +82,42 @@ Here is an example of a data row:
 | :---:   | :---: | :---: | :---:   | :---: | :---: | :---:   | :---: | :---:   | :---: | :---: | :---:   | :---: | :---: | :---:   | :---: | :---:   | :---: | :---: | :---:   | :---: | :---: | :---:   | :---: | :---:   | :---: | :---: | :---:   | :---: | :---:   | :---: |
 | Martin.Vassallo Arguello | 103506 | 125 | 296 | {19990201: [817, 13], 20000710: [398, 61], 20000731: [354, 75], 20000807: [377, 70], 20010625: [459, 48], 20010709: [405, 61], 20010813: [391, 68], 20010820: [374, 72], 20010827: [342, 88], 20010917: [291, 117], 20010924: [286, 122], etc...} | 123 | 19800210 | []   | R | 20030804 | 183 | [['V', 'atp_matches_qual_chall_1999_380'], ['D', 'atp_matches_qual_chall_1999_393'], ['V', 'atp_matches_qual_chall_2000_3972'], ['V', 'atp_matches_qual_chall_2000_3988'], ['D', 'atp_matches_qual_chall_2000_3996'], ['D', 'atp_matches_qual_chall_2000_4725'], ['D', 'atp_matches_qual_chall_2000_4758'], ['V', 'atp_matches_qual_chall_2001_3699'], etc...] | ['V', 'D', 'V', 'V', 'D', 'V', 'V', 'D', 'V', 'V', 'D', 'V', 'D', 'V', 'V', 'D', 'V', 'V', 'V', 'D', 'V', 'D', 'V', 'V', 'V', 'V', 'D', 'D', 'V', 'V', 'V', 'D', 'V', 'D', 'V', 'D', 'D', etc...] | ['D', 'V', 'D', 'V', 'D'] | ['D'] | ['D', 'D', 'D', 'V', 'V', 'V', 'V', 'D', 'V', 'D', 'V', 'D'] | 61.0294117647059 | 63.5593220338983 | 40 | 0 | 50 | 4.82456140350877 | 5.26315789473684 | 61.4035087719298 | 46.4912280701754 | 18.859649122807 | 65.3508771929825 | 9.64912280701754 | 5.70175438596491 | [157, 136, 165, 158, 9999, 9999, 204, 198, 197, 188, 204, 233] | [247, 304, 220, 232, 0, 0, 164, 172, 177, 188, 167, 137] |
 
+<ins>Player statistics before the match:</ins>
+- **Name_x**: Name of the player
+- **ID_x:** ID of the player
+- **Ranking_x:** ATP ranking of the player. For all rankings, 9999 means unranked.
+- **Ranking_Points_x:** Number of ATP points
+- **Ranking_History_x:** All recorded rankings
+- **Best_Rank_x:** Best reached ATP rank
+- **Birth_Year_x:** Birth year
+- **Versus_x:** Dictionnary containing all match outcomes agains other players
+- **Hand_x**: Hand used to play 'R', 'L' or 'U' for unknown
+- **Last_Tournament_Date_x:** Date of the last previous tournament attended
+- **Height_x:** Height
+- **Matches_x:** History of outcomes of previous matches
+- **Matchs_Clay_x:** History of outcomes of previous matches on clay
+- **Matchs_Carpet_x:** History of outcomes of previous matches on carpet
+- **Matchs_Grass_x:** History of outcomes of previous matches on grass
+- **Matchs_Hard_x:** History of outcomes of previous matches on hard
+- **Victories_Percentage_x:** Victory percentage over all player ATP matches
+- **Clay_Victories_Percentage_x:** Victory percentage over all player ATP matches on clay  
+- **Carpet_Victories_Percentage_x:** Victory percentage over all player ATP matches on carpet
+- **Grass_Victories_Percentage_x:** Victory percentage over all player ATP matches on grass
+- **Hard_Victories_Percentage_x:** Victory percentage over all player ATP matches on hard  
+- **Aces_Percentage_x:** Aces percentage over all player ATP matches
+- **Doublefaults_Percentage_x:** DoubleFaults percentage over all player ATP matches
+- **First_Save_Success_Percentage_x:**  First save success percentage  over all player ATP matches
+- **Winning_on_1st_Serve_Percentage_x:** Winning on first serve percentage over all player ATP matches
+- **Winning_on_2nd_Serve_Percentage_x:** Winning on second serve percentage over all player ATP matches
+- **Overall_Win_on_Serve_Percentage_x:** Overall winning percentage on serve over all player ATP matches
+- **BreakPoint_Face_Percentage_x:** Overall breakpoint face percentage over all player ATP matches
+- **BreakPoint_Saved_Percentage_x:** Overall breakpoint saved percentage over all player ATP matches
+- **last_rankings_x:** Five previous recorded ATP rankings
+- **last_ranking_points_x:** Five previous ATP ranking points recorded
+
 ### ML modelling
-Train/Testing on matches outcome:
-[Example](examples/models/train_test.py)
+Train/Testing on matches outcome
+[[Example](examples/models/train_test.py)].
 
 A generic function lets you evaluate your model with a train/test scheme without much work. Your model only needs a scikit-learn like signature.
 By playing with the years, columns to use in modelling and models & hyperparmaters, you can easily create your own best-performing model.
