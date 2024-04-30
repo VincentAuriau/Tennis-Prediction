@@ -49,8 +49,28 @@ Here is an example of a data row:
 | :---:   | :---: | :---: | :---:   | :---: | :---: | :---:   | :---: | :---:   | :---: |
 | atp_matches_qual_chall_2003_5427 | San Benedetto CH   | C   | 20030811   | Clay   | SF   | 3   | 20030811   | 0 | 2-6 7-5 7-5 |
 
-Additional match statistics: elapsed_minutes, aces_nb_1, doublefaults_nb_1, svpt_1, 1stIn_1, 1stWon_1, 2ndWon_1, SvGms_1, bpSaved_1, bpFaced_1, aces_nb_2, doublefaults_nb_2, svpt_2, 1stIn_2, 1stWon_2, 2ndWon_2, SvGms_2 bpSaved_2, bpFaced_2
-
+<ins>Base Match Statistics:</ins>
+- **id and match_id:** unique identification of the matches
+- **tournament:** name of the tournament
+- **tournament_level:** Category of the tournament 'G' (Grand Slams) 'M' (Masters 1000s), 'A' (other tour-level events), 'C' (Challengers), 'S' (Satellites/ITFs), 'F' (Tour finals), 'D'( Davis Cup)
+- **tournament_date:** date
+- **tournament_surface:** surface 'Grass', 'Clay', 'Carpet', 'Hard'
+- **round:** tournament round of the match 'F' (finale), 'SF' (semi-finale),
+- **best_of:** number of won games needded (3 or 5)
+- **Winner:** index of the winner: 0 (Player1) or 1 (Player2)
+- **Score:** finale score
+   
+<ins>Additional match statistics:</ins>
+- **elapsed_minutes:** Duration of the match
+- **aces_nb_x:** Number of aces of player x
+- **doublefaults_nb_x:** Number of doublefaults
+- **svpt_x:** Number of serve points
+- **1stIn_1:** Number of first serves made
+- **1stWon_1:** Number of first-serve points won
+- **2ndWon_x:** Number of second-serve points won
+- **SvGms_1:** Number of serve games
+- **bpSaved_1:** Number of break points saved
+- **bpFaced_1:** Number of break points faced
 
 
 | Name_1 | ID_1    | Ranking_1    | Ranking_Points_1    | Ranking_History_1    | Best_Rank_1    | Birth_Year_1    | Versus_1    | Hand_1 | Last_Tournament_Date_1    | Height_1    | Matches_1    | Matchs_Clay_1    | Matches_Carpet_1    | Matches_Grass_1    | Matches_Hard_1    | Victories_Percentage_1    | Clay_Victories_Percentage_1    | Carpet_Victories_Percentage_1    | Grass_Victories_Percentage_1    | Hard_Victories_Percentage_1    | Aces_Percentage_1    | Doublefaults_Percentage_1    | First_Save_Success_Percentage_1    | Winning_on_1st_Serve_Percentage_1    | Winning_on_2nd_Serve_Percentage_1    | Overall_Win_on_Serve_Percentage_1    | BreakPoint_Face_Percentage_1 | BreakPoint_Saved_Percentage_1 | last_rankings_1 | last_ranking_points_1 |
