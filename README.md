@@ -1,5 +1,6 @@
-# Tennis-Prediction Repository
+# Tennis-Prediction
 
+<img align="right" width="200" src="./robot.png" />
 The goal of this project is to predict the outcome of a tennis match using the data of both players and ML models.\
 The data used comes from [Jeff Sackmann's repository](https://github.com/JeffSackmann).
 
@@ -8,7 +9,7 @@ The data used comes from [Jeff Sackmann's repository](https://github.com/JeffSac
   - [Data Loading](#data-loading)
   - [Machine Learning modelling](#ml-modelling)
   - [Encoding Matches](#encoding-matches)
-- License
+- [License](#license)
 
 ## Installation
 
@@ -72,6 +73,7 @@ Here is an example of a data row:
 - **bpSaved_1:** Number of break points saved
 - **bpFaced_1:** Number of break points faced
 
+<ins>Example of match statistics:</ins>
 
 | Name_1 | ID_1    | Ranking_1    | Ranking_Points_1    | Ranking_History_1    | Best_Rank_1    | Birth_Year_1    | Versus_1    | Hand_1 | Last_Tournament_Date_1    | Height_1    | Matches_1    | Matchs_Clay_1    | Matches_Carpet_1    | Matches_Grass_1    | Matches_Hard_1    | Victories_Percentage_1    | Clay_Victories_Percentage_1    | Carpet_Victories_Percentage_1    | Grass_Victories_Percentage_1    | Hard_Victories_Percentage_1    | Aces_Percentage_1    | Doublefaults_Percentage_1    | First_Save_Success_Percentage_1    | Winning_on_1st_Serve_Percentage_1    | Winning_on_2nd_Serve_Percentage_1    | Overall_Win_on_Serve_Percentage_1    | BreakPoint_Face_Percentage_1 | BreakPoint_Saved_Percentage_1 | last_rankings_1 | last_ranking_points_1 |
 | :---:   | :---: | :---: | :---:   | :---: | :---: | :---:   | :---: | :---:   | :---: | :---: | :---:   | :---: | :---: | :---:   | :---: | :---:   | :---: | :---: | :---:   | :---: | :---: | :---:   | :---: | :---:   | :---: | :---: | :---:   | :---: | :---:   | :---: |
@@ -115,9 +117,9 @@ Here is an example of a data row:
 - **last_rankings_x:** Five previous recorded ATP rankings
 - **last_ranking_points_x:** Five previous ATP ranking points recorded
 
-### ML modelling
+### Machine-Learning modelling
 Train/Testing on matches outcome
-[[Example](examples/models/train_test.py)].
+[[Example]](examples/models/train_test.py).
 
 A generic function lets you evaluate your model with a train/test scheme without much work. Your model only needs a scikit-learn like signature.
 By playing with the years, columns to use in modelling and models & hyperparmaters, you can easily create your own best-performing model.
@@ -144,7 +146,7 @@ print("Test Score", test_score)
 
 Models and hyperparamters can easily be compared with the file results.csv saved in save_path.
 
-Different models performances
+Accuracy of differnt models
 :-------------------------:
 ![](examples/results_reading/models_performances.png)
 
