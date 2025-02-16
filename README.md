@@ -1,6 +1,6 @@
 # Tennis-Prediction
 
-<img align="right" width="200" src="./robot.png" />
+<img align="right" width="200" src="./tennis_robot.png" />
 
 The goal of this project is to predict the outcome of a tennis match using the data of both players and ML models.\
 The data used comes from [Jeff Sackmann's repository](https://github.com/JeffSackmann).
@@ -174,5 +174,12 @@ X_r, match_info = model.predict(data_df, transform_data=True)
 ![](examples/history_modeling/2d_pca_match_representation_test.png)
 
 ## License
+
+<img align="left" width="200" src="./tennis_robot_2.png" />
+
+&nbsp;
+&nbsp;
+
 The repository is under the MIT License, you can freely use any part as you like.\
 If you find this repository useful, you can cite it and add a star ⭐ !
+
